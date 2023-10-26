@@ -1,0 +1,44 @@
+{
+  "name": "monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@7.12.0",
+  "engines": {
+    "pnpm": ">=8.0.0",
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "dev": "turbo run dev --filter playground",
+    "clean": "rimraf node_modules **/*/node_modules",
+    "prerelease": "pnpm build",
+    "release": "bumpp",
+    "prepare": "husky install",
+    "commit": "git-cz",
+    "preinstall": "npx only-allow pnpm"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "18.0.0",
+    "@commitlint/config-conventional": "18.0.0",
+    "@gopowerteam/eslint-config": "^0.0.12",
+    "@types/node": "18",
+    "bumpp": "^9.2.0",
+    "commitizen": "4.3.0",
+    "cz-customizable": "7.0.0",
+    "eslint": "8.52.0",
+    "husky": "8.0.3",
+    "lint-staged": "15.0.2",
+    "pnpm": "8.9.2",
+    "prettier": "latest",
+    "rimraf": "5.0.5",
+    "tsup": "7.2.0",
+    "turbo": "latest",
+    "typescript": "5.2.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-customizable"
+    }
+  }
+}
