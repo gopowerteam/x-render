@@ -10,7 +10,7 @@
   "scripts": {
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "dev": "turbo run dev --filter playground",
+    "dev": "turbo run dev --concurrency=3",
     "clean": "rimraf node_modules **/*/node_modules",
     "prerelease": "pnpm build",
     "release": "bumpp",

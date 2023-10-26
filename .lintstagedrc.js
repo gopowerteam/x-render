@@ -1,10 +1,10 @@
 module.exports = {
   '!(**/*.spec.*)**/*.{ts,tsx}': [
-    'eslint --cache --fix --max-warnings=0',
+    'eslint --cache --fix',
     'prettier --write'
   ],
   '!(**/*.spec.*)**/*.{js,jsx}': [
-    'eslint --cache --fix --max-warnings=0 ',
+    'eslint --cache --fix ',
     'prettier --write'
   ]
 }
