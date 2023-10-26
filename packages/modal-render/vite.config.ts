@@ -33,7 +33,7 @@ export default defineConfig({
         presetIcons({
           collections: {
             'icon-park-outline': () =>
-              import('@iconify-json/icon-park-outline').then((i) => i.icons),
+              import('@iconify-json/icon-park-outline').then(i => i.icons),
           },
         }),
       ],
