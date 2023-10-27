@@ -16,6 +16,7 @@ export interface OpenModalOptions {
   footer?: boolean
   width?: number | string
   size?: 'large' | 'middle' | 'small'
+  draggable?: boolean
 }
 
 export interface ModalElement extends OpenModalOptions {
