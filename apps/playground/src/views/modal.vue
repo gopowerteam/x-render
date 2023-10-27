@@ -23,7 +23,7 @@ function onClick() {
       maskClosable: false,
       footer: true,
       esc: true,
-      draggable: true
+      draggable: true,
     })
     .then((a: any) => {
       console.log(a)

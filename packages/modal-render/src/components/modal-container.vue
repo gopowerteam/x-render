@@ -6,7 +6,12 @@
       @click.self="maskClosable && onClose()"
     >
       <div ref="contentRef" class="modal-content" :style="contentStyle">
-        <div v-if="header" ref="" class="modal-header" :style="headerStyle">
+        <div
+          v-if="header"
+          ref=""
+          class="modal-header"
+          :style="headerStyle"
+        >
           <div class="title font-bold">
             {{ title }}
           </div>
@@ -119,12 +124,11 @@ import {
   inject,
   onMounted,
   shallowRef,
-  nextTick,
-triggerRef
+  triggerRef,
 } from 'vue'
+import { useDraggable } from '@vueuse/core'
 import { ModalKey } from '../constants'
 import type { SizeOptions } from '../interfaces'
-import { useDraggable } from '@vueuse/core'
 
 const props = withDefaults (defineProps<{
   id: string
@@ -152,7 +156,7 @@ const props = withDefaults (defineProps<{
   maskClosable: false,
   size: 'middle',
   esc: false,
-  draggable: false
+  draggable: false,
 })
 const emits = defineEmits(['submit'])
 const modal = inject(ModalKey)
@@ -162,10 +166,9 @@ let offsetY = 0
 
 const wrapperRef = shallowRef<any>()
 const contentRef = shallowRef<any>()
-  const { x, y } = useDraggable(contentRef, {
+const { x, y } = useDraggable(contentRef, {
   initialValue: { x: 0, y: 0 },
 })
-
 
 function onClose() {
   modal?.close(props.id)
@@ -199,18 +202,18 @@ const contentStyle = computed(() => {
     styles.maxWidth = formatSizeValue(props.maxWidth)
   }
 
-  if(props.draggable){
+  if (props.draggable) {
     styles.transform = `translate(${x.value - offsetX}px, ${y.value - offsetY}px)`
   }
 
   return styles
 })
 
-const headerStyle = computed<CSSProperties>(()=>{
+const headerStyle = computed<CSSProperties>(() => {
   const styles: CSSProperties = {}
 
   if (props.draggable) {
-    styles.cursor = "move"
+    styles.cursor = 'move'
   }
 
   return styles
@@ -220,7 +223,7 @@ const bodyStyle = computed<CSSProperties>(() => {
   const styles: CSSProperties = {}
 
   if (props.maxHeight) {
-    styles.maxHeight = `calc(${formatSizeValue(props.maxWidth)?.replace('%','vh')} - 50px)`
+    styles.maxHeight = `calc(${formatSizeValue(props.maxWidth)?.replace('%', 'vh')} - 50px)`
   }
 
   return styles
@@ -240,8 +243,8 @@ function onResize() {
       triggerRef(wrapperRef)
       triggerRef(contentRef)
 
-      offsetX = contentRef.value.offsetLeft;
-      offsetY = contentRef.value.offsetTop;
+      offsetX = contentRef.value.offsetLeft
+      offsetY = contentRef.value.offsetTop
     })
   }
 }
@@ -259,25 +262,22 @@ function onKeyboard() {
   }
 }
 
-function initObserver(){
-  const observer = new MutationObserver(mutations => {
-    mutations.forEach(mutation => {
-      if (mutation.attributeName === 'style') {
-        const newOffsetX = contentRef.value.offsetLeft;
-        const newOffsetY = contentRef.value.offsetTop;
-        /* 当元素距离文档左侧或者顶部的值变化时 */
-        if (newOffsetX !== offsetX) {
-          offsetX = newOffsetX;
-        }
-        if (newOffsetY !== offsetY) {
-          offsetY = newOffsetX;
-        }
+function initObserver() {
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      const newOffsetX = contentRef.value.offsetLeft
+      const newOffsetY = contentRef.value.offsetTop
+      /* 当元素距离文档左侧或者顶部的值变化时 */
+      if (newOffsetX !== offsetX) {
+        offsetX = newOffsetX
       }
-    });
-  });
+      if (newOffsetY !== offsetY) {
+        offsetY = newOffsetX
+      }
+    })
+  })
 
-  observer.observe(contentRef.value, { attributes: true, attributeFilter: ['style'], attributeOldValue: true });
-
+  observer.observe(contentRef.value, { attributes: true, attributeFilter: ['style', 'offsetHeight', 'offsetWidth', 'clientHeight', 'clientWidth'], attributeOldValue: true })
 }
 
 onMounted(() => {
