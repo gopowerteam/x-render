@@ -16,9 +16,11 @@
     "release": "bumpp",
     "prepare": "husky install",
     "commit": "git-cz",
-    "preinstall": "npx only-allow pnpm"
+    "preinstall": "npx only-allow pnpm",
+    "publish-packages": "turbo run build && changeset version && changeset publish"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.26.2",
     "@commitlint/cli": "18.0.0",
     "@commitlint/config-conventional": "18.0.0",
     "@gopowerteam/eslint-config": "^0.0.12",
