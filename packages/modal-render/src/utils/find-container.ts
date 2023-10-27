@@ -1,19 +1,17 @@
 import type { ComponentInternalInstance } from 'vue'
 
-export function findContainer(ctx: ComponentInternalInstance | null) {
+export function findContainer(ctx: ComponentInternalInstance | null, name: 'ModalContainer' | 'ModalProvider') {
   let parent = ctx?.parent
 
   while (
     parent
-    && parent.vnode
-    && parent.vnode.el
-    && parent.vnode.el.className !== 'modal-container'
+    && parent?.type?.name !== name
   ) {
     parent = parent.parent
   }
 
-  if (parent?.vnode?.el?.className === 'modal-container') {
-    return parent.props
+  if (parent?.type?.name === name) {
+    return parent
   }
   else {
     return null

@@ -1,4 +1,4 @@
-import type { Component } from 'vue'
+import type { Component, Ref } from 'vue'
 
 export interface SizeOptions {
   small: number
@@ -7,7 +7,8 @@ export interface SizeOptions {
 }
 
 export interface OpenModalOptions {
-  closable?: boolean
+  closeable?: boolean
+  esc?: boolean
   mask?: boolean
   maskClosable?: boolean
   title?: string
@@ -23,6 +24,7 @@ export interface ModalElement extends OpenModalOptions {
   component: Component
   props: Record<string, any>
   options: OpenModalOptions
+  onSubmit: Ref<() => void>
 }
 
 export interface ModalActions {
@@ -33,4 +35,6 @@ export interface ModalActions {
   ) => Promise<any | void>
   close: (id: string, data?: any) => void
   closeAll: () => void
+  getElement: (id: string) => ModalElement | undefined
+  addSubmitListener: (id: string, fun: () => void) => void
 }

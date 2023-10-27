@@ -8,15 +8,13 @@
           v-for="(modal) in elements"
           :id="modal.id"
           :key="modal.id"
-          :closable="modal.options.closable"
           :component="modal.component"
           :component-props="modal.props"
-          :mask-closable="modal.options.maskClosable"
+          :max-height="maxHeight"
           :max-width="maxWidth"
-          :size="modal.options.size"
           :sizes="sizes"
-          :title="modal.options.title"
-          :width="modal.options.width"
+          v-bind="modal.options"
+          @submit="modal.onSubmit.value"
         />
       </transition-group>
     </teleport>
@@ -54,9 +52,11 @@ withDefaults(defineProps<{
   appendToBody: boolean
   sizes: SizeOptions
   maxWidth: string | number
+  maxHeight: string | number
 }>(), {
   appendToBody: false,
   maxWidth: '80%',
+  maxHeight: '80%',
   sizes: () => ({
     small: 520,
     middle: 860,
@@ -84,6 +84,7 @@ async function openModal(component: Component, props: Record<string, any>, optio
       props,
       options,
       resolve,
+      onSubmit: ref(() => {}),
     })
 
     triggerRef(elements)
@@ -116,13 +117,38 @@ function closeAllModal() {
   triggerRef(elements)
 }
 
+function getModalElement(id: string) {
+  return elements.value.find(element => element.id === id)
+}
+
+function addSubmitListener(id: string, fun: () => void) {
+  const element = elements.value.find(element => element.id === id)
+
+  if (element) {
+    element.onSubmit.value = fun
+  }
+}
+
 provide(ModalKey, {
   open: openModal,
   close: closeModal,
   closeAll: closeAllModal,
+  getElement: getModalElement,
+  addSubmitListener,
+})
+
+defineExpose({
+  elements,
 })
 
 onMounted(() => {
   clientMounted.value = true
 })
+</script>
+
+<script lang="ts">
+export default {
+  name: 'ModalProvider',
+  inheritAttrs: true,
+}
 </script>

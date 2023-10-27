@@ -3,7 +3,6 @@
     <div
       ref="wrapperRef"
       class="modal-wrapper"
-      :style="wrapperStyle"
       @click.self="maskClosable && onClose()"
     >
       <div ref="contentRef" class="modal-content" :style="contentStyle">
@@ -12,13 +11,25 @@
             {{ title }}
           </div>
           <div class="action">
-            <div class="i-icon-park-outline:close block cursor-pointer" @click="onClose" />
+            <div v-if="closeable" class="i-icon-park-outline:close block cursor-pointer" @click="onClose" />
           </div>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" :style="bodyStyle">
           <Component :is="component" v-bind="componentProps" />
         </div>
-        <div v-if="footer" class="modal-footer" />
+        <div v-if="footer" class="modal-footer space-x-2">
+          <button
+            class="submit-button"
+            :form="formId"
+            type="submit"
+            @click="onSubmit"
+          >
+            确定
+          </button>
+          <button class="cancel-button" type="button" @click="onCancel">
+            取消
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -26,21 +37,22 @@
 
 <style lang="less" scoped>
 .modal-wrapper {
-  z-index: 10000;
+  z-index: 1000;
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: rgba(0, 0, 0, 0.3);
-  overflow: auto;
 }
 
 .modal-content {
-    margin: auto;
     background: rgb(255, 255, 255);
     border-radius: 5px;
-
 }
 
 .modal-header {
@@ -56,15 +68,55 @@
 .modal-body{
   padding: 20px 10px;
   box-sizing: border-box;
+  max-height: 10vw;
+}
+
+.modal-footer{
+  box-sizing: border-box;
+  height: 50px;
+  border-top: solid 1px var(--color-border-1, #E8E8E8);
+  display: flex;
+  justify-content: end;
+  padding: 10px;
+
+  button{
+    height: 28px;
+    line-height: 28px;
+    width: 80px;
+    outline: none;
+    border-color: transparent;
+    font-size: 14px;
+    border-radius: 4px;
+    padding: 0;
+    box-sizing: content-box;
+
+    &.submit-button{
+      color: #fff;
+      background-color: var(--primary-6,#2D6AFB);
+
+      &:hover{
+        background-color: var(--primary-5,#1C4CCF);
+      }
+    }
+    &.cancel-button{
+      color: var(--color-text-2,#4E5969);
+      background-color: var(--color-fill-1,#F5F5F5);
+
+      &:hover{
+        background-color: var(--color-fill-4,#C9CDD4);
+      }
+    }
+  }
 }
 </style>
 
 <script setup lang="ts">
-import type { Component, StyleValue } from 'vue'
+import type { CSSProperties, Component, HTMLAttributes } from 'vue'
 import {
   computed,
   defineProps,
   inject,
+  onMounted,
   shallowRef,
 } from 'vue'
 import { ModalKey } from '../constants'
@@ -72,17 +124,19 @@ import type { SizeOptions } from '../interfaces'
 
 const props = withDefaults (defineProps<{
   id: string
+  formId?: string
   component: Component
   componentProps: Record<string, any>
   width?: number | string
   maxWidth?: number | string
+  maxHeight?: number | string
   sizes: SizeOptions
   size: 'small' | 'middle' | 'large'
   title?: string
   header?: boolean
   footer?: boolean
   closeable?: boolean
-  keyboard?: boolean
+  esc?: boolean
   maskClosable?: boolean
 }>()
 , {
@@ -92,27 +146,13 @@ const props = withDefaults (defineProps<{
   keyboard: false,
   maskClosable: false,
   size: 'middle',
+  esc: false,
 })
-
+const emits = defineEmits(['submit'])
 const modal = inject(ModalKey)
 
 const wrapperRef = shallowRef<any>()
 const contentRef = shallowRef<any>()
-
-const wrapperStyle = computed(() => {
-  const wrapper = wrapperRef.value
-  const content = contentRef.value
-
-  const oversize = wrapper && content && wrapper.clientHeight <= content.clientHeight
-
-  return oversize
-    ? { padding: '10px 0' }
-    : {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }
-})
 
 function onClose() {
   modal?.close(props.id)
@@ -132,7 +172,7 @@ function formatSizeValue(value: string | number | undefined): string | undefined
  * 获取容器样式
  */
 const contentStyle = computed(() => {
-  const styles: StyleValue = {}
+  const styles: HTMLAttributes['style'] = {}
 
   if (props.size) {
     styles.width = formatSizeValue(props.sizes[props.size])
@@ -149,6 +189,24 @@ const contentStyle = computed(() => {
   return styles
 })
 
+const bodyStyle = computed<CSSProperties>(() => {
+  const styles: CSSProperties = {}
+
+  if (props.maxHeight) {
+    styles.maxHeight = `calc(${formatSizeValue(props.maxWidth)} - 50px)`
+  }
+
+  return styles
+})
+
+function onSubmit() {
+  emits('submit')
+}
+
+function onCancel() {
+  modal?.close(props.id)
+}
+
 // function onResize() {
 //   if (window) {
 //     window.addEventListener('resize', () => {
@@ -158,16 +216,27 @@ const contentStyle = computed(() => {
 //   }
 // }
 
-// function onKeyboard() {
-//   if (props.closable && props.keyboard) {
-//     const handleEsc = ({ key }) => {
-//       if (key === 'Escape') {
-//         modal.close(props.id)
-//         window.removeEventListener('keydown', handleEsc)
-//       }
-//     }
+function onKeyboard() {
+  if (props.closeable && props.esc) {
+    const handleEsc = ({ key }) => {
+      if (key === 'Escape') {
+        modal?.close(props.id)
+        window.removeEventListener('keydown', handleEsc)
+      }
+    }
 
-//     window.addEventListener('keydown', handleEsc)
-//   }
-// }
+    window.addEventListener('keydown', handleEsc)
+  }
+}
+
+onMounted(() => {
+  onKeyboard()
+})
+</script>
+
+<script lang="ts">
+export default {
+  name: 'ModalContainer',
+  inheritAttrs: true,
+}
 </script>

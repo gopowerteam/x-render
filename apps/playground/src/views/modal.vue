@@ -18,9 +18,11 @@ const modal = useModal()
 function onClick() {
   modal
     .open(Test1, { msg: '123' }, {
-      title: 'aaa',
+      title: 'aaa11',
       size: 'large',
       maskClosable: false,
+      footer: true,
+      esc: true,
     })
     .then((a: any) => {
       console.log(a)

@@ -1,5 +1,5 @@
 <template>
-  <ModalProvider :min-width="500">
+  <ModalProvider>
     <RouterView />
   </ModalProvider>
 </template>
