@@ -98,18 +98,18 @@
 
     &.submit-button{
       color: #fff;
-      background-color: var(--primary-6,#2D6AFB);
+      background-color: rgb(var(--primary-6, 45, 106, 251));
 
       &:hover{
-        background-color: var(--primary-5,#1C4CCF);
+        background-color: rgb(var(--primary-5, 28, 76, 207));
       }
     }
     &.cancel-button{
-      color: var(--color-text-2,#4E5969);
-      background-color: var(--color-fill-1,#F5F5F5);
+      color: rgb(var(--color-text-2,78, 89, 105));
+      background-color: rgb(var(--color-fill-1,245, 245, 245));
 
       &:hover{
-        background-color: var(--color-fill-4,#C9CDD4);
+        background-color: rgb(var(--color-fill-4,201, 205, 212));
       }
     }
   }
@@ -123,6 +123,7 @@ import {
   defineProps,
   inject,
   onMounted,
+  onUnmounted,
   shallowRef,
   triggerRef,
 } from 'vue'
@@ -163,7 +164,7 @@ const modal = inject(ModalKey)
 
 let offsetX = 0
 let offsetY = 0
-
+let observer: MutationObserver
 const wrapperRef = shallowRef<any>()
 const contentRef = shallowRef<any>()
 const { x, y } = useDraggable(contentRef, {
@@ -263,7 +264,7 @@ function onKeyboard() {
 }
 
 function initObserver() {
-  const observer = new MutationObserver((mutations) => {
+  observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       const newOffsetX = contentRef.value.offsetLeft
       const newOffsetY = contentRef.value.offsetTop
@@ -277,13 +278,24 @@ function initObserver() {
     })
   })
 
-  observer.observe(contentRef.value, { attributes: true, attributeFilter: ['style', 'offsetHeight', 'offsetWidth', 'clientHeight', 'clientWidth'], attributeOldValue: true })
+  observer.observe(contentRef.value, {
+    attributes: true,
+    attributeFilter: ['style', 'offsetHeight', 'offsetWidth', 'clientHeight', 'clientWidth'],
+    attributeOldValue: true,
+  })
 }
 
 onMounted(() => {
   onKeyboard()
   initObserver()
   onResize()
+})
+
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect()
+    observer.takeRecords()
+  }
 })
 </script>
 

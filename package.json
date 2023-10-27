@@ -10,13 +10,14 @@
   "scripts": {
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "dev": "turbo run dev --concurrency=3",
+    "dev": "turbo run dev",
     "clean": "rimraf node_modules **/*/node_modules",
     "prerelease": "pnpm build",
     "release": "bumpp",
     "prepare": "husky install",
     "commit": "git-cz",
     "preinstall": "npx only-allow pnpm",
+    "changeset":"changeset",
     "publish-packages": "turbo run build && changeset version && changeset publish"
   },
   "devDependencies": {
