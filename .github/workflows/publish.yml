@@ -1,0 +1,63 @@
+name: publish
+on:
+  push:
+    branches:
+      - master
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: ${{ startsWith(github.event.head_commit.message, 'release') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.0.1
+        with:
+          version: ^7.0
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build Package
+        run: pnpm build
+
+      - name: Test Package
+        run: pnpm test
+
+      - name: Configure Git User
+        run: |
+          git config --global user.email "2037630@163.com"
+          git config --global user.name "zhuchentong"
+
+      - name: Set NPM TOKEN
+        run: |
+          git update-index --skip-worktree -- .npmrc
+          pnpm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
+        env:
+          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+
+      - name: Publish Package Patch
+        run: npm run publish:patch
+        if: ${{ startsWith(github.event.head_commit.message, 'release(patch):') }}
+
+      - name: Publish Package Minor
+        run: npm run publish:minor
+        if: ${{ startsWith(github.event.head_commit.message, 'release(minor):') }}
+
+      - name: Publish Package Major
+        run: npm run publish:major
+        if: ${{ startsWith(github.event.head_commit.message, 'release(major):') }}
+  sync:
+    runs-on: ubuntu-latest
+    needs: release
+    steps:
+      - name: Sync Package
+        run: |
+          curl -X PUT "https://registry-direct.npmmirror.com/@gopowerteam/vue-dynamic-table/sync"
