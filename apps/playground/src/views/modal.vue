@@ -19,11 +19,12 @@ function onClick() {
   modal
     .open(Test1, { msg: '123' }, {
       title: 'aaa11',
-      size: 'large',
+      size: 'middle',
       maskClosable: false,
       footer: true,
       esc: true,
       draggable: true,
+      form: 'form',
     })
     .then((a: any) => {
       console.log(a)

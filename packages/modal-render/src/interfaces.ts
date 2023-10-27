@@ -15,8 +15,9 @@ export interface OpenModalOptions {
   header?: boolean
   footer?: boolean
   width?: number | string
-  size?: 'large' | 'middle' | 'small'
+  size?: 'large' | 'middle' | 'small' | 'fullscreen'
   draggable?: boolean
+  form?: string
 }
 
 export interface ModalElement extends OpenModalOptions {

@@ -1,7 +1,10 @@
 import { createApp } from 'vue'
 import './style.css'
 import * as VueRouter from 'vue-router'
+import ArcoVue from '@arco-design/web-vue'
 import App from './App.vue'
+import '@arco-design/web-vue/dist/arco.less'
+import '@arco-themes/vue-tuboshi/index.less'
 import '@gopowerteam/modal-render/dist/style.css'
 
 import Modal from './views/modal.vue'
@@ -17,4 +20,4 @@ const router = VueRouter.createRouter({
   routes, // `routes: routes` 的缩写
 })
 
-createApp(App).use(router).mount('#app')
+createApp(App).use(router).use(ArcoVue).mount('#app')

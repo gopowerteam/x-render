@@ -8,9 +8,10 @@
       <div ref="contentRef" class="modal-content" :style="contentStyle">
         <div
           v-if="header"
-          ref=""
+          ref="headerRef"
           class="modal-header"
           :style="headerStyle"
+          @mousedown="onMouseDown"
         >
           <div class="title font-bold">
             {{ title }}
@@ -25,7 +26,7 @@
         <div v-if="footer" class="modal-footer space-x-2">
           <button
             class="submit-button"
-            :form="formId"
+            :form="form"
             type="submit"
             @click="onSubmit"
           >
@@ -67,7 +68,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: solid 1px var(--color-border-1, #E8E8E8);
+    border-bottom: solid 1px var(--color-border-1, rgb(232, 232, 232));
 }
 
 .modal-body{
@@ -80,7 +81,7 @@
 .modal-footer{
   box-sizing: border-box;
   height: 50px;
-  border-top: solid 1px var(--color-border-1, #E8E8E8);
+  border-top: solid 1px var(--color-border-1, rgb(232, 232, 232));
   display: flex;
   justify-content: end;
   padding: 10px;
@@ -105,11 +106,11 @@
       }
     }
     &.cancel-button{
-      color: rgb(var(--color-text-2,78, 89, 105));
-      background-color: rgb(var(--color-fill-1,245, 245, 245));
+      color: rgb(var(--color-text-2, 78, 89, 105));
+      background-color: var(--color-fill-1, #f5f5f5);
 
       &:hover{
-        background-color: rgb(var(--color-fill-4,201, 205, 212));
+        background-color: var(--color-fill-4, #c9cdd4);
       }
     }
   }
@@ -133,14 +134,14 @@ import type { SizeOptions } from '../interfaces'
 
 const props = withDefaults (defineProps<{
   id: string
-  formId?: string
+  form?: string
   component: Component
   componentProps: Record<string, any>
   width?: number | string
   maxWidth?: number | string
   maxHeight?: number | string
   sizes: SizeOptions
-  size: 'small' | 'middle' | 'large'
+  size: 'small' | 'middle' | 'large' | 'fullscreen'
   title?: string
   header?: boolean
   footer?: boolean
@@ -167,7 +168,8 @@ let offsetY = 0
 let observer: MutationObserver
 const wrapperRef = shallowRef<any>()
 const contentRef = shallowRef<any>()
-const { x, y } = useDraggable(contentRef, {
+const headerRef = shallowRef<any>()
+const { x, y } = useDraggable(headerRef, {
   initialValue: { x: 0, y: 0 },
 })
 
@@ -203,7 +205,16 @@ const contentStyle = computed(() => {
     styles.maxWidth = formatSizeValue(props.maxWidth)
   }
 
-  if (props.draggable) {
+  if (props.size === 'fullscreen') {
+    styles.maxWidth = 'unset'
+    styles.position = 'fixed'
+    styles.top = 0
+    styles.left = 0
+    styles.bottom = 0
+    styles.right = 0
+  }
+
+  if (props.draggable && props.size !== 'fullscreen') {
     styles.transform = `translate(${x.value - offsetX}px, ${y.value - offsetY}px)`
   }
 
@@ -213,7 +224,7 @@ const contentStyle = computed(() => {
 const headerStyle = computed<CSSProperties>(() => {
   const styles: CSSProperties = {}
 
-  if (props.draggable) {
+  if (props.draggable && props.size !== 'fullscreen') {
     styles.cursor = 'move'
   }
 
@@ -227,10 +238,24 @@ const bodyStyle = computed<CSSProperties>(() => {
     styles.maxHeight = `calc(${formatSizeValue(props.maxWidth)?.replace('%', 'vh')} - 50px)`
   }
 
+  if (props.size === 'fullscreen') {
+    styles.maxHeight = 'calc(100% - 50px)'
+  }
+
   return styles
 })
 
 function onSubmit() {
+  const content = contentRef.value as HTMLDivElement
+
+  if (props.form && content) {
+    const form = content.querySelector(`form[name="${props.form}"]`) as HTMLFormElement
+
+    if (form) {
+      form.dispatchEvent(new Event('submit'))
+    }
+  }
+
   emits('submit')
 }
 
@@ -263,31 +288,13 @@ function onKeyboard() {
   }
 }
 
-function initObserver() {
-  observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      const newOffsetX = contentRef.value.offsetLeft
-      const newOffsetY = contentRef.value.offsetTop
-      /* 当元素距离文档左侧或者顶部的值变化时 */
-      if (newOffsetX !== offsetX) {
-        offsetX = newOffsetX
-      }
-      if (newOffsetY !== offsetY) {
-        offsetY = newOffsetX
-      }
-    })
-  })
-
-  observer.observe(contentRef.value, {
-    attributes: true,
-    attributeFilter: ['style', 'offsetHeight', 'offsetWidth', 'clientHeight', 'clientWidth'],
-    attributeOldValue: true,
-  })
+function onMouseDown() {
+  offsetX = contentRef.value.offsetLeft
+  offsetY = contentRef.value.offsetTop
 }
 
 onMounted(() => {
   onKeyboard()
-  initObserver()
   onResize()
 })
 
