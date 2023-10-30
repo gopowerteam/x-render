@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "vue": "^3.3.4",
-    "@gopowerteam/modal-render":"workspace:*"
+    "@gopowerteam/modal-render": "workspace:*"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^7.5.1",
