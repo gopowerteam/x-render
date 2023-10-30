@@ -19,7 +19,7 @@ function onClick() {
   modal
     .open(Test1, { msg: '123' }, {
       title: 'aaa11',
-      size: 'middle',
+      size: 'fullscreen',
       maskClosable: false,
       footer: true,
       esc: true,

@@ -22,14 +22,22 @@
 </template>
 
 <style lang="less" scoped>
-  .modal-fade-enter-active,
+.modal-fade-enter-active,
   .modal-fade-leave-active{
-    transition: all 0.5s ease;
+    transition: opacity 0.5s ease;
+
+    &:deep(.modal-content.drawer-mode){
+      transition: transform 0.5s ease;
+    }
   }
 
   .modal-fade-enter-from,
   .modal-fade-leave-to{
     opacity: 0;
+
+    &:deep(.modal-content.drawer-mode){
+      transform: translate3d(100%,0,0);
+    }
   }
   </style>
 

@@ -1,11 +1,17 @@
 <template>
-  <div class="modal-container">
+  <div class="modal-container fixed inset-0">
     <div
       ref="wrapperRef"
       class="modal-wrapper"
+      :style="wrapperStyle"
       @click.self="maskClosable && onClose()"
     >
-      <div ref="contentRef" class="modal-content" :style="contentStyle">
+      <div
+        ref="contentRef"
+        class="modal-content"
+        :class="{ [`${mode}-mode`]: true }"
+        :style="contentStyle"
+      >
         <div
           v-if="header"
           ref="headerRef"
@@ -51,7 +57,6 @@
   right: 0;
   inset: 0;
   display: flex;
-  justify-content: center;
   align-items: center;
   background: rgba(0, 0, 0, 0.3);
 }
@@ -149,6 +154,7 @@ const props = withDefaults (defineProps<{
   esc?: boolean
   maskClosable?: boolean
   draggable?: boolean
+  mode?: 'dialog' | 'drawer'
 }>()
 , {
   header: true,
@@ -159,6 +165,7 @@ const props = withDefaults (defineProps<{
   size: 'middle',
   esc: false,
   draggable: false,
+  mode: 'dialog',
 })
 const emits = defineEmits(['submit'])
 const modal = inject(ModalKey)
@@ -187,6 +194,20 @@ function formatSizeValue(value: string | number | undefined): string | undefined
   }
 }
 
+const wrapperStyle = computed(() => {
+  const styles: CSSProperties = {}
+
+  if (props.mode === 'dialog') {
+    styles.justifyContent = 'center'
+  }
+
+  if (props.mode === 'drawer') {
+    styles.justifyContent = 'flex-end'
+  }
+
+  return styles
+})
+
 /**
  * 获取容器样式
  */
@@ -214,8 +235,8 @@ const contentStyle = computed(() => {
     styles.right = 0
   }
 
-  if (props.draggable && props.size !== 'fullscreen') {
-    styles.transform = `translate(${x.value - offsetX}px, ${y.value - offsetY}px)`
+  if (props.draggable && props.size !== 'fullscreen' && props.mode === 'dialog') {
+    styles.transform = `translate3d(${x.value - offsetX}px, ${y.value - offsetY}px, 0px)`
   }
 
   return styles
@@ -224,7 +245,7 @@ const contentStyle = computed(() => {
 const headerStyle = computed<CSSProperties>(() => {
   const styles: CSSProperties = {}
 
-  if (props.draggable && props.size !== 'fullscreen') {
+  if (props.draggable && props.size !== 'fullscreen' && props.mode === 'dialog') {
     styles.cursor = 'move'
   }
 
@@ -235,11 +256,15 @@ const bodyStyle = computed<CSSProperties>(() => {
   const styles: CSSProperties = {}
 
   if (props.maxHeight) {
-    styles.maxHeight = `calc(${formatSizeValue(props.maxWidth)?.replace('%', 'vh')} - 50px)`
+    styles.maxHeight = `calc(${formatSizeValue(props.maxHeight)?.replace('%', 'vh')} - 50px)`
+  }
+
+  if (props.mode === 'drawer') {
+    styles.maxHeight = `calc(100vh - ${(props.header ? 50 : 0) + (props.footer ? 50 : 0)}px)`
   }
 
   if (props.size === 'fullscreen') {
-    styles.maxHeight = 'calc(100% - 50px)'
+    styles.maxHeight = `calc(100vh - ${(props.header ? 50 : 0) + (props.footer ? 50 : 0)}px)`
   }
 
   return styles

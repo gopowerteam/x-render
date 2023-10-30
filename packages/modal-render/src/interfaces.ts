@@ -18,6 +18,7 @@ export interface OpenModalOptions {
   size?: 'large' | 'middle' | 'small' | 'fullscreen'
   draggable?: boolean
   form?: string
+  mode?: 'dialog' | 'drawer'
 }
 
 export interface ModalElement extends OpenModalOptions {
