@@ -17,7 +17,7 @@
     "prepare": "husky install",
     "commit": "git-cz",
     "preinstall": "npx only-allow pnpm",
-    "changeset":"changeset",
+    "changeset": "changeset",
     "publish-packages": "turbo run build && changeset version && changeset publish"
   },
   "devDependencies": {
@@ -25,7 +25,9 @@
     "@commitlint/cli": "18.0.0",
     "@commitlint/config-conventional": "18.0.0",
     "@gopowerteam/eslint-config": "^0.0.12",
+    "@tsconfig/node18": "^18.2.2",
     "@types/node": "18",
+    "@vue/tsconfig": "^0.4.0",
     "bumpp": "^9.2.0",
     "commitizen": "4.3.0",
     "cz-customizable": "7.0.0",

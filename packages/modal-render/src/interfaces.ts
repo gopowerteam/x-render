@@ -1,4 +1,5 @@
 import type { Component, Ref } from 'vue'
+import type { useModal } from './hooks/use-modal'
 
 export interface SizeOptions {
   small: number
@@ -15,7 +16,8 @@ export interface OpenModalOptions {
   header?: boolean
   footer?: boolean
   width?: number | string
-  size?: 'large' | 'middle' | 'small' | 'fullscreen'
+  size?: 'large' | 'middle' | 'small'
+  fullscreen?: boolean
   draggable?: boolean
   form?: string
   mode?: 'dialog' | 'drawer'
@@ -27,7 +29,7 @@ export interface ModalElement extends OpenModalOptions {
   component: Component
   props: Record<string, any>
   options: OpenModalOptions
-  onSubmit: Ref<() => void>
+  onSubmit: Ref<((actions: ReturnType<typeof useModal>) => void) | null>
 }
 
 export interface ModalActions {
@@ -39,5 +41,5 @@ export interface ModalActions {
   close: (id: string, data?: any) => void
   closeAll: () => void
   getElement: (id: string) => ModalElement | undefined
-  addSubmitListener: (id: string, fun: () => void) => void
+  addSubmitListener: (id: string, fun: (modal: ReturnType<typeof useModal>) => void) => void
 }

@@ -2,7 +2,7 @@
   <slot />
 
   <div v-if="clientMounted" class="modal-teleport">
-    <teleport :disabled="!appendToBody" to="body">
+    <teleport :disabled="!appendToBody" :to="typeof appendToBody === 'string' ? appendToBody : 'body'">
       <transition-group name="modal-fade">
         <ModalContainer
           v-for="(modal) in elements"
@@ -54,10 +54,11 @@ import {
 } from 'vue'
 import { ModalKey } from '../constants'
 import type { ModalElement, OpenModalOptions, SizeOptions } from '../interfaces'
+import type { useModal } from '../hooks/use-modal'
 import ModalContainer from './modal-container.vue'
 
 withDefaults(defineProps<{
-  appendToBody: boolean
+  appendToBody: boolean | string
   sizes: SizeOptions
   maxWidth: string | number
   maxHeight: string | number
@@ -92,7 +93,7 @@ async function openModal(component: Component, props: Record<string, any>, optio
       props,
       options,
       resolve,
-      onSubmit: ref(() => {}),
+      onSubmit: ref(null),
     })
 
     triggerRef(elements)
@@ -129,9 +130,9 @@ function getModalElement(id: string) {
   return elements.value.find(element => element.id === id)
 }
 
-function addSubmitListener(id: string, fun: () => void) {
+function addSubmitListener(id: string, fun: (actions: ReturnType<typeof useModal>) => void) {
   const element = elements.value.find(element => element.id === id)
-
+  console.log(fun, 111)
   if (element) {
     element.onSubmit.value = fun
   }

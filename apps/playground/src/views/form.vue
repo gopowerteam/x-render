@@ -1,8 +1,5 @@
 <template>
-  <div>123123123</div>
-  <button @click="onClick">
-    12312
-  </button>
+  <div>form demo</div>
 </template>
 
 <style scoped>
@@ -19,11 +16,12 @@ function onClick() {
   modal
     .open(Test1, { msg: '123' }, {
       title: 'aaa11',
+      fullscreen: true,
       maskClosable: false,
-      size: 'small',
       footer: true,
       esc: true,
       draggable: true,
+      form: 'form',
     })
     .then((a: any) => {
       console.log(a)

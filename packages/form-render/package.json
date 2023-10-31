@@ -1,7 +1,7 @@
 {
-  "name": "@gopowerteam/modal-render",
+  "name": "@gopowerteam/form-render",
   "type": "module",
-  "version": "0.0.4",
+  "version": "0.0.1",
   "author": {
     "name": "zhuchentong",
     "email": "2037630@gmail.com"
@@ -15,29 +15,19 @@
   "bugs": {
     "url": "https://github.com/gopowerteam/x-render/issues"
   },
-  "main": "./dist/cjs/index.cjs",
-  "module": "./dist/es/index.mjs",
-  "types": "./dist/es/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/es/index.d.ts",
-      "import": "./dist/es/index.mjs",
-      "require": "./dist/cjs/index.cjs"
+      "require": "./dist/index.cjs",
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
     },
-    "./es": {
-      "types": "./dist/es/index.d.ts",
-      "import": "./dist/es/index.mjs"
-    },
-    "./cjs": {
-      "types": "./dist/cjs/index.d.ts",
-      "require": "./dist/cjs/index.cjs"
-    },
-    "./dist/style.css": {
-      "require": "./dist/style.css",
-      "import": "./dist/style.css"
-    },
-    "./*": "./*"
+    "./dist/": "./dist/"
   },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist",
     "README.md"
@@ -48,9 +38,11 @@
     "npm:publish": "npm run build && npm publish --access publish"
   },
   "peerDependencies": {
-    "vue": "^3.0.0"
+    "vue": "^3.0.0",
+    "@arco-design/web-vue": "^2.52.1"
   },
   "devDependencies": {
+    "@arco-design/web-vue": "^2.52.1",
     "@iconify-json/icon-park-outline": "^1.1.12",
     "@types/node": "18.16.0",
     "@unocss/preset-icons": "^0.57.1",

@@ -1,47 +1,45 @@
 <template>
-  <div class="modal-container fixed inset-0">
+  <div
+    ref="wrapperRef"
+    class="modal-wrapper"
+    :style="wrapperStyle"
+    @click.self="maskClosable && onClose()"
+  >
     <div
-      ref="wrapperRef"
-      class="modal-wrapper"
-      :style="wrapperStyle"
-      @click.self="maskClosable && onClose()"
+      ref="contentRef"
+      class="modal-content"
+      :class="{ [`${mode}-mode`]: true }"
+      :style="contentStyle"
     >
       <div
-        ref="contentRef"
-        class="modal-content"
-        :class="{ [`${mode}-mode`]: true }"
-        :style="contentStyle"
+        v-if="header"
+        ref="headerRef"
+        class="modal-header"
+        :style="headerStyle"
+        @mousedown="onMouseDown"
       >
-        <div
-          v-if="header"
-          ref="headerRef"
-          class="modal-header"
-          :style="headerStyle"
-          @mousedown="onMouseDown"
+        <div class="title font-bold">
+          {{ title }}
+        </div>
+        <div class="action">
+          <div v-if="closeable" class="i-icon-park-outline:close block cursor-pointer" @click="onClose" />
+        </div>
+      </div>
+      <div class="modal-body" :style="bodyStyle">
+        <Component :is="component" v-bind="componentProps" />
+      </div>
+      <div v-if="footer" class="modal-footer space-x-2">
+        <button
+          class="submit-button"
+          :form="form"
+          type="submit"
+          @click="onSubmit"
         >
-          <div class="title font-bold">
-            {{ title }}
-          </div>
-          <div class="action">
-            <div v-if="closeable" class="i-icon-park-outline:close block cursor-pointer" @click="onClose" />
-          </div>
-        </div>
-        <div class="modal-body" :style="bodyStyle">
-          <Component :is="component" v-bind="componentProps" />
-        </div>
-        <div v-if="footer" class="modal-footer space-x-2">
-          <button
-            class="submit-button"
-            :form="form"
-            type="submit"
-            @click="onSubmit"
-          >
-            确定
-          </button>
-          <button class="cancel-button" type="button" @click="onCancel">
-            取消
-          </button>
-        </div>
+          确定
+        </button>
+        <button class="cancel-button" type="button" @click="onCancel">
+          取消
+        </button>
       </div>
     </div>
   </div>
@@ -146,7 +144,8 @@ const props = withDefaults (defineProps<{
   maxWidth?: number | string
   maxHeight?: number | string
   sizes: SizeOptions
-  size: 'small' | 'middle' | 'large' | 'fullscreen'
+  size: 'small' | 'middle' | 'large'
+  fullscreen?: boolean
   title?: string
   header?: boolean
   footer?: boolean
@@ -226,8 +225,9 @@ const contentStyle = computed(() => {
     styles.maxWidth = formatSizeValue(props.maxWidth)
   }
 
-  if (props.size === 'fullscreen') {
+  if (props.fullscreen) {
     styles.maxWidth = 'unset'
+    styles.width = '100%'
     styles.position = 'fixed'
     styles.top = 0
     styles.left = 0
@@ -235,7 +235,7 @@ const contentStyle = computed(() => {
     styles.right = 0
   }
 
-  if (props.draggable && props.size !== 'fullscreen' && props.mode === 'dialog') {
+  if (props.draggable && !props.fullscreen && props.mode === 'dialog') {
     styles.transform = `translate3d(${x.value - offsetX}px, ${y.value - offsetY}px, 0px)`
   }
 
@@ -245,7 +245,7 @@ const contentStyle = computed(() => {
 const headerStyle = computed<CSSProperties>(() => {
   const styles: CSSProperties = {}
 
-  if (props.draggable && props.size !== 'fullscreen' && props.mode === 'dialog') {
+  if (props.draggable && !props.fullscreen && props.mode === 'dialog') {
     styles.cursor = 'move'
   }
 
@@ -263,7 +263,7 @@ const bodyStyle = computed<CSSProperties>(() => {
     styles.maxHeight = `calc(100vh - ${(props.header ? 50 : 0) + (props.footer ? 50 : 0)}px)`
   }
 
-  if (props.size === 'fullscreen') {
+  if (props.fullscreen) {
     styles.maxHeight = `calc(100vh - ${(props.header ? 50 : 0) + (props.footer ? 50 : 0)}px)`
   }
 
@@ -281,7 +281,10 @@ function onSubmit() {
     }
   }
 
-  emits('submit')
+  emits('submit', {
+    open: modal?.open,
+    close: (data: any) => modal?.close(props.id, data),
+  })
 }
 
 function onCancel() {
@@ -302,7 +305,7 @@ function onResize() {
 
 function onKeyboard() {
   if (props.closeable && props.esc) {
-    const handleEsc = ({ key }) => {
+    const handleEsc = ({ key }: { key: string }) => {
       if (key === 'Escape') {
         modal?.close(props.id)
         window.removeEventListener('keydown', handleEsc)

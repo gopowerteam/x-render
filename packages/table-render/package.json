@@ -1,7 +1,7 @@
 {
-  "name": "@gopowerteam/modal-render",
+  "name": "@gopowerteam/table-render",
   "type": "module",
-  "version": "0.0.4",
+  "version": "0.0.1",
   "author": {
     "name": "zhuchentong",
     "email": "2037630@gmail.com"
@@ -48,14 +48,18 @@
     "npm:publish": "npm run build && npm publish --access publish"
   },
   "peerDependencies": {
+    "@arco-design/web-vue": "^2.52.1",
     "vue": "^3.0.0"
   },
   "devDependencies": {
+    "@arco-design/web-vue": "^2.52.1",
+    "@arco-plugins/vite-vue": "^1.4.5",
     "@iconify-json/icon-park-outline": "^1.1.12",
     "@types/node": "18.16.0",
     "@unocss/preset-icons": "^0.57.1",
     "@unocss/preset-uno": "^0.57.1",
     "@vitejs/plugin-vue": "4.4.0",
+    "@vitejs/plugin-vue-jsx": "^3.0.2",
     "@vue/compiler-sfc": "3.3.7",
     "@vueuse/core": "^10.5.0",
     "less": "^4.2.0",

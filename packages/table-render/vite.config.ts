@@ -3,9 +3,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import jsx from '@vitejs/plugin-vue-jsx'
 import dts from 'vite-plugin-dts'
-import unocss from 'unocss/vite'
-import presetIcons from '@unocss/preset-icons'
-import { presetUno } from 'unocss'
+import { vitePluginForArco as arco } from '@arco-plugins/vite-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,6 +12,7 @@ export default defineConfig({
     lib: {
       entry: [
         resolve(__dirname, 'src/index.ts'),
+        // resolve(__dirname, 'resolver.ts'),
       ],
       name: 'bundle',
       fileName: (format, name) => `${format}/${name}.${format === 'es' ? 'mjs' : 'cjs'}`,
@@ -21,7 +20,7 @@ export default defineConfig({
     },
     rollupOptions: {
       treeshake: true,
-      external: ['vue'],
+      external: ['vue', '@arco-design/web-vue', 'dayjs', 'mitt'],
       output: {
         exports: 'named',
         globals: {
@@ -39,16 +38,8 @@ export default defineConfig({
       copyDtsFiles: false,
       tsconfigPath: './tsconfig.dts.json',
     }),
-    unocss({
-      presets: [
-        presetUno(),
-        presetIcons({
-          collections: {
-            'icon-park-outline': () =>
-              import('@iconify-json/icon-park-outline').then(i => i.icons),
-          },
-        }),
-      ],
-    }),
+    arco({
+      style: 'css',
+    }) as any,
   ],
 })

@@ -40,15 +40,5 @@ export function useModal() {
 
       modal.closeAll()
     },
-    onSubmit(fun: () => void) {
-      const modalContainer = findContainer(ctx, 'ModalContainer')
-      const id = modalContainer?.props.id as string | undefined
-
-      if (!id) {
-        throw new Error('Not Found Current Modal Container')
-      }
-
-      // modal?.onSubmit(id, fun)
-    },
   }
 }

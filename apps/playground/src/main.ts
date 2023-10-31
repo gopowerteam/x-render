@@ -8,16 +8,18 @@ import '@arco-themes/vue-tuboshi/index.less'
 import '@gopowerteam/modal-render/dist/style.css'
 
 import Modal from './views/modal.vue'
+import Form from './views/form.vue'
+import Table from './views/table.vue'
 
 const routes = [
-  { path: '/', component: Modal },
   { path: '/modal', component: Modal },
+  { path: '/table', component: Table },
+  { path: '/form', component: Form },
 ]
 
 const router = VueRouter.createRouter({
-  // 4. 内部提供了 history 模式的实现。为了简单起见，我们在这里使用 hash 模式。
-  history: VueRouter.createMemoryHistory(),
-  routes, // `routes: routes` 的缩写
+  history: VueRouter.createWebHistory(),
+  routes,
 })
 
 createApp(App).use(router).use(ArcoVue).mount('#app')

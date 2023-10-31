@@ -38,3 +38,4 @@ dist/
 
 /generated
 storybook-static/
+vite.config.ts.timestamp-*
