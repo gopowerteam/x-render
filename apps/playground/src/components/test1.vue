@@ -9,7 +9,7 @@
       <AInput v-model="formModel.a" />
     </AFormItem>
   </AForm>
-  <div v-for="i in 1000" :key="i" style="width:2000px;">
+  <div v-for="i in 2" :key="i" style="width:2000px;">
     test-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxx
   </div>
 </template>

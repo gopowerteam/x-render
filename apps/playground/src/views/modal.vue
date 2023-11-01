@@ -24,6 +24,7 @@ function onClick() {
       footer: true,
       esc: true,
       draggable: true,
+      mode: 'drawer',
     })
     .then((a: any) => {
       console.log(a)

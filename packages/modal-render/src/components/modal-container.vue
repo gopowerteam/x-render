@@ -233,10 +233,15 @@ const contentStyle = computed(() => {
     styles.left = 0
     styles.bottom = 0
     styles.right = 0
+    styles.borderRadius = 0
   }
 
   if (props.draggable && !props.fullscreen && props.mode === 'dialog') {
     styles.transform = `translate3d(${x.value - offsetX}px, ${y.value - offsetY}px, 0px)`
+  }
+
+  if (props.mode === 'drawer') {
+    styles.borderRadius = 0
   }
 
   return styles
@@ -260,11 +265,13 @@ const bodyStyle = computed<CSSProperties>(() => {
   }
 
   if (props.mode === 'drawer') {
-    styles.maxHeight = `calc(100vh - ${(props.header ? 50 : 0) + (props.footer ? 50 : 0)}px)`
+    styles.maxHeight = 'unset'
+    styles.height = `calc(100vh - ${(props.header ? 50 : 0) + (props.footer ? 50 : 0)}px)`
   }
 
   if (props.fullscreen) {
-    styles.maxHeight = `calc(100vh - ${(props.header ? 50 : 0) + (props.footer ? 50 : 0)}px)`
+    styles.maxHeight = 'unset'
+    styles.height = `calc(100vh - ${(props.header ? 50 : 0) + (props.footer ? 50 : 0)}px)`
   }
 
   return styles

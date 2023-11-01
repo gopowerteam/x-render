@@ -1,5 +1,5 @@
-import { defineComponent, reactive } from 'vue'
 import { Table } from '@arco-design/web-vue'
+import { defineComponent, h, reactive } from 'vue'
 
 export default defineComponent({
   props: {
@@ -61,6 +61,15 @@ export default defineComponent({
       email: 'william.smith@example.com',
     }])
 
-    return <Table columns={columns} data={data}></Table>
+    const renderForm = () => <div></div>
+
+    const renderTable = () => <div>
+     { h(Table, { data, columns })}
+    </div>
+
+    return <div class="table-render table-render-container">
+      {renderForm}
+      {renderTable}
+    </div>
   },
 })

@@ -1,5 +1,11 @@
 # @gopowerteam/modal-render
 
+## 0.0.6
+
+### Patch Changes
+
+- fixed drawer height
+
 ## 0.0.5
 
 ### Patch Changes
