@@ -8,7 +8,8 @@ export function onSubmit(callback: (actions: ReturnType<typeof useModal>) => voi
   const ctx = getCurrentInstance()
   const container = findContainer(ctx, 'ModalContainer')
   const id = container?.props?.id as string
+
   if (modal && id) {
-    modal.addSubmitListener(id, callback)
+    modal.addEventListener(id, 'submit', callback)
   }
 }

@@ -41,6 +41,14 @@
           取消
         </button>
       </div>
+      <div v-if="loading" class="modal-loading">
+        <div class="lds-ring">
+          <div />
+          <div />
+          <div />
+          <div />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -62,6 +70,7 @@
 .modal-content {
     background: rgb(255, 255, 255);
     border-radius: 5px;
+    position: relative;;
 }
 
 .modal-header {
@@ -118,6 +127,51 @@
     }
   }
 }
+
+.modal-loading{
+  position: absolute;
+  z-index: 1001;
+  inset:0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.1);
+  .lds-ring {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+  }
+  .lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    margin: 8px;
+    border: 5px solid #fff;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #fff transparent transparent transparent;
+  }
+  .lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+  }
+  .lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+  }
+  .lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+  }
+  @keyframes lds-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}
 </style>
 
 <script setup lang="ts">
@@ -128,6 +182,7 @@ import {
   inject,
   onMounted,
   onUnmounted,
+  ref,
   shallowRef,
   triggerRef,
 } from 'vue'
@@ -154,6 +209,7 @@ const props = withDefaults (defineProps<{
   maskClosable?: boolean
   draggable?: boolean
   mode?: 'dialog' | 'drawer'
+  type?: string
 }>()
 , {
   header: true,
@@ -168,6 +224,7 @@ const props = withDefaults (defineProps<{
 })
 const emits = defineEmits(['submit'])
 const modal = inject(ModalKey)
+const loading = ref(false)
 
 let offsetX = 0
 let offsetY = 0
@@ -274,6 +331,10 @@ const bodyStyle = computed<CSSProperties>(() => {
     styles.height = `calc(100vh - ${(props.header ? 50 : 0) + (props.footer ? 50 : 0)}px)`
   }
 
+  if (props.type !== 'component') {
+    styles.padding = '0'
+  }
+
   return styles
 })
 
@@ -288,10 +349,7 @@ function onSubmit() {
     }
   }
 
-  emits('submit', {
-    open: modal?.open,
-    close: (data: any) => modal?.close(props.id, data),
-  })
+  emits('submit')
 }
 
 function onCancel() {
@@ -338,6 +396,20 @@ onUnmounted(() => {
     observer.disconnect()
     observer.takeRecords()
   }
+})
+
+function showLoading() {
+  loading.value = true
+  return () => hideLoading()
+}
+
+function hideLoading() {
+  loading.value = false
+}
+
+defineExpose({
+  showLoading,
+  hideLoading,
 })
 </script>
 

@@ -21,8 +21,9 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import { Form as AForm, type FieldRule } from '@arco-design/web-vue'
-import { onSubmit } from '@gopowerteam/modal-render'
+import { onSubmit, useModal } from '@gopowerteam/modal-render'
 
+const modal = useModal()
 const formModel = reactive({
   a: 'tt',
   b: '',
@@ -36,10 +37,10 @@ const formRules: Record<string, FieldRule<any>> = {
 }
 
 onSubmit((modal) => {
-  modal.close('aaa')
+  modal.showLoading()
+  // modal.close('aaa')
 })
 
-function onSubmitSuccess(modal) {
-  console.log(modal)
+function onSubmitSuccess() {
 }
 </script>

@@ -1,4 +1,4 @@
-import type { Component, Ref } from 'vue'
+import type { Component } from 'vue'
 import type { useModal } from './hooks/use-modal'
 
 export interface SizeOptions {
@@ -28,18 +28,20 @@ export interface ModalElement extends OpenModalOptions {
   resolve: (data?: any) => void
   component: Component
   props: Record<string, any>
-  options: OpenModalOptions
-  onSubmit: Ref<((actions: ReturnType<typeof useModal>) => void) | null>
+  options: OpenModalOptions & { type?: string }
+  listeners: {
+    event: string
+    callback: (actions: ReturnType<typeof useModal>) => void
+  }[]
 }
 
 export interface ModalActions {
   open: (
-    component: Component,
-    props: Record<string, any>,
-    options: OpenModalOptions,
-  ) => Promise<any | void>
+    component: Component | 'confirm' | 'info' | 'warning' | 'error' | 'sucess',
+    props?: Record<string, any>,
+    options?: OpenModalOptions,
+  ) => Promise<any> & { close: () => void }
   close: (id: string, data?: any) => void
   closeAll: () => void
-  getElement: (id: string) => ModalElement | undefined
-  addSubmitListener: (id: string, fun: (modal: ReturnType<typeof useModal>) => void) => void
+  addEventListener: (id: string, event: 'submit', callback: (modal: ReturnType<typeof useModal>) => void) => void
 }
