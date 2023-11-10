@@ -13,11 +13,13 @@ export function useModal() {
     props: {
       title?: string
       content: string
+      onOk?: () => Promise<void> | void
+      onCancel?: () => Promise<void> | void
       footer?: () => JSX.Element
     }
   ): Promise<any> & { close: () => void }
   function open(
-    component: 'info' | 'warning' | 'error' | 'sucess',
+    component: 'info' | 'warning' | 'error' | 'success',
     props: {
       title?: string
       content: string
@@ -29,7 +31,7 @@ export function useModal() {
     options?: OpenModalOptions,
   ): Promise<any> & { close: () => void }
   function open(
-    component: Component | 'confirm' | 'info' | 'warning' | 'error' | 'sucess',
+    component: Component | 'confirm' | 'info' | 'warning' | 'error' | 'success',
     props?: Record<string, any>,
     options?: OpenModalOptions,
   ): Promise<any> & { close: () => void } {
@@ -39,6 +41,7 @@ export function useModal() {
 
     return modal.open(component, props, options)
   }
+
   return {
     open,
     close(data?: any): void {
@@ -93,6 +96,39 @@ export function useModal() {
       if (container?.exposed) {
         container?.exposed.hideLoading()
       }
+    },
+    confirm(props: {
+      title?: string
+      content: string
+      onOk?: () => Promise<void> | void
+      onCancel?: () => Promise<void> | void
+      footer?: () => JSX.Element
+    }) {
+      return this.open('confirm', props)
+    },
+    info(props: {
+      title?: string
+      content: string
+    }) {
+      return this.open('info', props)
+    },
+    error(props: {
+      title?: string
+      content: string
+    }) {
+      return this.open('error', props)
+    },
+    warning(props: {
+      title?: string
+      content: string
+    }) {
+      return this.open('warning', props)
+    },
+    success(props: {
+      title?: string
+      content: string
+    }) {
+      return this.open('success', props)
     },
   }
 }

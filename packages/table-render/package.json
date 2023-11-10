@@ -1,7 +1,7 @@
 {
   "name": "@gopowerteam/table-render",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": {
     "name": "zhuchentong",
     "email": "2037630@gmail.com"
@@ -49,11 +49,15 @@
   },
   "peerDependencies": {
     "@arco-design/web-vue": "^2.52.1",
+    "@gopowerteam/form-render": "^0.0.2",
+    "@gopowerteam/modal-render": "^0.0.8",
     "vue": "^3.0.0"
   },
   "devDependencies": {
     "@arco-design/web-vue": "^2.52.1",
     "@arco-plugins/vite-vue": "^1.4.5",
+    "@gopowerteam/form-render": "workspace:*",
+    "@gopowerteam/modal-render": "workspace:*",
     "@iconify-json/icon-park-outline": "^1.1.12",
     "@types/node": "18.16.0",
     "@unocss/preset-icons": "^0.57.1",
@@ -73,5 +77,8 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
     "access": "public"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0"
   }
 }

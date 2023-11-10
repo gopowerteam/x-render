@@ -20,7 +20,14 @@ export default defineConfig({
     },
     rollupOptions: {
       treeshake: true,
-      external: ['vue', '@arco-design/web-vue', 'dayjs', 'mitt'],
+      external: [
+        'vue',
+        '@arco-design/web-vue',
+        'dayjs',
+        'mitt',
+        '@gopowerteam/form-render',
+        '@gopowerteam/modal-render',
+      ],
       output: {
         exports: 'named',
         globals: {

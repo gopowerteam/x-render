@@ -37,7 +37,7 @@ export interface ModalElement extends OpenModalOptions {
 
 export interface ModalActions {
   open: (
-    component: Component | 'confirm' | 'info' | 'warning' | 'error' | 'sucess',
+    component: Component | 'confirm' | 'info' | 'warning' | 'error' | 'success',
     props?: Record<string, any>,
     options?: OpenModalOptions,
   ) => Promise<any> & { close: () => void }

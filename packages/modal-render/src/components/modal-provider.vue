@@ -85,7 +85,7 @@ const instance = getCurrentInstance()
  * 打开Modal
  */
 
-function openModal(component: Component | 'confirm' | 'info' | 'warning' | 'error' | 'sucess', props: Record<string, any> = {}, options: OpenModalOptions = {}) {
+function openModal(component: Component | 'confirm' | 'info' | 'warning' | 'error' | 'success', props: Record<string, any> = {}, options: OpenModalOptions = {}) {
   const instance = defineAsyncComponent(() =>
     Promise.resolve(typeof component === 'string' ? ModalDialog : component),
   )
@@ -160,10 +160,15 @@ function onEvent(id: string, event: string) {
   if (listener) {
     listener.callback({
       open: openModal,
-      close: () => closeModal(element.id),
+      close: (data?: any) => closeModal(element.id, data),
       closeAll: closeAllModal,
       showLoading: () => showModalLoading(element.id),
       hideLoading: () => hideModalLoading(element.id),
+      confirm: options => openModal('confirm', options),
+      success: options => openModal('success', options),
+      error: options => openModal('error', options),
+      warning: options => openModal('warning', options),
+      info: options => openModal('info', options),
     })
   }
 }
@@ -212,6 +217,7 @@ provide(ModalKey, {
 
 defineExpose({
   elements,
+  open: openModal,
 })
 
 onMounted(() => {

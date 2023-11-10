@@ -1,7 +1,7 @@
 {
   "name": "@gopowerteam/form-render",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": {
     "name": "zhuchentong",
     "email": "2037630@gmail.com"
@@ -15,19 +15,29 @@
   "bugs": {
     "url": "https://github.com/gopowerteam/x-render/issues"
   },
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/es/index.mjs",
+  "types": "./dist/es/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/index.cjs",
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      }
+      "types": "./dist/es/index.d.ts",
+      "import": "./dist/es/index.mjs",
+      "require": "./dist/cjs/index.cjs"
     },
-    "./dist/": "./dist/"
+    "./es": {
+      "types": "./dist/es/index.d.ts",
+      "import": "./dist/es/index.mjs"
+    },
+    "./cjs": {
+      "types": "./dist/cjs/index.d.ts",
+      "require": "./dist/cjs/index.cjs"
+    },
+    "./dist/style.css": {
+      "require": "./dist/style.css",
+      "import": "./dist/style.css"
+    },
+    "./*": "./*"
   },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "files": [
     "dist",
     "README.md"

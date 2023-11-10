@@ -1,5 +1,16 @@
 <template>
-  <div>form demo</div>
+  <FormRender
+    footer
+    :form="form"
+    resetable
+    searchable
+  >
+    <template #actions>
+      <AButton type="primary">
+        123123
+      </AButton>
+    </template>
+  </FormRender>
 </template>
 
 <style scoped>
@@ -7,24 +18,20 @@
 </style>
 
 <script setup lang="ts">
-import { useModal } from '@gopowerteam/modal-render'
-import Test1 from '../components/test1.vue'
+import { FormRender, defineForm } from '@gopowerteam/form-render'
 
-const modal = useModal()
-
-function onClick() {
-  modal
-    .open(Test1, { msg: '123' }, {
-      title: 'aaa11',
-      fullscreen: true,
-      maskClosable: false,
-      footer: true,
-      esc: true,
-      draggable: true,
-      form: 'form',
-    })
-    .then((a: any) => {
-      console.log(a)
-    })
-}
+const form = defineForm([...Array.from(Array(10), (_, index) => ({
+  key: `name${index}`,
+  title: `姓名${index}`,
+  render: r => r.input(),
+  default: 'xxxx',
+})), {
+  key: 'xxx123123123123123',
+  title: 'zzz123123123',
+  collapsed: true,
+  rule: {
+    required: true,
+    message: 'asdasd',
+  },
+}])
 </script>

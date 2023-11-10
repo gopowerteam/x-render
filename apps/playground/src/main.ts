@@ -6,12 +6,14 @@ import App from './App.vue'
 import '@arco-design/web-vue/dist/arco.less'
 import '@arco-themes/vue-tuboshi/index.less'
 import '@gopowerteam/modal-render/dist/style.css'
+import '@gopowerteam/form-render/dist/style.css'
 
 import Modal from './views/modal.vue'
 import Form from './views/form.vue'
 import Table from './views/table.vue'
 
 const routes = [
+  { path: '/form', component: Form },
   { path: '/modal', component: Modal },
   { path: '/table', component: Table },
   { path: '/form', component: Form },
