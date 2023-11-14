@@ -6,7 +6,7 @@ import {
   onUpdated,
   ref,
 } from 'vue'
-import type { TableRender } from '../render/table-render'
+import type { TableRender } from '../table-render'
 
 type TableRenderInstance = InstanceType<typeof TableRender>
 

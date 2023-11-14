@@ -101,7 +101,7 @@ function openModal(component: Component | 'confirm' | 'info' | 'warning' | 'erro
 
   const id = Math.random().toString(32).slice(2)
 
-  const promise = new Promise((resolve) => {
+  const promise = new Promise((resolve, reject) => {
     elements.value.push({
       id,
       component: instance,
@@ -111,10 +111,18 @@ function openModal(component: Component | 'confirm' | 'info' | 'warning' | 'erro
         type: typeof component === 'string' ? component : 'component',
       },
       resolve,
+      reject,
       listeners: [],
     })
 
     triggerRef(elements)
+  }).catch((e) => {
+    if (e === 'CANCEL') {
+      return new Promise(() => {})
+    }
+    else {
+      return Promise.reject(e)
+    }
   })
 
   return Object.assign(promise, {
@@ -133,7 +141,14 @@ function closeModal(id: string, data?: any) {
   }
 
   const modal = elements.value[index]
-  modal?.resolve(data)
+
+  if (data === undefined) {
+    modal?.reject('CANCEL')
+  }
+  else {
+    modal?.resolve(data)
+  }
+
   elements.value.splice(index, 1)
 
   triggerRef(elements)

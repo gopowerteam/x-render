@@ -41,5 +41,5 @@ export function renderTagColumn<T = DataRecord>(
     )
   }
 
-  return createColumnRender<T>('tag', render, { showOverflow: false })
+  return createColumnRender<T>('tag', render)
 }

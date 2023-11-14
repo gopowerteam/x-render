@@ -29,6 +29,7 @@ export interface TableColumnOptions<T> {
   ellipsis?: boolean
   preview?: TableColumnPreviewOptions
   exportable?: ExportColumnOptions | boolean
+  sortable?: 'asc' | 'desc'
   treeNode?: boolean
   visiable?: boolean | (() => boolean)
   extraProps?: Partial<Omit<TableColumnData, 'dataIndex' | 'title' | 'fixed' | 'align' | 'width'>>

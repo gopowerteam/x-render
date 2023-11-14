@@ -104,13 +104,7 @@ export const FormRender = defineComponent({
   },
   render() {
     const onSubmitSuccess = () => {
-      if (this.searchable) {
-        this.$emit('submit', this.formSource)
-      }
-
-      if (this.submitable) {
-        this.$emit('submit', this.formSource)
-      }
+      this.$emit('submit', this.formSource)
     }
 
     const renderFormActions = () => {

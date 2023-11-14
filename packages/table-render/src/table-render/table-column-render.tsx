@@ -32,8 +32,7 @@ export function toRenderColumn<T>(
     [RenderColumnType]: templateRender.$type,
     disableColumnMode: templateRender.$disableColumnMode,
     disableViewMode: templateRender.$disableViewMode,
-    showOverflow: templateRender.$showOverflow,
-    isRenderColumn: templateRender.$type === 'render',
+    isRender: templateRender.$type === 'render',
     type: templateRender.$type,
   }
 }
@@ -54,12 +53,12 @@ export function renderTableColumns(columns: TableColumnsOptions, columnsOptions:
  * @returns
  */
 export function renderTableColumn<T>(options: TableColumnOptions<T>, events: EventEmits): TableColumnData | undefined {
-  const { render } = toRenderColumn(options, {
+  const { render, disableColumnMode } = toRenderColumn(options, {
     previewing: false,
     emits: events,
   }) || {}
 
-  if (options.visiable === false || (typeof options.visiable === 'function' && options.visiable() === false)) {
+  if (disableColumnMode || options.visiable === false || (typeof options.visiable === 'function' && options.visiable() === false)) {
     return
   }
 
@@ -70,6 +69,13 @@ export function renderTableColumn<T>(options: TableColumnOptions<T>, events: Eve
     align: options.align ?? 'center',
     fixed: options.fixed,
     ellipsis: options.ellipsis ?? true,
+    sortable: options.sortable
+      ? {
+          sorter: true,
+          sortDirections: ['ascend', 'descend'],
+          defaultSortOrder: options.sortable === 'asc' ? 'ascend' : 'descend',
+        }
+      : undefined,
     tooltip: true,
     ...options.extraProps,
     render,

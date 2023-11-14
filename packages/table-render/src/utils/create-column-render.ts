@@ -14,7 +14,6 @@ export function createColumnRender<T>(
   render.$type = type
   render.$disableColumnMode = options?.disableColumnMode
   render.$disableViewMode = options?.disableViewMode
-  render.$options = options?.showOverflow ?? true
 
   return render
 }

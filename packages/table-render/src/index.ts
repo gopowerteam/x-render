@@ -1,4 +1,4 @@
-export * from './render/table-render'
+export * from './table-render/index'
 export * from './interfaces'
 export * from './hooks'
 export * from './defines'

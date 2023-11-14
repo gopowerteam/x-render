@@ -7,7 +7,7 @@ import type {
   ExportColumnOptions,
   TableColumnsOptions,
 } from '../interfaces'
-import { toRenderFunction } from '../render/table-column-render'
+import { toRenderColumn } from '../table-render/table-column-render'
 
 function createWorkBook() {
   return new Workbook()
@@ -69,7 +69,7 @@ export function getTableRowValue(
     .filter(column => column.exportable !== false)
     .map(column => ({
       options: column,
-      render: toRenderFunction(column),
+      render: toRenderColumn(column),
       content:
         typeof column.exportable === 'object'
           ? column.exportable.content
@@ -122,16 +122,14 @@ function exportExcel(
     .filter(column => column.exportable !== false)
     .map(column => ({
       key: column.key,
-      header:
-        (column.exportable as ExportColumnOptions)?.header || column.title,
-      width:
-        (column.exportable as ExportColumnOptions)?.width
-        || transformWidth(column.width),
+      header: (column.exportable as ExportColumnOptions)?.header || column.title,
+      width: (column.exportable as ExportColumnOptions)?.width || transformWidth(column.width),
     }))
 
   const exportRows = source.map((record) => {
     return getTableRowValue(columns, record)
   })
+
   exportExcelFromJSON({
     columns: exportColumns as any,
     rows: exportRows,

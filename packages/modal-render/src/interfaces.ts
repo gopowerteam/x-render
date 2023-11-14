@@ -26,6 +26,7 @@ export interface OpenModalOptions {
 export interface ModalElement extends OpenModalOptions {
   id: string
   resolve: (data?: any) => void
+  reject: (key: 'CANCEL') => void
   component: Component
   props: Record<string, any>
   options: OpenModalOptions & { type?: string }

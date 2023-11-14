@@ -362,8 +362,10 @@ function onResize() {
       triggerRef(wrapperRef)
       triggerRef(contentRef)
 
-      offsetX = contentRef.value.offsetLeft
-      offsetY = contentRef.value.offsetTop
+      if (contentRef.value) {
+        offsetX = contentRef.value.offsetLeft
+        offsetY = contentRef.value.offsetTop
+      }
     })
   }
 }

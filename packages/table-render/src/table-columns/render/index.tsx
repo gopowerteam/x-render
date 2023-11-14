@@ -12,5 +12,5 @@ export function renderRenderColumn<T = DataRecord>(
     return renderer(record)
   }
 
-  return createColumnRender<T>('render', render, { showOverflow: false })
+  return createColumnRender<T>('render', render)
 }
