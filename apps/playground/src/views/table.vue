@@ -7,8 +7,9 @@
       v-model:radio-key="radioKey"
       v-model:radio-row="radioRow"
       :columns="columns"
+      :data-load="onTableLoad"
       exportable
-      :load-data="onTableLoad"
+      :form="form"
       pagination
       row-key="age"
       :selection="{
@@ -39,7 +40,7 @@
 <script setup lang="tsx">
 import { defineColumns, defineTableLoad, useTable } from '@gopowerteam/table-render'
 import { defineForm } from '@gopowerteam/form-render'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const radioKey = ref<number>()
 const checkboxKeys = ref<number[]>([])
@@ -60,6 +61,10 @@ const form = defineForm<t>([{
     required: true,
     message: 'asdasd',
   }],
+}, {
+  key: 'test',
+  title: 'xxx',
+  render: r => r.select({ options: new Map([['a', 'b'], ['c', 'd']]) }),
 }])
 
 const columns = defineColumns<t>([{
@@ -108,15 +113,15 @@ const columns = defineColumns<t>([{
     },
     {
       content: 'edit',
-      onClick: () => {
+      onClick: (record) => {
         table.value.edit({
-          key: 1,
+          key: record.age,
           form,
-          onSubmit: () => {
-            //
+          onSubmit: (f) => {
+            console.log('f', f)
           },
-        }).then(() => {
-          // console.log('z', a)
+        }).then((a) => {
+          console.log('z', a)
         })
       },
     },
@@ -124,6 +129,7 @@ const columns = defineColumns<t>([{
 }])
 
 const onTableLoad = defineTableLoad(({ form, update, page, sort }) => {
+  console.log('zzz')
   if (page) {
     page.total = 1000
   }
@@ -143,5 +149,13 @@ const onTableLoad = defineTableLoad(({ form, update, page, sort }) => {
       resolve(true)
     }, 1000)
   })
+})
+
+onMounted(() => {
+  setTimeout(() => {
+    console.log(table.value.formInstance)
+    table.value.formInstance?.updateFormField('test', 'c')
+    console.log(table.value.formSource)
+  }, 3000)
 })
 </script>

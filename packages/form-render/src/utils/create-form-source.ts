@@ -3,12 +3,23 @@ import type { DataRecord, FormItemsOptions } from '../interfaces'
 
 export function createFormSource(
   form?: FormItemsOptions,
+  source?: Record<string, any>,
 ): [Ref<DataRecord>, (value: DataRecord) => void] {
   // 创建数据库
   const state = ref<DataRecord>({})
 
   form?.forEach((item) => {
-    state.value[item.key] = (typeof item.default === 'function' ? item.default() : item.default) || null
+    let value = null
+
+    if (item.default) {
+      value = (typeof item.default === 'function' ? item.default() : item.default) || null
+    }
+
+    if (source && source[item.key]) {
+      value = source[item.key]
+    }
+
+    state.value[item.key] = value
   })
 
   const updateState = (value: DataRecord) => {

@@ -5,7 +5,7 @@ import type { DataRecord } from '..'
 
 export default defineComponent({
   props: {
-    record: {
+    value: {
       type: Object,
       required: true,
     },
@@ -29,10 +29,13 @@ export default defineComponent({
       modal.close(record)
     }
 
+    console.log(props.value)
+
     return () => (
       <div class="edit-form-container">
         <FormRender
             name="form"
+            value={props.value}
             form={props.form}
             onSubmit={onSubmit}
           ></FormRender>

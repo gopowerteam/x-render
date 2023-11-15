@@ -1,7 +1,7 @@
 import { Button } from '@arco-design/web-vue'
 
 import { useModal } from '@gopowerteam/modal-render'
-import { createColumnRender } from '../../utils'
+import { createColumnRender, isPromise } from '../../utils'
 import type { EventEmits, TableColumnOptions } from '../..'
 
 export type RenderButtonColumnOptions<T> =
@@ -108,10 +108,16 @@ export function renderButtonColumn<T>(options: RenderButtonColumnOptions<T>) {
         : Promise.resolve(true))
 
       if (executable && button?.onClick) {
-        await button.onClick(record)
+        const promise = button.onClick(record)
 
-        if (button.autoReload && ctx?.emits) {
-          ctx?.emits('reload')
+        if (isPromise(promise) && button.autoReload !== false) {
+          (promise as Promise<void>).then(() => {
+            ctx?.emits && ctx?.emits('reload')
+          })
+        }
+
+        if (!isPromise(promise) && button.autoReload === true) {
+          ctx?.emits && ctx?.emits('reload')
         }
       }
     }

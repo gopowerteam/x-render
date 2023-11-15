@@ -39,6 +39,7 @@ export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions)
         v-model={data[form.key as keyof T]}
         placeholder={options.placeholder}
         allowClear={options.clearable}
+        maxTagCount={options.maxTagCount}
         onChange={onSelectChange}>
         {Array.from(selectOptions.value.entries()).map(([value, label]) => (
           <Option
@@ -65,6 +66,7 @@ export interface RenderSelectItemOptions {
   | (() => Promise<SelectOptions>)
   // 多选支持
   multiple?: boolean
+  maxTagCount?: number
   // 默认值
   default?: string | number | boolean
   // 自动提交

@@ -1,6 +1,6 @@
 import { Table, type TableInstance } from '@arco-design/web-vue'
 
-import { type PropType, type Ref, defineComponent, onMounted, ref } from 'vue'
+import { type PropType, type Ref, computed, defineComponent, onMounted, readonly, ref } from 'vue'
 import { ModalProvider } from '@gopowerteam/modal-render'
 import { type DataRecord, type FormItemsOptions, type FormRenderInstance } from '@gopowerteam/form-render'
 import type { RequestPlugin } from '@gopowerteam/request'
@@ -12,6 +12,7 @@ import { PageService } from '../utils/page.service'
 import { useExport } from '../hooks/use-export'
 import type { PageableOptions } from '../interfaces/pageable-options'
 import { SortService } from '../utils/sort.service'
+import { isPromise } from '../utils'
 import { renderTableColumns } from './table-column-render'
 import TableViewRender from './table-view-render'
 import { tableActionsRender } from './table-actions-render'
@@ -19,10 +20,6 @@ import { tableFormRender } from './table-form-render'
 import { tableSecletionRender } from './table-selection-render'
 import { tablePaginationRender } from './table-pagination-render'
 import tableEditRender from './table-edit-render'
-
-function isPromise(obj: any) {
-  return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function'
-}
 
 export const TableRender = defineComponent({
   props: {
@@ -32,7 +29,7 @@ export const TableRender = defineComponent({
       required: true,
     },
     form: {
-      type: Object as PropType<FormItemsOptions>,
+      type: Object as PropType<FormItemsOptions<any>>,
       required: false,
     },
     columns: {
@@ -126,6 +123,7 @@ export const TableRender = defineComponent({
     'update:radio-row',
     'update:checkbox-keys',
     'update:checkbox-rows',
+    'formInstance',
   ],
   setup(props, ctx) {
     const tableId = Math.random().toString(32).slice(2).toUpperCase()
@@ -212,7 +210,7 @@ export const TableRender = defineComponent({
       }
 
       return modalInstance.value.open(tableEditRender, {
-        record,
+        value: record,
         form: options?.form,
         onSubmit: options.onSubmit,
       }, {
@@ -334,7 +332,8 @@ export const TableRender = defineComponent({
       tableForm,
       tableLoading,
       modalInstance,
-      formSource: formInstance?.value?.formSource,
+      formSource: readonly(computed(() => formInstance?.value?.formSource)),
+      formInstance,
       reload: onTableReload,
       preview: onTablePreview,
       edit: onTableEdit,

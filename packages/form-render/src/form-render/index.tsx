@@ -9,8 +9,16 @@ import { renderFormItem } from './form-item-render'
 export const FormRender = defineComponent({
   props: {
     form: {
-      type: Object as PropType<FormItemsOptions>,
+      type: Object as PropType<FormItemsOptions<any>>,
       required: true,
+    },
+    value: {
+      type: Object as PropType<Record<string, any>>,
+      required: false,
+    },
+    modelValue: {
+      type: Object as PropType<Record<string, any>>,
+      required: false,
     },
     minWidth: {
       type: Number,
@@ -41,14 +49,18 @@ export const FormRender = defineComponent({
   emits: [
     'submit',
     'cancel',
+    'update:model-value',
   ],
   expose: [
     'formSource',
+    'updateFormField',
+    'updateFormSource',
+    'reset',
   ],
   setup(props) {
     const formId = Math.random().toString(32).slice(2).toUpperCase()
     const formInstance = ref<FormInstance>()
-    const [formSource] = createFormSource(props.form)
+    const [formSource, updateFormSource] = createFormSource(props.form, props.modelValue || props.value)
     const formColumns = ref(0)
     const formCollspased = ref<boolean>(true)
     const toggleFormCollapsed = () => formCollspased.value = !formCollspased.value
@@ -71,7 +83,7 @@ export const FormRender = defineComponent({
     const formRules = computed(() => {
       return props.form.reduce<Record<string, FieldRule | FieldRule[]>>((rules, item) => {
         if (item.rule) {
-          rules[item.key] = item.rule
+          rules[item.key as string] = item.rule
         }
         return rules
       }, {})
@@ -86,6 +98,17 @@ export const FormRender = defineComponent({
       updateFormColumnValue()
     })
 
+    function updateFormField(key: string, value: any) {
+      updateFormSource({
+        ...formSource,
+        [key]: value,
+      })
+    }
+
+    function resetForm() {
+      formInstance.value?.resetFields()
+    }
+
     window.addEventListener('resize', updateFormColumnValue)
 
     return ({
@@ -97,11 +120,15 @@ export const FormRender = defineComponent({
       formCollspased,
       formActiosSpan,
       toggleFormCollapsed,
+      updateFormField,
+      updateFormSource,
+      reset: resetForm,
     })
   },
   render() {
     const onSubmitSuccess = () => {
       this.$emit('submit', this.formSource)
+      this.$emit('update:model-value', this.formSource)
     }
 
     const renderFormActions = () => {
