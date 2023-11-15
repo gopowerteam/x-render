@@ -14,7 +14,7 @@ function toRenderTemplate(source: DataRecord, options: FormItemOptions) {
 
   // 获取渲染模板
   const templateRender = options.render({
-    ...renders,
+    ...renders(),
   })
 
   // 获取deault slot

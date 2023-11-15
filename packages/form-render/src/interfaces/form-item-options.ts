@@ -5,7 +5,7 @@ import type { FormItemRenders } from '../form-items'
  * 表单项配置
  */
 export interface FormItemOptions<T = Record<string, any>> {
-  key: string
+  key: keyof T | string
   title: string
   default?: any | (() => any) | (() => Promise<any>)
   collapsed?: boolean
@@ -16,17 +16,27 @@ export interface FormItemOptions<T = Record<string, any>> {
   render?: FormItemRender<T>
 }
 
+export interface FormItemStringKeyOptions<T = Record<string, any>> extends FormItemOptions<T> {
+  key: string
+}
+export interface FormItemTypeKeyOptions<T = Record<string, any>> extends FormItemOptions<T> {
+  key: keyof T
+}
+
 /**
  * 表单配置
  */
 export type FormItemsOptions<T = Record<string, any>> = Array<FormItemOptions<T>>
+
+export type FormItemsTypeKeyOptions<T= Record<string, any>> = FormItemTypeKeyOptions<T>[]
+export type FormItemsStringKeyOptions<T = Record<string, any>> = FormItemStringKeyOptions<T>[]
 
 /**
  * Render函数
  */
 export interface FormItemRender<T = Record<string, any>> {
   (
-    render: FormItemRenderFun
+    render: FormItemRenderFun<T>
   ):
   (
     data: T,
@@ -37,4 +47,4 @@ export interface FormItemRender<T = Record<string, any>> {
 /**
  * Render函数模板
  */
-export type FormItemRenderFun = typeof FormItemRenders & { [key: string]: any }
+export type FormItemRenderFun<T> = ReturnType<typeof FormItemRenders<T>> & { [key: string]: any }

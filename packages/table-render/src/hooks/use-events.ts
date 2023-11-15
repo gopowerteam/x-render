@@ -19,7 +19,7 @@ export interface TableEditEventOptions<T=DataRecord> {
   record?: T
   mode?: 'dialog' | 'drawer'
   title?: string
-  form: FormItemsOptions
+  form: FormItemsOptions<T>
   onSubmit?: (record: DataRecord) => void
 }
 

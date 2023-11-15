@@ -6,12 +6,14 @@ import { renderDateRangeItem } from './date-range'
 import { renderTextareaItem } from './textarea'
 import { renderRenderItem } from './render'
 
-export const FormItemRenders = {
-  input: renderInputItem,
-  textarea: renderTextareaItem,
-  select: renderSelectItem,
-  date: renderDateItem,
-  switch: renderSwitchItem,
-  dateRange: renderDateRangeItem,
-  render: renderRenderItem,
+export function FormItemRenders<T>() {
+  return {
+    input: renderInputItem<T>,
+    textarea: renderTextareaItem<T>,
+    select: renderSelectItem<T>,
+    date: renderDateItem<T>,
+    switch: renderSwitchItem<T>,
+    dateRange: renderDateRangeItem<T>,
+    render: renderRenderItem<T>,
+  }
 }

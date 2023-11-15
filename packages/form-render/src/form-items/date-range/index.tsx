@@ -1,14 +1,14 @@
 import { RangePicker } from '@arco-design/web-vue'
 import dayjs from 'dayjs'
-import type { FormItemOptions } from '../../interfaces'
+import type { DataRecord, FormItemOptions } from '../../interfaces'
 
 /**
  * 日期节点表单渲染
  * @param options 日期节点配置选项
  * @returns JSX
  */
-export function renderDateRangeItem(options?: RenderDateRangeItemOptions) {
-  return (data: Record<string, any>, form: FormItemOptions) => {
+export function renderDateRangeItem<T=DataRecord>(options?: RenderDateRangeItemOptions) {
+  return (data: T, form: FormItemOptions<T>) => {
     let dates: string[] = []
 
     function onSelect(value: (Date | string | number | undefined)[]) {
@@ -21,10 +21,10 @@ export function renderDateRangeItem(options?: RenderDateRangeItemOptions) {
         const startDate = dayjs(startDateStr).startOf('days')
         const endDate = dayjs(endDateStr).endOf('days')
 
-        data[form.key] = [
+        data[form.key as keyof T] = [
           startDate.format(options?.valueFormat || 'YYYY-MM-DD'),
           endDate.format(options?.valueFormat || 'YYYY-MM-DD'),
-        ]
+        ] as any
       }
     }
 
@@ -40,7 +40,7 @@ export function renderDateRangeItem(options?: RenderDateRangeItemOptions) {
       <div>
         <RangePicker
           style={{ width: '300px' }}
-          v-model={data[form.key]}
+          v-model={data[form.key as keyof T]}
           onSelect={onSelect}
           onChange={onChange}
           mode={options?.type}

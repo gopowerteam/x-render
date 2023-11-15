@@ -5,14 +5,14 @@ import {
   WeekPicker,
   YearPicker,
 } from '@arco-design/web-vue'
-import type { FormItemOptions } from '../../interfaces'
+import type { DataRecord, FormItemOptions } from '../../interfaces'
 
 /**
  * 日期节点表单渲染
  * @param options 日期节点配置选项
  * @returns JSX
  */
-export function renderDateItem(options?: RenderDateItemOptions) {
+export function renderDateItem<T = DataRecord>(options?: RenderDateItemOptions) {
   function disabledMethod(value: string, date: Date) {
     if (!options?.disabledDate) {
       return false
@@ -21,12 +21,12 @@ export function renderDateItem(options?: RenderDateItemOptions) {
     return options.disabledDate(value, date)
   }
 
-  return (data: Record<string, any>, form: FormItemOptions) => {
+  return (data: T, form: FormItemOptions<T>) => {
     switch (options?.type) {
       case 'week':
         return (
           <WeekPicker
-            v-model={data[form.key]}
+            v-model={data[form.key as keyof T]}
             disabled-date={disabledMethod}
             format={options?.labelFormat}
             value-format={options?.valueFormat}></WeekPicker>
@@ -34,7 +34,7 @@ export function renderDateItem(options?: RenderDateItemOptions) {
       case 'month':
         return (
           <MonthPicker
-            v-model={data[form.key]}
+            v-model={data[form.key as keyof T]}
             disabled-date={disabledMethod}
             format={options?.labelFormat}
             value-format={options?.valueFormat}></MonthPicker>
@@ -42,7 +42,7 @@ export function renderDateItem(options?: RenderDateItemOptions) {
       case 'quarter':
         return (
           <QuarterPicker
-            v-model={data[form.key]}
+            v-model={data[form.key as keyof T]}
             disabled-date={disabledMethod}
             format={options?.labelFormat}
             value-format={options?.valueFormat}></QuarterPicker>
@@ -50,7 +50,7 @@ export function renderDateItem(options?: RenderDateItemOptions) {
       case 'year':
         return (
           <YearPicker
-            v-model={data[form.key]}
+            v-model={data[form.key as keyof T]}
             disabled-date={disabledMethod}
             format={options?.labelFormat}
             value-format={options?.valueFormat}></YearPicker>
@@ -59,7 +59,7 @@ export function renderDateItem(options?: RenderDateItemOptions) {
       default:
         return (
           <DatePicker
-            v-model={data[form.key]}
+            v-model={data[form.key as keyof T]}
             disabled-date={disabledMethod}
             format={options?.labelFormat}
             value-format={options?.valueFormat}></DatePicker>

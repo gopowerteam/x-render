@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import type { DataRecord, FormItemOptions } from '../../interfaces'
 // import { useEvents } from '../../utils/use-events'
 
-export function renderSelectItem(options: RenderSelectItemOptions) {
+export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions) {
   // const events = useEvents(inject<string>('id'))
 
   let mounted = false
@@ -26,17 +26,17 @@ export function renderSelectItem(options: RenderSelectItemOptions) {
     }
   }
 
-  return (data: DataRecord, form: FormItemOptions) => {
+  return (data: T, form: FormItemOptions<T>) => {
     // 设置默认值
     if (options.default && !mounted) {
-      data[form.key] = options.default
+      data[form.key as keyof T] = options.default as any
       mounted = true
     }
 
     return (
       <Select
         multiple={options.multiple}
-        v-model={data[form.key]}
+        v-model={data[form.key as keyof T]}
         placeholder={options.placeholder}
         allowClear={options.clearable}
         onChange={onSelectChange}>

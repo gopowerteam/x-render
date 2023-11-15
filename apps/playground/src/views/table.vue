@@ -52,7 +52,7 @@ interface t {
 
 const table = useTable('table')
 
-const form = defineForm([{
+const form = defineForm<t>([{
   key: 'age',
   title: 'age',
   render: r => r.input({ type: 'number' }),

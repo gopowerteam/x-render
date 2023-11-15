@@ -1,13 +1,13 @@
 import { Input, InputNumber } from '@arco-design/web-vue'
 import type { DataRecord, FormItemOptions } from '../../interfaces'
 
-export function renderInputItem(options?: RenderInputItemOptions) {
-  return (data: DataRecord, form: FormItemOptions) => {
+export function renderInputItem<T=DataRecord>(options?: RenderInputItemOptions) {
+  return (data: T, form: FormItemOptions<T>) => {
     switch (options?.type) {
       case 'number':
         return (
           <InputNumber
-            v-model={data[form.key]}
+            v-model={data[form.key as keyof T]}
             hideButton
             placeholder={options?.placeholder}
             allowClear={options?.clearable}></InputNumber>
@@ -16,7 +16,7 @@ export function renderInputItem(options?: RenderInputItemOptions) {
       default:
         return (
           <Input
-            v-model={data[form.key]}
+            v-model={data[form.key as keyof T]}
             placeholder={options?.placeholder}
             allowClear={options?.clearable}></Input>
         )
