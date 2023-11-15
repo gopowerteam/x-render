@@ -9,6 +9,7 @@ export function renderInputItem<T=DataRecord>(options?: RenderInputItemOptions) 
           <InputNumber
             v-model={data[form.key as keyof T]}
             hideButton
+            read-only={options?.readonly}
             placeholder={options?.placeholder}
             allowClear={options?.clearable}></InputNumber>
         )
@@ -18,6 +19,7 @@ export function renderInputItem<T=DataRecord>(options?: RenderInputItemOptions) 
           <Input
             v-model={data[form.key as keyof T]}
             placeholder={options?.placeholder}
+            readonly={options?.readonly}
             allowClear={options?.clearable}></Input>
         )
     }
@@ -27,5 +29,6 @@ export function renderInputItem<T=DataRecord>(options?: RenderInputItemOptions) 
 export interface RenderInputItemOptions {
   placeholder?: string
   clearable?: boolean
+  readonly?: boolean
   type?: 'string' | 'number'
 }
