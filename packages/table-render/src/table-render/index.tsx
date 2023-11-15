@@ -108,6 +108,7 @@ export const TableRender = defineComponent({
     pageable: {
       type: [Object, Boolean] as PropType<(RequestPlugin & PageableOptions) | { index: number; size: number } | boolean>,
       required: false,
+      default: false,
     },
     sortable: {
       type: [Object] as PropType<Record<string, 'desc' | 'asc'>>,
@@ -139,7 +140,7 @@ export const TableRender = defineComponent({
 
     function createPageService() {
       switch (true) {
-        case typeof props.pageable === 'boolean':
+        case typeof props.pageable === 'boolean' && props.pageable === true:
           return new PageService()
         case typeof props.pageable === 'object' && !!(props.pageable as PageableOptions).reset:
           return props.pageable as (RequestPlugin & PageableOptions)

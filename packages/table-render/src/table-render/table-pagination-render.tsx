@@ -7,7 +7,7 @@ export function tablePaginationRender(
   {
     pageService,
     tableEvents,
-  }: TableRenderOptions) {
+  }: TableRenderOptions): ()=>(JSX.Element | undefined) {
   function onPageChange(index: number) {
     if (pageService) {
       pageService.pageIndex = index

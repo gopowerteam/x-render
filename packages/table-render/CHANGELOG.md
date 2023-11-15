@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.6
+
+### Patch Changes
+
+- fixed form display
+
 ## 0.0.5
 
 ### Patch Changes
