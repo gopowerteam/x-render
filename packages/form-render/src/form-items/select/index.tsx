@@ -39,7 +39,7 @@ export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions)
         v-model={data[form.key as keyof T]}
         placeholder={options.placeholder}
         allowClear={options.clearable}
-        maxTagCount={options.maxTagCount || 4}
+        maxTagCount={options.maxTagCount ?? 5}
         onChange={onSelectChange}>
         {Array.from(selectOptions.value.entries()).map(([value, label]) => (
           <Option
