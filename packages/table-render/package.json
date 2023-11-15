@@ -1,7 +1,7 @@
 {
   "name": "@gopowerteam/table-render",
   "type": "module",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": {
     "name": "zhuchentong",
     "email": "2037630@gmail.com"
@@ -54,8 +54,8 @@
   },
   "peerDependencies": {
     "@arco-design/web-vue": "^2.52.1",
-    "@gopowerteam/form-render": "^0.0.3",
-    "@gopowerteam/modal-render": "^0.0.9",
+    "@gopowerteam/form-render": "^0.0.4",
+    "@gopowerteam/modal-render": "^0.0.10",
     "vue": "^3.0.0"
   },
   "devDependencies": {
@@ -85,6 +85,5 @@
     "registry": "https://registry.npmjs.org",
     "access": "public"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
