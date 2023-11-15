@@ -44,7 +44,7 @@ export const TableRender = defineComponent({
       required: false,
       default: true,
     },
-    loadData: {
+    dataLoad: {
       type: Function as PropType<(params: TableLoadParams) => (void | Promise<any>)>,
       required: false,
     },
@@ -226,7 +226,7 @@ export const TableRender = defineComponent({
      * 加载表单数据
      */
     const onTableReload = (options?: TableReloadEventOptions) => {
-      if (!props.loadData) {
+      if (!props.dataLoad) {
         return
       }
 
@@ -244,7 +244,7 @@ export const TableRender = defineComponent({
         }
       })
 
-      const promise = props.loadData({
+      const promise = props.dataLoad({
         form: formSource,
         page: pageService,
         sort: sortService,

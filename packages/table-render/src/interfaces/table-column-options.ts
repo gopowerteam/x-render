@@ -17,7 +17,7 @@ export interface TableColumnSharedOptions {
  * 列配置
  */
 export interface TableColumnOptions<T> {
-  key: string
+  key: string | keyof T
   title: string
   index?: string
   fixed?: 'left' | 'right'
@@ -33,7 +33,13 @@ export interface TableColumnOptions<T> {
   treeNode?: boolean
   visiable?: boolean | (() => boolean)
   extraProps?: Partial<Omit<TableColumnData, 'dataIndex' | 'title' | 'fixed' | 'align' | 'width'>>
+}
 
+export interface TableColumnTypeKeyOptions<T> extends TableColumnOptions<T> {
+  key: keyof T
+}
+export interface TableColumnStringKeyOptions<T> extends TableColumnOptions<T> {
+  key: string
 }
 
 export interface ExportColumnOptions {
@@ -44,6 +50,7 @@ export interface ExportColumnOptions {
 
 // 列配置
 export type TableColumnsOptions<T = DataRecord> = TableColumnOptions<T>[]
-
+export type TableColumnsTypeKeyOptions<T = DataRecord> = TableColumnTypeKeyOptions<T>[]
+export type TableColumnsStringKeyOptions<T = DataRecord> = TableColumnStringKeyOptions<T>[]
 // Formatter格式化
 export type DataFormatter<T> = (record: T) => string | number | Date | undefined
