@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TableRender: typeof import('@gopowerteam/table-render')['TableRender']
     Test1: typeof import('./components/test1.vue')['default']
   }
 }

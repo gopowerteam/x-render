@@ -2,9 +2,8 @@
   "name": "@gopowerteam/x-render",
   "version": "0.0.0",
   "private": true,
-  "packageManager": "pnpm@7.12.0",
+  "packageManager": "bun@1.0.5",
   "engines": {
-    "pnpm": ">=8.0.0",
     "node": ">=18.0.0"
   },
   "scripts": {
@@ -12,11 +11,11 @@
     "lint": "turbo run lint",
     "dev": "turbo run dev",
     "clean": "rimraf node_modules **/*/node_modules",
-    "prerelease": "pnpm build",
+    "prerelease": "bun build",
     "release": "bumpp",
     "prepare": "husky install",
     "commit": "git-cz",
-    "preinstall": "npx only-allow pnpm",
+    "preinstall": "npx only-allow bun",
     "changeset": "changeset",
     "publish-packages": "turbo run build && changeset version && changeset publish"
   },
@@ -34,7 +33,6 @@
     "eslint": "8.52.0",
     "husky": "8.0.3",
     "lint-staged": "15.0.2",
-    "pnpm": "8.9.2",
     "prettier": "latest",
     "rimraf": "5.0.5",
     "tsup": "7.2.0",
@@ -45,5 +43,9 @@
     "commitizen": {
       "path": "node_modules/cz-customizable"
     }
-  }
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }

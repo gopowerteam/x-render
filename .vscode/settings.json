@@ -16,7 +16,6 @@
     "sass",
     "vue"
   ],
-  "stylelint.packageManager": "pnpm",
   "stylelint.enable": true,
   "css.validate": false,
   "less.validate": false,

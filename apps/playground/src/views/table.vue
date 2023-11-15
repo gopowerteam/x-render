@@ -37,7 +37,7 @@
 </style>
 
 <script setup lang="tsx">
-import { TableRender, defineColumns, defineTableLoad, useTable } from '@gopowerteam/table-render'
+import { defineColumns, defineTableLoad, useTable } from '@gopowerteam/table-render'
 import { defineForm } from '@gopowerteam/form-render'
 import { ref } from 'vue'
 
