@@ -36,6 +36,11 @@
       "require": "./dist/style.css",
       "import": "./dist/style.css"
     },
+    "./resolver": {
+      "require": "./dist/cjs/resolver.cjs",
+      "import": "./dist/es/resolver.mjs",
+      "types": "./dist/es/resolver.d.ts"
+    },
     "./*": "./*"
   },
   "files": [
@@ -73,13 +78,13 @@
     "vite": "4.5.0",
     "vite-plugin-dts": "^3.6.1",
     "vue": "3.3.7",
-    "vue-tsc": "1.8.21"
+    "vue-tsc": "1.8.21",
+    "exceljs": "^4.4.0"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
     "access": "public"
   },
   "dependencies": {
-    "exceljs": "^4.4.0"
   }
 }

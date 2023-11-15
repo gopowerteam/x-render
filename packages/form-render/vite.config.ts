@@ -22,7 +22,7 @@ export default defineConfig({
     },
     rollupOptions: {
       treeshake: true,
-      external: ['vue', '@arco-design/web-vue', 'dayjs', 'mitt'],
+      external: ['vue', '@arco-design/web-vue', 'dayjs'],
       output: {
         exports: 'named',
         globals: {

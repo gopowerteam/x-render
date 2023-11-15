@@ -1,4 +1,4 @@
-import { FormItem } from '@arco-design/web-vue/es/form'
+import { FormItem } from '@arco-design/web-vue'
 import { h } from 'vue'
 import type { DataRecord, FormItemOptions } from '../interfaces'
 import { FormItemRenders as renders } from '../form-items'

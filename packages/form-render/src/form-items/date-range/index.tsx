@@ -1,5 +1,4 @@
 import { RangePicker } from '@arco-design/web-vue'
-import type { CalendarValue } from '@arco-design/web-vue/es/date-picker/interface'
 import dayjs from 'dayjs'
 import type { FormItemOptions } from '../../interfaces'
 
@@ -12,11 +11,11 @@ export function renderDateRangeItem(options?: RenderDateRangeItemOptions) {
   return (data: Record<string, any>, form: FormItemOptions) => {
     let dates: string[] = []
 
-    function onSelect(value: (CalendarValue | undefined)[]) {
+    function onSelect(value: (Date | string | number | undefined)[]) {
       dates = value as string[]
     }
 
-    function onChange(values: (CalendarValue | undefined)[] | undefined) {
+    function onChange(values: (Date | string | number | undefined)[] | undefined) {
       if (values && values.length === 2) {
         const [startDateStr, endDateStr] = values.sort()
         const startDate = dayjs(startDateStr).startOf('days')

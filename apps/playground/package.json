@@ -9,8 +9,8 @@
   "dependencies": {
     "@arco-design/web-vue": "^2.52.1",
     "@arco-themes/vue-tuboshi": "^0.0.12",
-    "@gopowerteam/modal-render": "workspace:*",
     "@gopowerteam/form-render": "workspace:*",
+    "@gopowerteam/modal-render": "workspace:*",
     "@gopowerteam/table-render": "workspace:*",
     "less": "^4.2.0",
     "vue": "^3.2.47",
@@ -19,6 +19,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.1.0",
     "typescript": "^5.0.2",
+    "unplugin-vue-components": "^0.25.2",
     "vite": "^4.3.9",
     "vue-tsc": "^1.4.2"
   }

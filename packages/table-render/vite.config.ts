@@ -12,7 +12,7 @@ export default defineConfig({
     lib: {
       entry: [
         resolve(__dirname, 'src/index.ts'),
-        // resolve(__dirname, 'resolver.ts'),
+        resolve(__dirname, 'src/resolver.ts'),
       ],
       name: 'bundle',
       fileName: (format, name) => `${format}/${name}.${format === 'es' ? 'mjs' : 'cjs'}`,
@@ -24,7 +24,6 @@ export default defineConfig({
         'vue',
         '@arco-design/web-vue',
         'dayjs',
-        'mitt',
         '@gopowerteam/form-render',
         '@gopowerteam/modal-render',
       ],
