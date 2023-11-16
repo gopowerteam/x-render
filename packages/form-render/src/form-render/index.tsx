@@ -99,9 +99,10 @@ export const FormRender = defineComponent({
     })
 
     function updateFormField(key: string, value: any) {
+      formSource.value[key] = value
+
       updateFormSource({
         ...formSource,
-        [key]: value,
       })
     }
 
