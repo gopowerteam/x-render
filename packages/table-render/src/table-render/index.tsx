@@ -150,10 +150,10 @@ export const TableRender = defineComponent({
     function createSortService() {
       const column = props.columns.find(column => !!column.sortable)
 
-      if (column) {
+      if (column || props.sortable) {
         return new SortService({
-          [column.key]: column.sortable,
-          ...props.sortable,
+          ...props.sortable || {},
+          ...(column ? ({ [column.key]: column.sortable! }) : {}),
         })
       }
     }

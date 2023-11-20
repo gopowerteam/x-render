@@ -4,7 +4,7 @@ import type { SortableOptions } from '../interfaces'
 export class SortService implements RequestPlugin, SortableOptions {
   private sort: { [key: string]: 'asc' | 'desc' } = {}
 
-  constructor(data?: any) {
+  constructor(data?: Record<string, 'desc' | 'asc'>) {
     if (data) {
       this.sort = data
     }
