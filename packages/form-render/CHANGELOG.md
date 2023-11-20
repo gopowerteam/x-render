@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.10
+
+### Patch Changes
+
+- form-render add layout props
+
 ## 0.0.9
 
 ### Patch Changes

@@ -1,7 +1,9 @@
 <template>
   <FormRender
+    :columns="1"
     footer
     :form="form"
+    layout="horizontal"
     resetable
     searchable
   >

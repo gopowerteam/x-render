@@ -16,6 +16,15 @@ export const FormRender = defineComponent({
       type: Object as PropType<Record<string, any>>,
       required: false,
     },
+    layout: {
+      type: String as PropType<'horizontal' | 'vertical'>,
+      required: false,
+      default: 'horizontal',
+    },
+    columns: {
+      type: Number,
+      required: false,
+    },
     modelValue: {
       type: Object as PropType<Record<string, any>>,
       required: false,
@@ -61,7 +70,7 @@ export const FormRender = defineComponent({
     const formId = Math.random().toString(32).slice(2).toUpperCase()
     const formInstance = ref<FormInstance>()
     const [formSource, updateFormSource] = createFormSource(props.form, props.modelValue || props.value)
-    const formColumns = ref(0)
+    const formColumns = ref(props.columns || 0)
     const formCollspased = ref<boolean>(true)
     const toggleFormCollapsed = () => formCollspased.value = !formCollspased.value
 
@@ -90,8 +99,10 @@ export const FormRender = defineComponent({
     })
 
     function updateFormColumnValue() {
-      const form = formInstance.value?.$el as HTMLFormElement
-      formColumns.value = Math.floor(form.offsetWidth / props.minWidth)
+      if (formColumns.value === 0) {
+        const form = formInstance.value?.$el as HTMLFormElement
+        formColumns.value = Math.floor(form.offsetWidth / props.minWidth)
+      }
     }
 
     onMounted(() => {
@@ -180,7 +191,7 @@ export const FormRender = defineComponent({
     }
 
     return (
-      <Form rules={this.formRules} onSubmitSuccess={onSubmitSuccess} {...({ name: this.name })} auto-label-width ref={instance => this.formInstance = instance as any} model={this.formSource}>
+      <Form layout={this.$props.layout} rules={this.formRules} onSubmitSuccess={onSubmitSuccess} {...({ name: this.name })} auto-label-width ref={instance => this.formInstance = instance as any} model={this.formSource}>
         <Grid cols={this.formColumns} col-gap={10} rol-gap={10}>
           {this.form.filter(item => this.formCollspased ? !item.collapsed : true).map(item => (
             <GridItem span={item.span}>
