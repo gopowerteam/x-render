@@ -1,4 +1,4 @@
-import { Table, type TableInstance } from '@arco-design/web-vue'
+import { Table, type TableData, type TableInstance } from '@arco-design/web-vue'
 
 import { type PropType, type Ref, computed, defineComponent, onMounted, readonly, ref } from 'vue'
 import { ModalProvider } from '@gopowerteam/modal-render'
@@ -268,6 +268,11 @@ export const TableRender = defineComponent({
       }
     }
 
+    const onTableChange = (data: TableData[]) => {
+      updateTableSource(data)
+      ctx.emit('change', data)
+    }
+
     const tableEvents = useEvents({
       reload: onTableReload,
       preview: onTablePreview,
@@ -314,7 +319,7 @@ export const TableRender = defineComponent({
     /**
      * 创建表单配置选项
      */
-    const tableOptions: Partial<TableInstance['$props']> = {
+    const tableOptions = computed<Partial<TableInstance['$props']>>(() => ({
       rowKey: props.rowKey,
       size: props.size,
       scroll: {
@@ -325,7 +330,7 @@ export const TableRender = defineComponent({
       },
       rowSelection,
       draggable: props.draggable ? { type: 'handle', width: 40 } : undefined,
-    }
+    }))
 
     onMounted(() => {
       if (props.autoLoad) {
@@ -350,6 +355,7 @@ export const TableRender = defineComponent({
       edit: onTableEdit,
       export: onTableExport,
       onSorterChange,
+      onTableChange,
       renders: {
         renderTableForm,
         renderTableActions,
@@ -373,7 +379,7 @@ export const TableRender = defineComponent({
           ref={table => this.tableInstance = table as any}
           onSelect={this.tableSelection.onSelect}
           onSelectAll={this.tableSelection.onSelectAll}
-          onChange={data => this.$emit('change', data)}
+          onChange={this.onTableChange}
           onSorterChange={this.onSorterChange}
           v-model:selectedKeys={this.tableSelection.selectedRowKeys.value}
           pagination={false}

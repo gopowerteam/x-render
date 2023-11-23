@@ -1,5 +1,8 @@
 <template>
   <div>
+    <AButton @click="() => draggable = !draggable">
+      draggle toggle
+    </AButton>
     <TableRender
       ref="table"
       v-model:checkbox-keys="checkboxKeys"
@@ -8,7 +11,7 @@
       v-model:radio-row="radioRow"
       :columns="columns"
       :data-load="onTableLoad"
-      draggable
+      :draggable="draggable"
       exportable
       :form="form"
       :form-options="{
@@ -59,6 +62,7 @@ interface t {
 function onTableChange(...z: any) {
   console.log(z)
 }
+const draggable = ref(false)
 const table = useTable('table')
 
 const form = defineForm<t>([{
