@@ -3,6 +3,8 @@ import { ref } from 'vue'
 import type { DataRecord, FormItemOptions } from '../../interfaces'
 // import { useEvents } from '../../utils/use-events'
 
+const cache = new WeakMap()
+
 export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions) {
   // const events = useEvents(inject<string>('id'))
 
@@ -11,7 +13,15 @@ export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions)
 
   // 获取SelectOptions值
   if (options.options instanceof Function) {
-    options.options().then(data => (selectOptions.value = data))
+    if (cache.has(options.options)) {
+      selectOptions.value = cache.get(options.options)
+    }
+    else {
+      options.options().then((data) => {
+        selectOptions.value = data
+        cache.set(options.options, data)
+      })
+    }
   }
   else if (options.options instanceof Promise) {
     options.options.then(data => (selectOptions.value = data))
@@ -66,6 +76,7 @@ export interface RenderSelectItemOptions {
   | (() => Promise<SelectOptions>)
   // 多选支持
   multiple?: boolean
+  // 最大标签数量
   maxTagCount?: number
   // 默认值
   default?: string | number | boolean

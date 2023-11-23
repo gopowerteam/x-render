@@ -35,5 +35,18 @@ const form = defineForm([...Array.from(Array(10), (_, index) => ({
     required: true,
     message: 'asdasd',
   },
+}, {
+  key: 'xxx',
+  title: 'zzz',
+  render: r => r.select({
+    options: a,
+  }),
 }])
+
+function a() {
+  return new Promise<Map<string, string>>((resolve, reject) => {
+    console.log('zzz')
+    resolve(new Map<string, string>([['a', 'b'], ['c', 'd']]))
+  })
+}
 </script>
