@@ -8,6 +8,7 @@
       v-model:radio-row="radioRow"
       :columns="columns"
       :data-load="onTableLoad"
+      draggable
       exportable
       :form="form"
       :form-options="{
@@ -19,6 +20,7 @@
         type: 'checkbox',
         width: 100,
       }"
+      @change="onTableChange"
     >
       <template #actions>
         <AButton type="primary">
@@ -54,6 +56,9 @@ interface t {
   name: string
 }
 
+function onTableChange(...z: any) {
+  console.log(z)
+}
 const table = useTable('table')
 
 const form = defineForm<t>([{
@@ -68,6 +73,10 @@ const form = defineForm<t>([{
   key: 'test',
   title: 'xxx',
   render: r => r.select({ options: new Map([['a', 'b'], ['c', 'd']]) }),
+}, {
+  key: 'test1',
+  title: 'xxx2',
+  render: r => r.date(),
 }])
 
 const columns = defineColumns<t>([{

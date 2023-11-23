@@ -115,6 +115,10 @@ export const TableRender = defineComponent({
       type: [Object] as PropType<Record<string, 'desc' | 'asc'>>,
       required: false,
     },
+    draggable: {
+      type: Boolean,
+      required: false,
+    },
   },
   expose: [
     'preview',
@@ -128,6 +132,7 @@ export const TableRender = defineComponent({
     'update:checkbox-keys',
     'update:checkbox-rows',
     'formInstance',
+    'change',
   ],
   setup(props, ctx) {
     const tableId = Math.random().toString(32).slice(2).toUpperCase()
@@ -319,6 +324,7 @@ export const TableRender = defineComponent({
         y: props.height ?? '100%',
       },
       rowSelection,
+      draggable: props.draggable ? { type: 'handle', width: 40 } : undefined,
     }
 
     onMounted(() => {
@@ -367,6 +373,7 @@ export const TableRender = defineComponent({
           ref={table => this.tableInstance = table as any}
           onSelect={this.tableSelection.onSelect}
           onSelectAll={this.tableSelection.onSelectAll}
+          onChange={data => this.$emit('change', data)}
           onSorterChange={this.onSorterChange}
           v-model:selectedKeys={this.tableSelection.selectedRowKeys.value}
           pagination={false}
