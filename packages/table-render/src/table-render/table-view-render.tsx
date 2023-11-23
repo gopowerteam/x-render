@@ -57,7 +57,7 @@ export default defineComponent({
           previewing: true,
         }),
       }))
-      .filter(({ options }) => !props.exclude?.includes(options.key))
+      .filter(({ options }) => !props.exclude?.includes(options.key as string))
       .filter(({ renderer }) => !renderer?.disableViewMode)
 
     function updateFormColumnValue() {

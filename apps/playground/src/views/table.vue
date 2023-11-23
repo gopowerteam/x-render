@@ -10,6 +10,9 @@
       :data-load="onTableLoad"
       exportable
       :form="form"
+      :form-options="{
+        minWidth: 400,
+      }"
       pagination
       row-key="age"
       :selection="{

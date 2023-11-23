@@ -13,6 +13,10 @@ export interface TableColumnSharedOptions {
   ellipsis?: boolean
 }
 
+export interface TableFormSharedOptions {
+  minWidth?: number
+}
+
 /**
  * 列配置
  */

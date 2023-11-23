@@ -17,6 +17,7 @@ export function tableFormRender(
           ref={form => formInstance && (formInstance.value = form as any)}
           searchable
           onSubmit={() => tableEvents('reload', { reset: true })}
+          {...props.formOptions}
         ></FormRender>
       </div>
     )

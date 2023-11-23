@@ -11,7 +11,6 @@ export interface FormItemOptions<T = Record<string, any>> {
   collapsed?: boolean
   visiable?: (record: T) => boolean
   span?: number
-  minWidth?: number
   rule?: FieldRule | FieldRule[]
   render?: FormItemRender<T>
 }

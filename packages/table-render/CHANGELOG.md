@@ -1,5 +1,13 @@
 # @gopowerteam/table-render
 
+## 0.0.15
+
+### Patch Changes
+
+- add table form-options props
+- Updated dependencies
+  - @gopowerteam/form-render@0.0.11
+
 ## 0.0.14
 
 ### Patch Changes

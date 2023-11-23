@@ -4,7 +4,7 @@ import { type PropType, type Ref, computed, defineComponent, onMounted, readonly
 import { ModalProvider } from '@gopowerteam/modal-render'
 import { type DataRecord, type FormItemsOptions, type FormRenderInstance } from '@gopowerteam/form-render'
 import type { RequestPlugin } from '@gopowerteam/request'
-import type { SortableOptions, TableColumnSharedOptions, TableColumnsOptions, TableLoadParams } from '../interfaces'
+import type { SortableOptions, TableColumnSharedOptions, TableColumnsOptions, TableFormSharedOptions, TableLoadParams } from '../interfaces'
 import { createTableSource } from '../utils/create-table-source'
 import { createTableForm } from '../utils/create-table-form'
 import { type EventEmits, type TableEditEventOptions, type TableExportEventOptions, type TablePreviewEventOptions, type TableReloadEventOptions, useEvents } from '../hooks'
@@ -30,6 +30,10 @@ export const TableRender = defineComponent({
     },
     form: {
       type: Object as PropType<FormItemsOptions<any>>,
+      required: false,
+    },
+    formOptions: {
+      type: Object as PropType<TableFormSharedOptions>,
       required: false,
     },
     columns: {
@@ -289,6 +293,7 @@ export const TableRender = defineComponent({
       tableSource,
       formInstance: formInstance as Ref<FormRenderInstance>,
       pageService,
+      formOptions: props.formOptions,
     }
 
     const renderTableForm = tableFormRender(props, ctx, renderOptions)
@@ -396,5 +401,6 @@ export interface TableRenderOptions {
   tableEvents: EventEmits
   tableSource: Ref<DataRecord[]>
   formInstance?: Ref<FormRenderInstance>
+  formOptions?: TableFormSharedOptions
   pageService?: PageableOptions
 }

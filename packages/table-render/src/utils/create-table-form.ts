@@ -6,7 +6,7 @@ export function createTableForm(columns: TableColumnsOptions): FormItemsOptions 
     .filter(column => column.form)
     .map((column) => {
       const formItemOptions: FormItemOptions = {
-        key: column.key,
+        key: column.key as string,
         title: column.title,
         ...(typeof column.form === 'boolean' ? {} : column.form),
       }
