@@ -22,31 +22,36 @@
 <script setup lang="ts">
 import { FormRender, defineForm } from '@gopowerteam/form-render'
 
-const form = defineForm([...Array.from(Array(10), (_, index) => ({
-  key: `name${index}`,
-  title: `姓名${index}`,
-  render: r => r.input(),
-  default: 'xxxx',
-})), {
-  key: 'xxx123123123123123',
-  title: 'zzz123123123',
-  collapsed: true,
-  rule: {
-    required: true,
-    message: 'asdasd',
-  },
-}, {
+const form = defineForm([{
   key: 'xxx',
-  title: 'zzz',
+  title: 'xxx',
+  render: r => r.input(),
+  rule: [{
+    required: true,
+    message: 'xxx',
+  }],
+}, {
+  key: 'yyy',
+  title: 'yyy',
   render: r => r.select({
-    options: a,
+    options: b,
+    cache: true,
+    autoSumbit: true,
   }),
 }])
 
-function a() {
+let x = 0
+let y = 0
+
+function a(): Promise<Map<string, string>> {
   return new Promise<Map<string, string>>((resolve, reject) => {
-    console.log('zzz')
+    console.log(x++)
     resolve(new Map<string, string>([['a', 'b'], ['c', 'd']]))
   })
+}
+
+function b() {
+  console.log(y++)
+  return new Map<string, string>([['x', 'x'], ['y', 'y']])
 }
 </script>

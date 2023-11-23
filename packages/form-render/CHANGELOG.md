@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.13
+
+### Patch Changes
+
+- fixed select options
+
 ## 0.0.12
 
 ### Patch Changes

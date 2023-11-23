@@ -1,38 +1,63 @@
 import { Option, Select } from '@arco-design/web-vue'
-import { ref } from 'vue'
+import { type ComponentPublicInstance, ref } from 'vue'
 import type { DataRecord, FormItemOptions } from '../../interfaces'
-// import { useEvents } from '../../utils/use-events'
+import { isPromise } from '../../utils/is-promise'
 
 const cache = new WeakMap()
 
 export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions) {
-  // const events = useEvents(inject<string>('id'))
-
+  let selectInstance: ComponentPublicInstance
   let mounted = false
   const selectOptions = ref<SelectOptions>(new Map())
 
-  // 获取SelectOptions值
-  if (options.options instanceof Function) {
-    if (cache.has(options.options)) {
-      selectOptions.value = cache.get(options.options)
-    }
-    else {
-      options.options().then((data) => {
-        selectOptions.value = data
-        cache.set(options.options, data)
-      })
+  const updateSelectOptions = (data: SelectOptions) => {
+    selectOptions.value = data
+
+    if (options.cache !== false) {
+      cache.set(options.options, data)
     }
   }
-  else if (options.options instanceof Promise) {
-    options.options.then(data => (selectOptions.value = data))
-  }
-  else {
-    selectOptions.value = options.options
+
+  switch (true) {
+    case options.options instanceof Function:{
+      if (cache.has(options.options)) {
+        selectOptions.value = cache.get(options.options)
+        break
+      }
+
+      const value: Promise<SelectOptions> | SelectOptions = (options.options as Function)()
+
+      if (isPromise(value)) {
+        (value as Promise<SelectOptions>).then(updateSelectOptions)
+      }
+      else {
+        updateSelectOptions(value as SelectOptions)
+      }
+      break
+    }
+    case isPromise(options.options): {
+      (options.options as Promise<SelectOptions>).then(data => (selectOptions.value = data))
+      break
+    }
+    default:{
+      selectOptions.value = options.options as SelectOptions
+    }
   }
 
   function onSelectChange() {
-    if (options.autoSumbit) {
-      // events.emit('reload')
+    if (!options.autoSumbit || !selectInstance) {
+      return
+    }
+
+    let parent: ComponentPublicInstance | null = selectInstance
+
+    while (parent && (parent.$el as HTMLElement).tagName !== 'FORM') {
+      parent = parent.$parent
+    }
+
+    if (parent && parent.$el) {
+      const form = parent.$el as HTMLFormElement
+      form.dispatchEvent(new Event('submit'))
     }
   }
 
@@ -45,6 +70,7 @@ export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions)
 
     return (
       <Select
+        ref={instance => selectInstance = (instance as ComponentPublicInstance)}
         multiple={options.multiple}
         v-model={data[form.key as keyof T]}
         placeholder={options.placeholder}
@@ -72,6 +98,7 @@ export interface RenderSelectItemOptions {
   // select options列表
   options:
   | SelectOptions
+  | (() => SelectOptions)
   | Promise<SelectOptions>
   | (() => Promise<SelectOptions>)
   // 多选支持
@@ -82,4 +109,6 @@ export interface RenderSelectItemOptions {
   default?: string | number | boolean
   // 自动提交
   autoSumbit?: boolean
+  // 开启缓存
+  cache?: boolean
 }
