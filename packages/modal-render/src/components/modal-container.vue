@@ -70,7 +70,7 @@
 .modal-content {
     background: rgb(255, 255, 255);
     border-radius: 5px;
-    position: relative;;
+    position: relative;
 }
 
 .modal-header {
@@ -210,6 +210,7 @@ const props = withDefaults (defineProps<{
   draggable?: boolean
   mode?: 'dialog' | 'drawer'
   type?: string
+  offset?: { x?: number; y?: number }
 }>()
 , {
   header: true,
@@ -299,6 +300,11 @@ const contentStyle = computed(() => {
 
   if (props.mode === 'drawer') {
     styles.borderRadius = 0
+  }
+
+  if (props.offset && props.mode === 'dialog') {
+    styles.marginLeft = `${props.offset.x || 0}px`
+    styles.marginTop = `${props.offset.y || 0}px`
   }
 
   return styles

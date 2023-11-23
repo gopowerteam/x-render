@@ -13,6 +13,7 @@
           :component-props="modal.props"
           :max-height="maxHeight"
           :max-width="maxWidth"
+          :offset="offset"
           :sizes="sizes"
           v-bind="modal.options"
           @submit="() => onEvent(modal.id, 'submit')"
@@ -65,6 +66,7 @@ withDefaults(defineProps<{
   sizes: SizeOptions
   maxWidth: string | number
   maxHeight: string | number
+  offset?: { x?: number; y?: number }
 }>(), {
   appendToBody: false,
   maxWidth: '80%',
@@ -74,6 +76,7 @@ withDefaults(defineProps<{
     middle: 860,
     large: 1190,
   }),
+  offset: () => ({ x: 0, y: 0 }),
 })
 
 // modal列表

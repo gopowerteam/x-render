@@ -1,5 +1,11 @@
 # @gopowerteam/modal-render
 
+## 0.0.11
+
+### Patch Changes
+
+- add offset props
+
 ## 0.0.10
 
 ### Patch Changes

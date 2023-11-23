@@ -1,5 +1,5 @@
 <template>
-  <ModalProvider>
+  <ModalProvider :offset="{ x: 500, y: 0 }">
     <RouterView />
   </ModalProvider>
 </template>
