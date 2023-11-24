@@ -3,17 +3,17 @@ import { createColumnRender, getColumnValue } from '../../utils'
 import type { DataRecord, TableColumnOptions } from '../../interfaces'
 import type { EventEmits } from '../..'
 
-export interface ImageColumnOptions {
+export interface ImageColumnOptions<T> {
   width?: string
   height?: string
   radius?: string
   preview?: boolean
   rotate?: number
-  parse?: (key: string) => Promise<string>
+  parse?: (key: string, record: T) => Promise<string>
 }
 
 export function renderImageColumn<T = DataRecord>(
-  options?: ImageColumnOptions,
+  options?: ImageColumnOptions<T>,
 ) {
   function showPreview(id: string, url: string) {
     const rect = document.getElementById(id)?.getBoundingClientRect()
@@ -66,12 +66,12 @@ export function renderImageColumn<T = DataRecord>(
       cursor: options?.preview ? 'pointer' : 'unset',
     }
 
-    const parsedKey = `${column.index || column.key}_parsed`
+    const parsedKey = `${column.index || column.key as string}_parsed`
 
     // 获取转换值
     if (options?.parse) {
       options
-        ?.parse(value)
+        ?.parse(value, record)
         .then(v => ((record as Record<string, string>)[parsedKey] = v))
     }
 
