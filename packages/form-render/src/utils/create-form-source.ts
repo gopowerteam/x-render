@@ -15,7 +15,7 @@ export function createFormSource(
       value = (typeof item.default === 'function' ? item.default() : item.default) || null
     }
 
-    if (source && source[item.key]) {
+    if (source && source[item.key] !== undefined) {
       value = source[item.key]
     }
 
