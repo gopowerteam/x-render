@@ -9,7 +9,7 @@ export interface ImageColumnOptions<T> {
   radius?: string
   preview?: boolean
   rotate?: number
-  parse?: (key: string, record: T) => Promise<string>
+  parse?: (key: string, record: T) => Promise<string> | string
 }
 
 export function renderImageColumn<T = DataRecord>(
@@ -73,10 +73,10 @@ export function renderImageColumn<T = DataRecord>(
       const result = options?.parse(value, record)
 
       if (isPromise(result)) {
-        result.then(v => ((record as Record<string, string>)[parsedKey] = v))
+        (result as Promise<string>).then(v => ((record as Record<string, string>)[parsedKey] = v))
       }
       else {
-        (record as DataRecord)[parsedKey] = result
+        (record as DataRecord)[parsedKey] = result as string
       }
     }
 
