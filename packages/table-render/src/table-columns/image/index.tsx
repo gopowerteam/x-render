@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'vue'
-import { createColumnRender, getColumnValue } from '../../utils'
+import { createColumnRender, getColumnValue, isPromise } from '../../utils'
 import type { DataRecord, TableColumnOptions } from '../../interfaces'
 import type { EventEmits } from '../..'
 
@@ -70,9 +70,14 @@ export function renderImageColumn<T = DataRecord>(
 
     // 获取转换值
     if (options?.parse) {
-      options
-        ?.parse(value, record)
-        .then(v => ((record as Record<string, string>)[parsedKey] = v))
+      const result = options?.parse(value, record)
+
+      if (isPromise(result)) {
+        result.then(v => ((record as Record<string, string>)[parsedKey] = v))
+      }
+      else {
+        (record as DataRecord)[parsedKey] = result
+      }
     }
 
     if (options?.parse && !(record as Record<string, string>)[parsedKey]) {
