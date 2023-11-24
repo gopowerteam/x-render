@@ -6,10 +6,17 @@ import type { EventEmits } from '../..'
 export interface ImageColumnOptions<T> {
   width?: string
   height?: string
+  size?: 'small' | 'middle' | 'large'
   radius?: string
   preview?: boolean
   rotate?: number
   parse?: (key: string, record: T) => Promise<string> | string
+}
+
+const sizeOptions = {
+  small: '20px',
+  middle: '30px',
+  large: '40px',
 }
 
 export function renderImageColumn<T = DataRecord>(
@@ -55,7 +62,7 @@ export function renderImageColumn<T = DataRecord>(
     const id = Math.random().toString(32).slice(2).toUpperCase()
 
     const style: CSSProperties = {
-      width: ctx?.previewing ? options?.width || 'auto' : '40px',
+      width: ctx?.previewing ? options?.width || 'auto' : sizeOptions[options?.size || 'middle'],
       height: ctx?.previewing ? options?.height || 'auto' : 'auto',
       borderRadius: options?.radius,
       maxWidth: !options?.height && !options?.width ? '150px' : 'auto',
@@ -73,27 +80,27 @@ export function renderImageColumn<T = DataRecord>(
       const result = options?.parse(value, record)
 
       if (isPromise(result)) {
-        (result as Promise<string>).then(v => ((record as Record<string, string>)[parsedKey] = v))
+        (result as Promise<string>).then(v => ((record as Record<string, string>)[parsedKey] = v ?? ''))
       }
       else {
-        (record as DataRecord)[parsedKey] = result as string
+        (record as DataRecord)[parsedKey] = result ?? ''
       }
     }
 
-    if (options?.parse && !(record as Record<string, string>)[parsedKey]) {
+    if (options?.parse && !(record as Record<string, string>)[parsedKey] === undefined) {
       return <div>Loading...</div>
     }
     else {
       const url = (record as Record<string, string>)[parsedKey] || value
-      return (
-        <img
+      return url
+        ? (<img
           id={id}
           onMouseenter={() => options?.preview && !ctx?.previewing && showPreview(id, url)}
           onMouseleave={() => options?.preview && !ctx?.previewing && closePreview(id)}
           src={url}
           style={style}
-        />
-      )
+        />)
+        : <></>
     }
   }
 
