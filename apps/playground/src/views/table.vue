@@ -17,7 +17,7 @@
       :form-options="{
         minWidth: 400,
       }"
-      pagination
+      pageable="client"
       row-key="age"
       :selection="{
         type: 'checkbox',

@@ -37,13 +37,13 @@ export function toRenderColumn<T>(
   }
 }
 
-export function renderTableColumns(columns: TableColumnsOptions, columnsOptions: TableColumnSharedOptions | undefined, events: EventEmits) {
+export function renderTableColumns(columns: TableColumnsOptions, columnsOptions: TableColumnSharedOptions | undefined, pageMode: 'client' | 'server', events: EventEmits) {
   return columns
     .map(column => ({
       ...columnsOptions || {},
       ...column,
     }))
-    .map(column => renderTableColumn(column, events))
+    .map(column => renderTableColumn(column, pageMode, events))
     .filter(Boolean) as TableColumnData[]
 }
 
@@ -52,7 +52,7 @@ export function renderTableColumns(columns: TableColumnsOptions, columnsOptions:
  * @param options
  * @returns
  */
-export function renderTableColumn<T>(options: TableColumnOptions<T>, events: EventEmits): TableColumnData | undefined {
+export function renderTableColumn<T>(options: TableColumnOptions<T>, pageMode: 'client' | 'server', events: EventEmits): TableColumnData | undefined {
   const { render, disableColumnMode } = toRenderColumn(options, {
     previewing: false,
     emits: events,
@@ -63,7 +63,7 @@ export function renderTableColumn<T>(options: TableColumnOptions<T>, events: Eve
   }
 
   return {
-    dataIndex: options.index || options.key,
+    dataIndex: options.index || options.key as string,
     title: options.title,
     width: options.width === 'auto' ? undefined : options.width,
     align: options.align ?? 'center',
@@ -71,7 +71,7 @@ export function renderTableColumn<T>(options: TableColumnOptions<T>, events: Eve
     ellipsis: options.ellipsis ?? true,
     sortable: options.sortable
       ? {
-          sorter: true,
+          sorter: pageMode === 'server',
           sortDirections: ['ascend', 'descend'],
           defaultSortOrder: options.sortable === 'asc' ? 'ascend' : 'descend',
         }

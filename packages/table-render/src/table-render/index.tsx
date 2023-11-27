@@ -1,4 +1,4 @@
-import { Table, type TableData, type TableInstance } from '@arco-design/web-vue'
+import { Table, type TableChangeExtra, type TableData, type TableInstance } from '@arco-design/web-vue'
 
 import { type PropType, type Ref, computed, defineComponent, onMounted, readonly, ref } from 'vue'
 import { ModalProvider } from '@gopowerteam/modal-render'
@@ -107,9 +107,9 @@ export const TableRender = defineComponent({
       default: 'right',
     },
     pageable: {
-      type: [Object, Boolean] as PropType<(RequestPlugin & PageableOptions) | { index: number; size: number } | boolean>,
+      type: [Object, Boolean, String] as PropType<(RequestPlugin & PageableOptions) | { index: number; size: number } | boolean | 'client' | 'server'>,
       required: false,
-      default: false,
+      default: undefined,
     },
     sortable: {
       type: [Object] as PropType<Record<string, 'desc' | 'asc'>>,
@@ -147,6 +147,8 @@ export const TableRender = defineComponent({
 
     function createPageService() {
       switch (true) {
+        case typeof props.pageable === 'string' && props.pageable === 'server':
+          return new PageService()
         case typeof props.pageable === 'boolean' && props.pageable === true:
           return new PageService()
         case typeof props.pageable === 'object' && !!(props.pageable as PageableOptions).reset:
@@ -155,6 +157,17 @@ export const TableRender = defineComponent({
           return new PageService((props.pageable as { index?: number; size?: number }).index, (props.pageable as { index?: number; size?: number }).size)
       }
     }
+
+    const pageMode: 'client' | 'server' = (() => {
+      switch (true) {
+        case typeof props.pageable === 'string':
+          return props.pageable as 'client' | 'server'
+        case props.pageable === undefined || props.pageable === false:
+          return 'client'
+        default:
+          return 'server'
+      }
+    })()
 
     function createSortService() {
       const column = props.columns.find(column => !!column.sortable)
@@ -268,9 +281,23 @@ export const TableRender = defineComponent({
       }
     }
 
-    const onTableChange = (data: TableData[]) => {
-      updateTableSource(data)
-      ctx.emit('change', data)
+    const onTableChange = (data: TableData[], { type }: TableChangeExtra) => {
+      switch (type) {
+        case 'drag':{
+          updateTableSource(data)
+          ctx.emit('change', data)
+          break
+        }
+        case 'pagination':{
+          break
+        }
+        case 'sorter':{
+          break
+        }
+        case 'filter':{
+          break
+        }
+      }
     }
 
     const tableEvents = useEvents({
@@ -295,7 +322,7 @@ export const TableRender = defineComponent({
       tableEvents('reload')
     }
 
-    const tableColumns = renderTableColumns(props.columns, props.columnsOptions, tableEvents)
+    const tableColumns = renderTableColumns(props.columns, props.columnsOptions, pageMode, tableEvents)
 
     const renderOptions: TableRenderOptions = {
       tableEvents,
@@ -330,6 +357,7 @@ export const TableRender = defineComponent({
       },
       rowSelection,
       draggable: props.draggable ? { type: 'handle', width: 40 } : undefined,
+      pagination: (props.pageable === undefined || props.pageable === 'client'),
     }))
 
     onMounted(() => {
@@ -382,7 +410,6 @@ export const TableRender = defineComponent({
           onChange={this.onTableChange}
           onSorterChange={this.onSorterChange}
           v-model:selectedKeys={this.tableSelection.selectedRowKeys.value}
-          pagination={false}
           {...this.tableOptions}>
         </Table>
       </div>

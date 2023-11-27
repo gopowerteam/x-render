@@ -158,6 +158,10 @@ function closeModal(id: string, data?: any) {
 }
 
 function closeAllModal() {
+  if (!elements.value || elements.value.length === 0) {
+    return
+  }
+
   elements.value.forEach((modal) => {
     modal.resolve()
   })
@@ -236,6 +240,8 @@ provide(ModalKey, {
 defineExpose({
   elements,
   open: openModal,
+  close: closeModal,
+  closeAll: closeAllModal,
 })
 
 onMounted(() => {
