@@ -300,6 +300,7 @@ const contentStyle = computed(() => {
 
   if (props.mode === 'drawer') {
     styles.borderRadius = 0
+    styles.height = '100%'
   }
 
   if (props.offset && props.mode === 'dialog') {
@@ -329,12 +330,12 @@ const bodyStyle = computed<CSSProperties>(() => {
 
   if (props.mode === 'drawer') {
     styles.maxHeight = 'unset'
-    styles.height = `calc(100vh - ${(props.header ? 50 : 0) + (props.footer ? 50 : 0)}px)`
+    styles.height = `calc(100% - ${(props.header ? 50 : 0) + (props.footer ? 50 : 0)}px)`
   }
 
   if (props.fullscreen) {
     styles.maxHeight = 'unset'
-    styles.height = `calc(100vh - ${(props.header ? 50 : 0) + (props.footer ? 50 : 0)}px)`
+    styles.height = `calc(100% - ${(props.header ? 50 : 0) + (props.footer ? 50 : 0)}px)`
   }
 
   if (props.type !== 'component') {
