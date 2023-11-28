@@ -349,6 +349,7 @@ export const TableRender = defineComponent({
     const tableOptions = computed<Partial<TableInstance['$props']>>(() => ({
       rowKey: props.rowKey,
       size: props.size,
+      bordered: false,
       scroll: {
         x: props.columns.reduce((r, item) =>
           r += (typeof item.width !== 'number' ? Math.max(item.title.length * 16, 80) : item.width),

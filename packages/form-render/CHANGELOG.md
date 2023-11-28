@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.15
+
+### Patch Changes
+
+- update props
+
 ## 0.0.14
 
 ### Patch Changes

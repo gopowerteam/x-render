@@ -32,7 +32,7 @@ export const FormRender = defineComponent({
     minWidth: {
       type: Number,
       required: false,
-      default: 350,
+      default: 320,
     },
     name: {
       type: String,
@@ -99,8 +99,9 @@ export const FormRender = defineComponent({
     })
 
     function updateFormColumnValue() {
-      if (formColumns.value === 0) {
-        const form = formInstance.value?.$el as HTMLFormElement
+      const form = formInstance.value?.$el as HTMLFormElement
+
+      if (form) {
         formColumns.value = Math.floor(form.offsetWidth / props.minWidth)
       }
     }
@@ -191,7 +192,8 @@ export const FormRender = defineComponent({
     }
 
     return (
-      <Form layout={this.$props.layout} rules={this.formRules} onSubmitSuccess={onSubmitSuccess} {...({ name: this.name })} auto-label-width ref={instance => this.formInstance = instance as any} model={this.formSource}>
+     <div class="form-render">
+       <Form layout={this.$props.layout} rules={this.formRules} onSubmitSuccess={onSubmitSuccess} {...({ name: this.name })} auto-label-width ref={instance => this.formInstance = instance as any} model={this.formSource}>
         <Grid cols={this.formColumns} col-gap={10} rol-gap={10}>
           {this.form.filter(item => this.formCollspased ? !item.collapsed : true).map(item => (
             <GridItem span={item.span}>
@@ -203,6 +205,7 @@ export const FormRender = defineComponent({
           }
         </Grid>
       </Form>
+     </div>
     )
   },
 })
