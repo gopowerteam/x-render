@@ -163,7 +163,7 @@ function closeAllModal() {
   }
 
   elements.value.forEach((modal) => {
-    modal.resolve()
+    modal?.reject('CANCEL')
   })
 
   elements.value = []
