@@ -15,6 +15,14 @@ export function tableSecletionRender(
   } {
   const selectedRowKeys = ref<(string | number)[]>([])
 
+  if (props.checkboxRows?.length) {
+    selectedRowKeys.value = [...props.checkboxRows.map(x => x[props.rowKey])]
+  }
+
+  if (props.checkboxKeys?.length) {
+    selectedRowKeys.value = [...props.checkboxKeys]
+  }
+
   function getRowSelection() {
     const selection = typeof props.selection === 'string' ? { type: props.selection } : props.selection
 

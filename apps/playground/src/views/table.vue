@@ -53,7 +53,7 @@ import { onMounted, ref } from 'vue'
 const radioKey = ref<number>()
 const checkboxKeys = ref<number[]>([])
 const radioRow = ref<any>()
-const checkboxRows = ref<any[]>([])
+const checkboxRows = ref<any[]>([{ age: 98 }, { age: 97 }])
 interface t {
   age: string
   name: string

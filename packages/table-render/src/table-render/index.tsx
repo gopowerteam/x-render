@@ -357,8 +357,9 @@ export const TableRender = defineComponent({
         y: props.height ?? '100%',
       },
       rowSelection,
-      draggable: props.draggable ? { type: 'handle', width: 40 } : undefined,
+      draggable: props.draggable ? { type: 'handle' as const, width: 40 } : undefined,
       pagination: (props.pageable === undefined || props.pageable === 'client'),
+      selectedKeys: selectedRowKeys.value,
     }))
 
     onMounted(() => {
