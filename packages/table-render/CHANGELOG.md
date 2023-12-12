@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.36
+
+### Patch Changes
+
+- update
+
 ## 0.0.35
 
 ### Patch Changes

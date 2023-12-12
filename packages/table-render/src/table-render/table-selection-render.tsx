@@ -62,7 +62,9 @@ export function tableSecletionRender(
   function onSelectAll() {
     nextTick(() => {
       ctx.emit('update:checkbox-keys', selectedRowKeys.value)
-      ctx.emit('update:checkbox-rows', selectedRowKeys.value.map(row => tableSource.value.find(item => item[props.rowKey] === row)))
+      ctx.emit('update:checkbox-rows', selectedRowKeys.value.map((row) => {
+        return tableSource.value.find(item => item[props.rowKey] === row) || props.checkboxRows?.find(item => item[props.rowKey] === row)
+      }))
     })
   }
 
