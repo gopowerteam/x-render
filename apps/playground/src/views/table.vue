@@ -81,6 +81,25 @@ const form = defineForm<t>([{
   key: 'test1',
   title: 'xxx2',
   render: r => r.date(),
+}, {
+  key: 'tree1',
+  title: 'tree',
+  render: r => r.treeSelect({
+    options: [{
+      key: 'a',
+      title: 'b',
+      children: [{
+        key: 'c',
+        title: 'd',
+        children: [
+          {
+            key: 'e',
+            title: 'f',
+          },
+        ],
+      }],
+    }],
+  }),
 }])
 
 const columns = defineColumns<t>([{

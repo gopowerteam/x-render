@@ -1,5 +1,19 @@
 # @gopowerteam/table-render
 
+## 0.0.38
+
+### Patch Changes
+
+- add tree-select compute
+- Updated dependencies
+  - @gopowerteam/form-render@0.0.17
+
+## 0.0.37
+
+### Patch Changes
+
+- fix
+
 ## 0.0.36
 
 ### Patch Changes

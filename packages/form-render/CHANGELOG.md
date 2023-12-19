@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.17
+
+### Patch Changes
+
+- add tree-select compute
+
 ## 0.0.16
 
 ### Patch Changes

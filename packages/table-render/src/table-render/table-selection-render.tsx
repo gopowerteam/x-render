@@ -54,7 +54,9 @@ export function tableSecletionRender(
         break
       case 'checkbox':
         ctx.emit('update:checkbox-keys', rowKeys)
-        ctx.emit('update:checkbox-rows', rowKeys.map(row => tableSource.value.find(item => item[props.rowKey] === row)))
+        ctx.emit('update:checkbox-rows', rowKeys.map((row) => {
+          return tableSource.value.find(item => item[props.rowKey] === row) || props.checkboxRows?.find(item => item[props.rowKey] === row)
+        }))
         break
     }
   }
