@@ -211,6 +211,7 @@ const props = withDefaults (defineProps<{
   mode?: 'dialog' | 'drawer'
   type?: string
   offset?: { x?: number; y?: number }
+  backgroundColor?: string
 }>()
 , {
   header: true,
@@ -306,6 +307,10 @@ const contentStyle = computed(() => {
   if (props.offset && props.mode === 'dialog') {
     styles.marginLeft = `${props.offset.x || 0}px`
     styles.marginTop = `${props.offset.y || 0}px`
+  }
+
+  if (props.backgroundColor) {
+    styles.backgroundColor = props.backgroundColor
   }
 
   return styles

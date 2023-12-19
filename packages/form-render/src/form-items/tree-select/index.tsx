@@ -75,6 +75,7 @@ export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItem
         v-model={data[form.key as keyof T]}
         placeholder={options.placeholder}
         allowClear={options.clearable}
+        allowSearch={options.searchable}
         maxTagCount={options.maxTagCount ?? 2}
         onChange={onSelectChange}
         data={selectOptions.value}
@@ -89,6 +90,8 @@ export interface RenderTreeSelectItemOptions {
   placeholder?: string
   // 可清楚
   clearable?: boolean
+  // 可搜索
+  searchable?: boolean
   // 字段配置
   fieldNames?: TreeFieldNames
   // select options列表

@@ -21,6 +21,7 @@ export interface OpenModalOptions {
   draggable?: boolean
   form?: string
   mode?: 'dialog' | 'drawer'
+  backgroundColor?: string
 }
 
 export interface ModalElement extends OpenModalOptions {

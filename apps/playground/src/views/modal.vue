@@ -15,9 +15,13 @@ import { useModal } from '@gopowerteam/modal-render'
 const modal = useModal()
 
 function onClick() {
-  const instance = modal.open('confirm', {
+  const instance = modal.open(<div style={{ backgroundColor: 'red' }}>123</div>, {
     content: 'asdasd',
-
+  }, {
+    mode: 'dialog',
+    header: false,
+    fullscreen: true,
+    backgroundColor: 'yellow',
   })
 
   instance.then((a: any) => {
