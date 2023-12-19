@@ -61,6 +61,19 @@ export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItem
     }
   }
 
+  function filterTreeNode(searchValue: string, nodeData: TreeNodeData) {
+    const key = options.fieldNames?.title || 'title'
+
+    const title = nodeData[key as keyof TreeNodeData] as string
+
+    if (title) {
+      return title.toLowerCase().includes(searchValue.toLowerCase())
+    }
+    else {
+      return false
+    }
+  }
+
   return (data: T, form: FormItemOptions<T>) => {
     // 设置默认值
     if (options.default && !mounted) {
@@ -78,6 +91,7 @@ export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItem
         allowSearch={options.searchable}
         maxTagCount={options.maxTagCount ?? 2}
         onChange={onSelectChange}
+        filterTreeNode={filterTreeNode}
         data={selectOptions.value}
         fieldNames={options.fieldNames}>
       </TreeSelect>
