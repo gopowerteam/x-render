@@ -75,6 +75,7 @@ export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions)
         v-model={data[form.key as keyof T]}
         placeholder={options.placeholder}
         allowClear={options.clearable}
+        allowSearch={options.searchable}
         maxTagCount={options.maxTagCount ?? 2}
         onChange={onSelectChange}>
         {Array.from(selectOptions.value.entries()).map(([value, label]) => (
@@ -95,6 +96,8 @@ export interface RenderSelectItemOptions {
   placeholder?: string
   // 可清楚
   clearable?: boolean
+  // 可搜索
+  searchable?: boolean
   // select options列表
   options:
   | SelectOptions
