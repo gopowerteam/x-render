@@ -191,11 +191,24 @@ export const FormRender = defineComponent({
       }
     }
 
+    const formItems = this.form
+      .filter(item => this.formCollspased ? !item.collapsed : true)
+      .filter((item) => {
+        switch (true) {
+          case typeof item.visiable === 'boolean':
+            return item.visiable
+          case typeof item.visiable === 'function':
+            return item.visiable(this.formSource)
+          default:
+            return true
+        }
+      })
+
     return (
      <div class="form-render">
        <Form layout={this.$props.layout} rules={this.formRules} onSubmitSuccess={onSubmitSuccess} {...({ name: this.name })} auto-label-width ref={instance => this.formInstance = instance as any} model={this.formSource}>
         <Grid cols={this.formColumns} col-gap={10} rol-gap={10}>
-          {this.form.filter(item => this.formCollspased ? !item.collapsed : true).map(item => (
+          {formItems.map(item => (
             <GridItem span={item.span}>
               {renderFormItem(this.formSource, item)}
             </GridItem>
