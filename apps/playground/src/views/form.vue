@@ -38,6 +38,11 @@ const form = defineForm([{
     cache: true,
     autoSumbit: true,
   }),
+}, {
+  key: 'xxx1',
+  title: 'xx',
+  render: r => r.dateRange(),
+
 }])
 
 let x = 0

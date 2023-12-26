@@ -1,7 +1,7 @@
 {
   "name": "@gopowerteam/table-render",
   "type": "module",
-  "version": "0.0.43",
+  "version": "0.0.44",
   "author": {
     "name": "zhuchentong",
     "email": "2037630@gmail.com"
@@ -54,7 +54,7 @@
   },
   "peerDependencies": {
     "@arco-design/web-vue": "^2.52.1",
-    "@gopowerteam/form-render": "^0.0.21",
+    "@gopowerteam/form-render": "^0.0.22",
     "@gopowerteam/modal-render": "^0.0.16",
     "vue": "^3.0.0"
   },
