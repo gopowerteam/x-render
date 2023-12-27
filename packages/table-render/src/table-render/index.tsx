@@ -132,6 +132,8 @@ export const TableRender = defineComponent({
     'update:checkbox-keys',
     'update:checkbox-rows',
     'formInstance',
+    'resetSelection',
+    'reloadSelection',
     'change',
   ],
   setup(props, ctx) {
@@ -341,6 +343,8 @@ export const TableRender = defineComponent({
       rowSelection,
       onSelect,
       onSelectAll,
+      reloadSelection,
+      resetSelection,
     } = tableSecletionRender(props, ctx, renderOptions)
 
     /**
@@ -397,6 +401,8 @@ export const TableRender = defineComponent({
         onSelect,
         onSelectAll,
       },
+      resetSelection,
+      reloadSelection,
     }
   },
   render() {

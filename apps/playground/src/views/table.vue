@@ -26,10 +26,10 @@
       @change="onTableChange"
     >
       <template #actions>
-        <AButton type="primary">
+        <AButton type="primary" @click="a">
           123adasd
         </AButton>
-        <AButton type="primary">
+        <AButton type="primary" @click="b">
           123adasd
         </AButton>
       </template>
@@ -51,9 +51,9 @@ import { defineForm } from '@gopowerteam/form-render'
 import { onMounted, ref } from 'vue'
 
 const radioKey = ref<number>()
-const checkboxKeys = ref<number[]>([])
+const checkboxKeys = ref<string[]>(['99'])
 const radioRow = ref<any>()
-const checkboxRows = ref<any[]>([{ age: 98 }, { age: 97 }])
+const checkboxRows = ref<any[]>([{ age: 99 }])
 interface t {
   age: string
   name: string
@@ -65,6 +65,15 @@ function onTableChange(...z: any) {
 const draggable = ref(false)
 const table = useTable('table')
 
+function a() {
+  table.value.resetSelection()
+}
+
+function b() {
+  checkboxKeys.value = ['99']
+  checkboxRows.value = [{ age: '99' }]
+  table.value.reloadSelection()
+}
 const form = defineForm<t>([{
   key: 'age',
   title: 'age',

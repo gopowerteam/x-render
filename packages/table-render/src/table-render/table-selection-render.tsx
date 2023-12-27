@@ -12,15 +12,37 @@ export function tableSecletionRender(
     rowSelection?: TableRowSelection
     onSelect: (rowKeys: (string | number)[], rowKey: string | number, record: TableData) => void
     onSelectAll: (value: boolean) => void
+    reloadSelection(): void
+    resetSelection(): void
   } {
   const selectedRowKeys = ref<(string | number)[]>([])
 
-  if (props.checkboxRows?.length) {
-    selectedRowKeys.value = [...props.checkboxRows.map(x => x[props.rowKey])]
+  function resetSelection() {
+    selectedRowKeys.value = []
+    ctx.emit('update:radio-key', null)
+    ctx.emit('update:radio-row', null)
+    ctx.emit('update:checkbox-keys', [])
+    ctx.emit('update:checkbox-rows', [])
   }
 
-  if (props.checkboxKeys?.length) {
-    selectedRowKeys.value = [...props.checkboxKeys]
+  function reloadSelection() {
+    nextTick(() => {
+      if (props.checkboxRows?.length) {
+        selectedRowKeys.value = [...props.checkboxRows.map(x => x[props.rowKey])]
+      }
+
+      if (props.checkboxKeys?.length) {
+        selectedRowKeys.value = [...props.checkboxKeys]
+      }
+
+      if (props.radioKey) {
+        selectedRowKeys.value = [props.radioKey]
+      }
+
+      if (props.radioRow) {
+        selectedRowKeys.value = [props.radioRow[props.rowKey]]
+      }
+    })
   }
 
   function getRowSelection() {
@@ -70,10 +92,14 @@ export function tableSecletionRender(
     })
   }
 
+  reloadSelection()
+
   return {
     selectedRowKeys,
     rowSelection: getRowSelection(),
     onSelect,
     onSelectAll,
+    resetSelection,
+    reloadSelection,
   }
 }
