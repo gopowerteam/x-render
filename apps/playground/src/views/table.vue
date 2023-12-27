@@ -142,12 +142,14 @@ const columns = defineColumns<t>([{
     {
       content: 'preview',
       confirm: true,
+      visiable: record => record.age === '99',
       onClick: () => {
         table.value.preview({ key: 1, mode: 'drawer' })
       },
     },
     {
       content: 'edit',
+      visiable: record => record.age === '99',
       onClick: (record) => {
         table.value.edit({
           key: record.age,
@@ -177,7 +179,7 @@ const onTableLoad = defineTableLoad(({ form, update, page, sort }) => {
     setTimeout(() => {
       update(Array.from(Array(100), (_, i) => ({
         name: i,
-        age: i === 3 ? i.toString().repeat(200) : i,
+        age: i === 3 ? i.toString().repeat(200) : i.toString(),
         text: i,
         image: 'https://lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg',
       })))

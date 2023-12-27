@@ -131,6 +131,7 @@ export function renderButtonColumn<T>(options: RenderButtonColumnOptions<T>) {
               onClick={() => onClick(button)}
               type={button.type || 'text'}
               shape={button.shape}
+              size="mini"
               disabled={toBooleanValue(button.disabled, false)}>
               {{
                 icon: button.icon,

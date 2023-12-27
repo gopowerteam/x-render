@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.45
+
+### Patch Changes
+
+- update button size
+
 ## 0.0.44
 
 ### Patch Changes
