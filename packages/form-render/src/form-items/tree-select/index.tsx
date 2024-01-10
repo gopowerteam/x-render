@@ -1,62 +1,15 @@
 import { type TreeFieldNames, type TreeNodeData, TreeSelect } from '@arco-design/web-vue'
 import { type ComponentPublicInstance, ref } from 'vue'
 import type { DataRecord, FormItemOptions } from '../../interfaces'
-import { isPromise } from '../../utils/is-promise'
 
-const cache_value = new WeakSet()
-const cache_update = new WeakMap()
+const cache = new Map()
 
 export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItemOptions) {
   let selectInstance: ComponentPublicInstance
   let mounted = false
   const selectOptions = ref<TreeNodeData[]>([])
 
-  const updateSelectOptions = (data: TreeNodeData[]) => {
-    if (options.cache !== false) {
-      const update = cache_update.get(options.options)
-      update(data)
-    }
-    else {
-      selectOptions.value = data
-    }
-  }
-
-  if (options.cache !== false) {
-    cache_update.set(options.options, (value: TreeNodeData[]) => {
-      selectOptions.value = value
-    })
-  }
-
-  switch (true) {
-    case options.options instanceof Function:{
-      if (options.cache !== false && cache_value.has(options.options)) {
-        break
-      }
-
-      if (options.cache !== false) {
-        cache_value.add(options.options)
-      }
-
-      const value: Promise<TreeNodeData[]> | TreeNodeData[] = (options.options as Function)()
-
-      if (isPromise(value)) {
-        (value as Promise<TreeNodeData[]>).then(updateSelectOptions)
-      }
-      else {
-        updateSelectOptions(value as TreeNodeData[])
-      }
-      break
-    }
-    case isPromise(options.options): {
-      (options.options as Promise<TreeNodeData[]>).then(data => (selectOptions.value = data))
-      break
-    }
-    default:{
-      selectOptions.value = options.options as TreeNodeData[]
-    }
-  }
-
-  function onSelectChange() {
+  const onSelectChange = () => {
     if (!options.autoSumbit || !selectInstance) {
       return
     }
@@ -70,6 +23,39 @@ export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItem
     if (parent && parent.$el) {
       const form = parent.$el as HTMLFormElement
       form.dispatchEvent(new Event('submit'))
+    }
+  }
+
+  const execUpdateSelectOptions = async () => {
+    const value: TreeNodeData[] = await (options.options as Function)()
+
+    if (options.cache !== false && cache.has(options.options)) {
+      const update = cache.get(options.options)
+      typeof update === 'function' && update(value)
+      cache.delete(options.options)
+    }
+    else {
+      selectOptions.value = value
+    }
+  }
+
+  switch (true) {
+    case options.options instanceof Function:{
+      if (options.cache !== false && cache.has(options.options)) {
+        break
+      }
+
+      execUpdateSelectOptions()
+
+      if (options.cache !== false) {
+        cache.set(options.options, (value: TreeNodeData[]) => {
+          selectOptions.value = value
+        })
+      }
+      break
+    }
+    default:{
+      selectOptions.value = options.options as TreeNodeData[]
     }
   }
 
@@ -124,7 +110,6 @@ export interface RenderTreeSelectItemOptions {
   options:
   | TreeNodeData[]
   | (() => TreeNodeData[])
-  | Promise<TreeNodeData[]>
   | (() => Promise<TreeNodeData[]>)
   // 多选支持
   multiple?: boolean

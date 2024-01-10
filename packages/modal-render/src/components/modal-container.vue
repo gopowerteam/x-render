@@ -29,6 +29,9 @@
         <Component :is="component" v-bind="componentProps" />
       </div>
       <div v-if="footer" class="modal-footer space-x-2">
+        <button class="cancel-button" type="button" @click="onCancel">
+          取消
+        </button>
         <button
           class="submit-button"
           :form="form"
@@ -36,9 +39,6 @@
           @click="onSubmit"
         >
           确定
-        </button>
-        <button class="cancel-button" type="button" @click="onCancel">
-          取消
         </button>
       </div>
       <div v-if="loading" class="modal-loading">
