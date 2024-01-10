@@ -2,13 +2,14 @@ import { Option, Select } from '@arco-design/web-vue'
 import { type ComponentPublicInstance, ref } from 'vue'
 import type { DataRecord, FormItemOptions } from '../../interfaces'
 
-const cache = new Map()
+const cache = new WeakMap()
 
 export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions) {
   let selectInstance: ComponentPublicInstance
   let mounted = false
 
   const selectOptions = ref<SelectOptions>(new Map())
+  const updateSelectOptions = (value: SelectOptions) => selectOptions.value = value
 
   const onSelectChange = () => {
     if (!options.autoSumbit || !selectInstance) {
@@ -30,10 +31,14 @@ export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions)
   const execUpdateSelectOptions = async () => {
     const value: SelectOptions = await (options.options as Function)()
 
+    if (options.cache === false) {
+      selectOptions.value = value
+    }
+
     if (options.cache !== false && cache.has(options.options)) {
       const update = cache.get(options.options)
       typeof update === 'function' && update(value)
-      cache.delete(options.options)
+      cache.set(options.options, value)
     }
     else {
       selectOptions.value = value
@@ -42,7 +47,14 @@ export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions)
 
   switch (true) {
     case options.options instanceof Function:{
-      if (options.cache !== false && cache.has(options.options)) {
+      const data = cache.get(options.options)
+
+      if (options.cache !== false && typeof data === 'function') {
+        break
+      }
+
+      if (options.cache !== false && data instanceof Map) {
+        updateSelectOptions(data)
         break
       }
 

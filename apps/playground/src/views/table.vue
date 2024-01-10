@@ -193,7 +193,6 @@ function c() {
 }
 
 const onTableLoad = defineTableLoad(({ form, update, page, sort }) => {
-  console.log('zzz')
   if (page) {
     page.total = 1000
   }
