@@ -2,12 +2,14 @@ import { type TreeFieldNames, type TreeNodeData, TreeSelect } from '@arco-design
 import { type ComponentPublicInstance, ref } from 'vue'
 import type { DataRecord, FormItemOptions } from '../../interfaces'
 
-const cache = new Map()
+const cache = new WeakMap()
 
 export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItemOptions) {
   let selectInstance: ComponentPublicInstance
   let mounted = false
+
   const selectOptions = ref<TreeNodeData[]>([])
+  const updateSelectOptions = (value: TreeNodeData[]) => selectOptions.value = value
 
   const onSelectChange = () => {
     if (!options.autoSumbit || !selectInstance) {
@@ -29,10 +31,14 @@ export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItem
   const execUpdateSelectOptions = async () => {
     const value: TreeNodeData[] = await (options.options as Function)()
 
+    if (options.cache === false) {
+      selectOptions.value = value
+    }
+
     if (options.cache !== false && cache.has(options.options)) {
       const update = cache.get(options.options)
       typeof update === 'function' && update(value)
-      cache.delete(options.options)
+      cache.set(options.options, value)
     }
     else {
       selectOptions.value = value
@@ -41,7 +47,14 @@ export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItem
 
   switch (true) {
     case options.options instanceof Function:{
-      if (options.cache !== false && cache.has(options.options)) {
+      const data = cache.get(options.options)
+
+      if (options.cache !== false && typeof data === 'function') {
+        break
+      }
+
+      if (options.cache !== false && Array.isArray(data)) {
+        updateSelectOptions(data)
         break
       }
 
