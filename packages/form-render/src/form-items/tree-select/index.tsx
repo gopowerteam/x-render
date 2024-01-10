@@ -3,7 +3,8 @@ import { type ComponentPublicInstance, ref } from 'vue'
 import type { DataRecord, FormItemOptions } from '../../interfaces'
 import { isPromise } from '../../utils/is-promise'
 
-const cache = new WeakMap()
+const cache_value = new WeakSet()
+const cache_update = new WeakMap()
 
 export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItemOptions) {
   let selectInstance: ComponentPublicInstance
@@ -11,18 +12,29 @@ export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItem
   const selectOptions = ref<TreeNodeData[]>([])
 
   const updateSelectOptions = (data: TreeNodeData[]) => {
-    selectOptions.value = data
-
     if (options.cache !== false) {
-      cache.set(options.options, data)
+      const update = cache_update.get(options.options)
+      update(data)
     }
+    else {
+      selectOptions.value = data
+    }
+  }
+
+  if (options.cache !== false) {
+    cache_update.set(options.options, (value: TreeNodeData[]) => {
+      selectOptions.value = value
+    })
   }
 
   switch (true) {
     case options.options instanceof Function:{
-      if (cache.has(options.options)) {
-        selectOptions.value = cache.get(options.options)
+      if (options.cache !== false && cache_value.has(options.options)) {
         break
+      }
+
+      if (options.cache !== false) {
+        cache_value.add(options.options)
       }
 
       const value: Promise<TreeNodeData[]> | TreeNodeData[] = (options.options as Function)()

@@ -91,6 +91,14 @@ const form = defineForm<t>([{
   title: 'xxx2',
   render: r => r.date(),
 }, {
+  key: 'yyy',
+  title: 'yyy',
+  render: r => r.select({
+    options: c,
+    cache: true,
+    autoSumbit: true,
+  }),
+}, {
   key: 'tree1',
   title: 'tree',
   render: r => r.treeSelect({
@@ -138,7 +146,8 @@ const columns = defineColumns<t>([{
     dict: new Map([[3, 'xxx']]),
     tag: 'success',
   }),
-}, {
+},
+{
   key: 'render',
   title: 'render',
   render: r => r.render(() => <div>123</div>),
@@ -173,6 +182,15 @@ const columns = defineColumns<t>([{
     },
   ]),
 }])
+let y = 0
+function c() {
+  console.log(y++)
+  return new Promise<Map<string, string>>((resolve) => {
+    setTimeout(() => {
+      resolve(new Map<string, string>([['x', 'x'], ['y', 'y']]))
+    }, 2000)
+  })
+}
 
 const onTableLoad = defineTableLoad(({ form, update, page, sort }) => {
   console.log('zzz')
