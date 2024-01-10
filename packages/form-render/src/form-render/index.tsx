@@ -99,6 +99,10 @@ export const FormRender = defineComponent({
     })
 
     function updateFormColumnValue() {
+      if (props.columns) {
+        return
+      }
+
       const form = formInstance.value?.$el as HTMLFormElement
 
       if (form) {
@@ -121,7 +125,6 @@ export const FormRender = defineComponent({
     function resetForm() {
       formInstance.value?.resetFields()
     }
-
     window.addEventListener('resize', updateFormColumnValue)
 
     return ({
@@ -208,11 +211,13 @@ export const FormRender = defineComponent({
      <div class="form-render">
        <Form layout={this.$props.layout} rules={this.formRules} onSubmitSuccess={onSubmitSuccess} {...({ name: this.name })} auto-label-width ref={instance => this.formInstance = instance as any} model={this.formSource}>
         <Grid cols={this.formColumns} col-gap={10} rol-gap={10}>
-          {formItems.map(item => (
-            <GridItem span={item.span}>
-              {renderFormItem(this.formSource, item)}
-            </GridItem>
-          ))}
+          {
+            formItems.filter(() => this.formColumns !== 0).map(item => (
+              <GridItem span={item.span}>
+                {renderFormItem(this.formSource, item)}
+              </GridItem>
+            ))
+          }
           {
             renderFormActions()
           }

@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.23
+
+### Patch Changes
+
+- fixed columns config
+
 ## 0.0.22
 
 ### Patch Changes

@@ -1,6 +1,5 @@
 <template>
   <FormRender
-    :columns="1"
     footer
     :form="form"
     layout="horizontal"
@@ -57,6 +56,10 @@ function a(): Promise<Map<string, string>> {
 
 function b() {
   console.log(y++)
-  return new Map<string, string>([['x', 'x'], ['y', 'y']])
+  return new Promise<Map<string, string>>((resolve) => {
+    setTimeout(() => {
+      resolve(new Map<string, string>([['x', 'x'], ['y', 'y']]))
+    }, 2000)
+  })
 }
 </script>
