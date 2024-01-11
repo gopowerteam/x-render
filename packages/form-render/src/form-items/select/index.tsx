@@ -13,7 +13,6 @@ function useSelectOptions(): [Ref<SelectOptions>, (value: SelectOptions) => void
 }
 
 export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions) {
-  console.log('开始渲染Select:')
   let selectInstance: ComponentPublicInstance
   let mounted = false
 
@@ -49,23 +48,21 @@ export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions)
 
   const updateSelectOptionsFromCache = async () => {
     const value = cache.get(options.options)
-    console.log('当前缓存值:', value)
+
     switch (typeof value) {
       // 已经执行未返回
       case 'function':
-        console.log('检测到缓存正在请求中')
-        console.log('更新缓存')
+
         cache.set(options.options, updateSelectOptions)
         return
       // 已经执行已返回
       case 'object':
-        console.log('检测到缓存数据完成')
+
         updateSelectOptions(value)
         return
     }
     // 缓存执行
 
-    console.log('未检测到缓存开始进行请求')
     cache.set(options.options, updateSelectOptions)
     // 未执行
     runSelectOptionsFunction(
@@ -90,11 +87,9 @@ export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions)
   switch (true) {
     case options.options instanceof Function:{
       if (options.cache !== false) {
-        console.log('缓存开启')
         updateSelectOptionsFromCache()
       }
       else {
-        console.log('缓存关闭')
         updateSelectOptionsFromData()
       }
       break

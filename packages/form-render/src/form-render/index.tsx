@@ -209,8 +209,15 @@ export const FormRender = defineComponent({
 
     return (
      <div class="form-render">
-       <Form layout={this.$props.layout} rules={this.formRules} onSubmitSuccess={onSubmitSuccess} {...({ name: this.name })} auto-label-width ref={instance => this.formInstance = instance as any} model={this.formSource}>
-        <Grid cols={this.formColumns} col-gap={10} rol-gap={10}>
+       <Form {...({ name: this.name })}
+            labelAlign='left'
+            layout={this.$props.layout}
+            rules={this.formRules}
+            onSubmitSuccess={onSubmitSuccess}
+            auto-label-width
+            ref={instance => this.formInstance = instance as any}
+            model={this.formSource}>
+        <Grid cols={this.formColumns} col-gap={24} rol-gap={10}>
           {
             formItems.filter(() => this.formColumns !== 0).map(item => (
               <GridItem span={item.span}>

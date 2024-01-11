@@ -64,8 +64,12 @@ function onTableChange(...z: any) {
 const draggable = ref(false)
 const table = useTable('table')
 
+const a1 = ref('1')
+
 function a() {
-  table.value.resetSelection()
+  a1.value = '2'
+  // table.value.resetSelection()
+  table.value.reloadColumns()
 }
 
 function b() {
@@ -127,7 +131,7 @@ const columns = defineColumns<t>([{
 }, {
   key: 'image',
   title: 'image',
-
+  visiable: () => a1.value === '2',
   render: r => r.image({
     preview: true,
   }),

@@ -19,8 +19,7 @@ function onClick() {
     content: 'asdasd',
   }, {
     mode: 'dialog',
-    header: false,
-    fullscreen: true,
+    title: 'asdasd',
     backgroundColor: 'yellow',
   })
 

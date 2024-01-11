@@ -18,7 +18,7 @@
         :style="headerStyle"
         @mousedown="onMouseDown"
       >
-        <div class="title font-bold">
+        <div class="title text-16px font-bold">
           {{ title }}
         </div>
         <div class="action">
@@ -79,8 +79,9 @@
     height: 50px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items--color-text-1
     border-bottom: solid 1px var(--color-border-1, rgb(232, 232, 232));
+    color: var(--color-text-2, #4E5969);
 }
 
 .modal-body{

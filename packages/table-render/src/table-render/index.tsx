@@ -1,4 +1,4 @@
-import { Table, type TableChangeExtra, type TableData, type TableInstance } from '@arco-design/web-vue'
+import { Table, type TableChangeExtra, type TableColumnData, type TableData, type TableInstance } from '@arco-design/web-vue'
 
 import { type PropType, type Ref, computed, defineComponent, onMounted, readonly, ref } from 'vue'
 import { ModalProvider } from '@gopowerteam/modal-render'
@@ -134,6 +134,7 @@ export const TableRender = defineComponent({
     'formInstance',
     'resetSelection',
     'reloadSelection',
+    'reloadColumns',
     'change',
   ],
   setup(props, ctx) {
@@ -324,7 +325,7 @@ export const TableRender = defineComponent({
       tableEvents('reload')
     }
 
-    const tableColumns = renderTableColumns(props.columns, props.columnsOptions, pageMode, tableEvents)
+    const tableColumns = ref<TableColumnData[]>(renderTableColumns(props.columns, props.columnsOptions, pageMode, tableEvents))
 
     const renderOptions: TableRenderOptions = {
       tableEvents,
@@ -366,6 +367,10 @@ export const TableRender = defineComponent({
       selectedKeys: selectedRowKeys.value,
     }))
 
+    function reloadColumns() {
+      tableColumns.value = renderTableColumns(props.columns, props.columnsOptions, pageMode, tableEvents)
+    }
+
     onMounted(() => {
       if (props.autoLoad) {
         onTableReload()
@@ -403,6 +408,7 @@ export const TableRender = defineComponent({
       },
       resetSelection,
       reloadSelection,
+      reloadColumns,
     }
   },
   render() {
