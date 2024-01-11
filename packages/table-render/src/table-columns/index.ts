@@ -1,6 +1,7 @@
 import { renderButtonColumn } from './button'
 import { renderCurrencyColumn } from './currency'
 import { renderDictColumn } from './dict'
+import { renderDropdownColumn } from './dropdown'
 import { renderImageColumn } from './image'
 import { renderPhoneColumn } from './phone'
 import { renderRenderColumn } from './render'
@@ -9,6 +10,7 @@ import { renderTextColumn } from './text'
 
 export function TableColumnRenders<T>() {
   return {
+    dropdown: renderDropdownColumn<T>,
     text: renderTextColumn<T>,
     dict: renderDictColumn<T>,
     tag: renderTagColumn<T>,

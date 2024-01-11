@@ -6,7 +6,6 @@
     <TableRender
       ref="table"
       v-model:checkbox-keys="checkboxKeys"
-      v-model:checkbox-rows="checkboxRows"
       v-model:radio-key="radioKey"
       v-model:radio-row="radioRow"
       :columns="columns"
@@ -30,7 +29,7 @@
           123adasd
         </AButton>
         <AButton type="primary" @click="b">
-          123adasd
+          clear selected
         </AButton>
       </template>
     </TableRender>
@@ -58,7 +57,7 @@ interface t {
   age: string
   name: string
 }
-
+const xx = ref(new Map())
 function onTableChange(...z: any) {
   console.log(z)
 }
@@ -70,8 +69,8 @@ function a() {
 }
 
 function b() {
-  checkboxKeys.value = ['99']
-  checkboxRows.value = [{ age: '99' }]
+  checkboxKeys.value = []
+  // checkboxRows.value = [{ age: '99' }]
   table.value.reloadSelection()
 }
 const form = defineForm<t>([{
@@ -94,7 +93,7 @@ const form = defineForm<t>([{
   key: 'yyy',
   title: 'yyy',
   render: r => r.select({
-    options: c,
+    options: xx,
     cache: true,
     autoSumbit: true,
   }),
@@ -151,37 +150,61 @@ const columns = defineColumns<t>([{
   key: 'render',
   title: 'render',
   render: r => r.render(() => <div>123</div>),
-}, {
+},
+{
   key: 'actions',
+  title: 'xx',
   width: 200,
-  title: 'actions',
-  fixed: 'right',
-  render: r => r.button([
-    {
-      content: 'preview',
-      confirm: true,
-      visiable: record => record.age === '99',
-      onClick: () => {
-        table.value.preview({ key: 1, mode: 'drawer' })
+  render: r => r.dropdown({
+    content: 'asd',
+    options: [
+      {
+        content: 'preview',
+        visiable: record => record.age === '99',
+        onClick: () => {
+          table.value.preview({ key: 1, mode: 'drawer' })
+        },
       },
-    },
-    {
-      content: 'edit',
-      visiable: record => record.age === '99',
-      onClick: (record) => {
-        table.value.edit({
-          key: record.age,
-          form,
-          onSubmit: (f) => {
-            console.log('f', f)
-          },
-        }).then((a) => {
-          console.log('z', a)
-        })
+      {
+        content: 'edit',
+        visiable: record => record.age === '99',
+        onClick: (record) => {},
       },
-    },
-  ]),
-}])
+    ],
+  }),
+},
+// {
+//   key: 'actions',
+//   width: 200,
+//   title: 'actions',
+//   fixed: 'right',
+//   render: r => r.button([
+//     {
+//       content: 'preview',
+//       confirm: true,
+//       visiable: record => record.age === '99',
+//       onClick: () => {
+//         table.value.preview({ key: 1, mode: 'drawer' })
+//       },
+//     },
+//     {
+//       content: 'edit',
+//       visiable: record => record.age === '99',
+//       onClick: (record) => {
+//         table.value.edit({
+//           key: record.age,
+//           form,
+//           onSubmit: (f) => {
+//             console.log('f', f)
+//           },
+//         }).then((a) => {
+//           console.log('z', a)
+//         })
+//       },
+//     },
+//   ]),
+// }
+])
 let y = 0
 function c() {
   console.log(y++)
@@ -219,6 +242,11 @@ onMounted(() => {
     console.log(table.value.formInstance)
     table.value.formInstance?.updateFormField('test', 'c')
     console.log(table.value.formSource)
+    xx.value = new Map<string, string>([['c', 'c'], ['ya', 'ya']])
   }, 3000)
+
+  setTimeout(() => {
+    xx.value = new Map<string, string>([['dd', 'dd'], ['yaa', 'yaa']])
+  }, 5000)
 })
 </script>

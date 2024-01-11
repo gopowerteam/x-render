@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.29
+
+### Patch Changes
+
+- fixed cache error
+
 ## 0.0.28
 
 ### Patch Changes

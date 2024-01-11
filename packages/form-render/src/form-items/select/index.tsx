@@ -1,15 +1,23 @@
 import { Option, Select } from '@arco-design/web-vue'
-import { type ComponentPublicInstance, ref } from 'vue'
+import { type ComponentPublicInstance, type Ref, isRef, ref } from 'vue'
+import { watchOnce } from '@vueuse/core'
 import type { DataRecord, FormItemOptions } from '../../interfaces'
 
 const cache = new WeakMap()
 
+function useSelectOptions(): [Ref<SelectOptions>, (value: SelectOptions) => void] {
+  const selectOptions = ref<SelectOptions>(new Map())
+  const updateSelectOptions = (value: SelectOptions) => selectOptions.value = value
+
+  return [selectOptions, updateSelectOptions]
+}
+
 export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions) {
+  console.log('开始渲染Select:')
   let selectInstance: ComponentPublicInstance
   let mounted = false
 
-  const selectOptions = ref<SelectOptions>(new Map())
-  const updateSelectOptions = (value: SelectOptions) => selectOptions.value = value
+  const [selectOptions, updateSelectOptions] = useSelectOptions()
 
   const onSelectChange = () => {
     if (!options.autoSumbit || !selectInstance) {
@@ -28,43 +36,75 @@ export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions)
     }
   }
 
-  const execUpdateSelectOptions = async () => {
-    const value: SelectOptions = await (options.options as Function)()
+  const runSelectOptionsFunction = (fun: (() => SelectOptions) | (() => Promise<SelectOptions>), callback: (value: SelectOptions) => void) => {
+    const result = fun()
 
-    if (options.cache === false) {
-      selectOptions.value = value
-    }
-
-    if (options.cache !== false && cache.has(options.options)) {
-      const update = cache.get(options.options)
-      typeof update === 'function' && update(value)
-      cache.set(options.options, value)
+    if (result instanceof Promise) {
+      result.then(callback)
     }
     else {
-      selectOptions.value = value
+      callback(result)
     }
+  }
+
+  const updateSelectOptionsFromCache = async () => {
+    const value = cache.get(options.options)
+    console.log('当前缓存值:', value)
+    switch (typeof value) {
+      // 已经执行未返回
+      case 'function':
+        console.log('检测到缓存正在请求中')
+        console.log('更新缓存')
+        cache.set(options.options, updateSelectOptions)
+        return
+      // 已经执行已返回
+      case 'object':
+        console.log('检测到缓存数据完成')
+        updateSelectOptions(value)
+        return
+    }
+    // 缓存执行
+
+    console.log('未检测到缓存开始进行请求')
+    cache.set(options.options, updateSelectOptions)
+    // 未执行
+    runSelectOptionsFunction(
+      options.options as (() => SelectOptions) | (() => Promise<SelectOptions>),
+      (value) => {
+        const update = cache.get(options.options)
+        cache.set(options.options, value)
+        update(value)
+      },
+    )
+  }
+
+  const updateSelectOptionsFromData = () => {
+    runSelectOptionsFunction(
+      options.options as (() => SelectOptions) | (() => Promise<SelectOptions>),
+      (value) => {
+        updateSelectOptions(value)
+      },
+    )
   }
 
   switch (true) {
     case options.options instanceof Function:{
-      const data = cache.get(options.options)
-
-      if (options.cache !== false && typeof data === 'function') {
-        break
-      }
-
-      if (options.cache !== false && data instanceof Map) {
-        updateSelectOptions(data)
-        break
-      }
-
-      execUpdateSelectOptions()
-
       if (options.cache !== false) {
-        cache.set(options.options, (value: SelectOptions) => {
-          selectOptions.value = value
-        })
+        console.log('缓存开启')
+        updateSelectOptionsFromCache()
       }
+      else {
+        console.log('缓存关闭')
+        updateSelectOptionsFromData()
+      }
+      break
+    }
+    case isRef(options.options): {
+      watchOnce(options.options, () => {
+        updateSelectOptions((options.options as Ref<SelectOptions>).value)
+      }, {
+        immediate: true,
+      })
       break
     }
     default:{
@@ -114,6 +154,7 @@ export interface RenderSelectItemOptions {
   | SelectOptions
   | (() => SelectOptions)
   | (() => Promise<SelectOptions>)
+  | Ref<SelectOptions>
   // 多选支持
   multiple?: boolean
   // 最大标签数量

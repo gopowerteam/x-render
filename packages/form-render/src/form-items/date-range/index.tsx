@@ -39,6 +39,7 @@ export function renderDateRangeItem<T=DataRecord>(options?: RenderDateRangeItemO
     return (
       <div>
         <RangePicker
+          disabled-input
           style={{ width: '300px' }}
           v-model={data[form.key as keyof T]}
           onSelect={onSelect}

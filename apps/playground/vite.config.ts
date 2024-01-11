@@ -6,6 +6,9 @@ import { TableRenderResolver } from '@gopowerteam/table-render'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    host: '0.0.0.0',
+  },
   plugins: [vue(), jsx(), components({
     dts: 'src/components.d.ts',
     resolvers: [

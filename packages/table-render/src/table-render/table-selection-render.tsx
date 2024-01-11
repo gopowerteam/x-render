@@ -27,11 +27,11 @@ export function tableSecletionRender(
 
   function reloadSelection() {
     nextTick(() => {
-      if (props.checkboxRows?.length) {
+      if (props.checkboxRows !== undefined) {
         selectedRowKeys.value = [...props.checkboxRows.map(x => x[props.rowKey])]
       }
 
-      if (props.checkboxKeys?.length) {
+      if (props.checkboxKeys !== undefined) {
         selectedRowKeys.value = [...props.checkboxKeys]
       }
 

@@ -59,6 +59,7 @@ export function renderDateItem<T = DataRecord>(options?: RenderDateItemOptions) 
       default:
         return (
           <DatePicker
+            disabled-input
             v-model={data[form.key as keyof T]}
             disabled-date={disabledMethod}
             format={options?.labelFormat}
