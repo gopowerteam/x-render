@@ -79,13 +79,13 @@
     height: 50px;
     display: flex;
     justify-content: space-between;
-    align-items--color-text-1
+    align-items:center;
     border-bottom: solid 1px var(--color-border-1, rgb(232, 232, 232));
     color: var(--color-text-2, #4E5969);
 }
 
 .modal-body{
-  padding: 20px 10px;
+  padding: 10px 10px;
   box-sizing: border-box;
   max-height: 10vw;
   overflow: auto;
@@ -213,6 +213,7 @@ const props = withDefaults (defineProps<{
   type?: string
   offset?: { x?: number; y?: number }
   backgroundColor?: string
+  bodyStyle?: CSSProperties
 }>()
 , {
   header: true,
@@ -346,6 +347,10 @@ const bodyStyle = computed<CSSProperties>(() => {
 
   if (props.type !== 'component') {
     styles.padding = '0'
+  }
+
+  if (props.bodyStyle) {
+    Object.assign(styles, props.bodyStyle)
   }
 
   return styles

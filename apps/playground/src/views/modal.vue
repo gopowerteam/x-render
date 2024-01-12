@@ -18,9 +18,11 @@ function onClick() {
   const instance = modal.open(<div style={{ backgroundColor: 'red' }}>123</div>, {
     content: 'asdasd',
   }, {
-    mode: 'dialog',
+    mode: 'drawer',
     title: 'asdasd',
-    backgroundColor: 'yellow',
+    bodyStyle: {
+      padding: '100px',
+    },
   })
 
   instance.then((a: any) => {

@@ -1,4 +1,4 @@
-import type { Component } from 'vue'
+import type { CSSProperties, Component } from 'vue'
 import type { useModal } from './hooks/use-modal'
 
 export interface SizeOptions {
@@ -22,6 +22,7 @@ export interface OpenModalOptions {
   form?: string
   mode?: 'dialog' | 'drawer'
   backgroundColor?: string
+  bodyStyle?: CSSProperties
 }
 
 export interface ModalElement extends OpenModalOptions {
