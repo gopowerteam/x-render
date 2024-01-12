@@ -116,6 +116,7 @@ export function renderCascaderItem<T=DataRecord>(options: RenderCascaderItemOpti
 
     return (
       <Cascader
+      pathMode={options.pathMode}
         ref={instance => selectInstance = (instance as ComponentPublicInstance)}
         multiple={options.multiple}
         v-model={data[form.key as keyof T]}
@@ -139,6 +140,8 @@ export interface RenderCascaderItemOptions {
   clearable?: boolean
   // 可搜索
   searchable?: boolean
+  // 路径模式
+  pathMode?: boolean
   // select options列表
   options:
   | SelectOptions

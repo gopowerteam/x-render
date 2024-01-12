@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.32
+
+### Patch Changes
+
+- add ascader props
+
 ## 0.0.31
 
 ### Patch Changes
