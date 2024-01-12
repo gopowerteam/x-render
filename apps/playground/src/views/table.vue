@@ -57,7 +57,7 @@ interface t {
   age: string
   name: string
 }
-const xx = ref(new Map())
+const xx = ref<any>(new Map())
 function onTableChange(...z: any) {
   console.log(z)
 }
@@ -164,6 +164,7 @@ const columns = defineColumns<t>([{
     options: [
       {
         content: 'preview',
+        confirm: true,
         visiable: record => record.age === '99',
         onClick: () => {
           table.value.preview({ key: 1, mode: 'drawer' })

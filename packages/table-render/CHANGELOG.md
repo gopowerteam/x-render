@@ -1,5 +1,13 @@
 # @gopowerteam/table-render
 
+## 0.0.58
+
+### Patch Changes
+
+- update tree select & dropdown
+- Updated dependencies
+  - @gopowerteam/form-render@0.0.33
+
 ## 0.0.57
 
 ### Patch Changes

@@ -138,7 +138,11 @@ export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItem
         onChange={onSelectChange}
         filterTreeNode={filterTreeNode}
         data={selectOptions.value}
-        fieldNames={options.fieldNames}>
+        fieldNames={options.fieldNames}
+        treeProps={{
+          defaultExpandAll: options.defaultExpandAll,
+        }}
+        >
       </TreeSelect>
     )
   }
@@ -170,4 +174,6 @@ export interface RenderTreeSelectItemOptions {
   autoSumbit?: boolean
   // 开启缓存
   cache?: boolean
+  // 默认展开所有
+  defaultExpandAll?: boolean
 }
