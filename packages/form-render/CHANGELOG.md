@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.31
+
+### Patch Changes
+
+- add cascader form item
+
 ## 0.0.30
 
 ### Patch Changes

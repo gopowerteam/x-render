@@ -5,6 +5,7 @@ import { renderSwitchItem } from './switch'
 import { renderDateRangeItem } from './date-range'
 import { renderTextareaItem } from './textarea'
 import { renderTreeSelectItem } from './tree-select'
+import { renderCascaderItem } from './cascader'
 import { renderRenderItem } from './render'
 
 export function FormItemRenders<T>() {
@@ -17,5 +18,6 @@ export function FormItemRenders<T>() {
     switch: renderSwitchItem<T>,
     dateRange: renderDateRangeItem<T>,
     render: renderRenderItem<T>,
+    cascader: renderCascaderItem<T>,
   }
 }

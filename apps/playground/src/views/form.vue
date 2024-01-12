@@ -42,7 +42,66 @@ const form = defineForm([{
   title: 'xx',
   render: r => r.dateRange(),
 
+}, {
+  key: 'cascader',
+  title: 'cascader',
+  render: r => r.cascader({
+    options: getCascaderOptions,
+  }),
 }])
+
+function getCascaderOptions() {
+  return [
+    {
+      value: 'beijing',
+      label: 'Beijing',
+      children: [
+        {
+          value: 'chaoyang',
+          label: 'ChaoYang',
+          children: [
+            {
+              value: 'datunli',
+              label: 'Datunli',
+            },
+          ],
+        },
+        {
+          value: 'haidian',
+          label: 'Haidian',
+        },
+        {
+          value: 'dongcheng',
+          label: 'Dongcheng',
+        },
+        {
+          value: 'xicheng',
+          label: 'Xicheng',
+          children: [
+            {
+              value: 'jinrongjie',
+              label: 'Jinrongjie',
+            },
+            {
+              value: 'tianqiao',
+              label: 'Tianqiao',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      value: 'shanghai',
+      label: 'Shanghai',
+      children: [
+        {
+          value: 'huangpu',
+          label: 'Huangpu',
+        },
+      ],
+    },
+  ]
+}
 
 let x = 0
 let y = 0
