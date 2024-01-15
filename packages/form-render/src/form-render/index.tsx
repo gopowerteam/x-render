@@ -32,7 +32,7 @@ export const FormRender = defineComponent({
     minWidth: {
       type: Number,
       required: false,
-      default: 320,
+      default: 400,
     },
     name: {
       type: String,
