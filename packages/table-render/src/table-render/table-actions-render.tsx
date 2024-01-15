@@ -1,5 +1,4 @@
 import { Button, Divider, Space } from '@arco-design/web-vue'
-import { IconDownload, IconRefresh } from '@arco-design/web-vue/es/icon'
 import type { TableRenderContext, TableRenderOptions, TableRenderProps } from '.'
 
 export function tableActionsRender(
@@ -27,16 +26,12 @@ export function tableActionsRender(
           }}>
           <div class="built-in">
             <Space>
-             { props.refreshable && <Button type='outline' shape='circle'>
-                {{
-                  icon: () => <IconRefresh onClick={() => tableEvents('reload')}></IconRefresh>,
-                }}
+             { props.refreshable && <Button type='primary'>
+                刷新
               </Button>
               }
-              { props.exportable && <Button type='outline' shape='circle'>
-                {{
-                  icon: () => <IconDownload onClick={() => tableEvents('export')}></IconDownload>,
-                }}
+              { props.exportable && <Button type='primary'>
+                导出
               </Button>}
             </Space>
           </div>
