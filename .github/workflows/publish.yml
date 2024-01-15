@@ -11,8 +11,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2.0.1
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v1
         with:
           version: ^7.0
 
@@ -20,13 +20,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: bun install
 
       - name: Build Package
-        run: pnpm build
+        run: bun run build
 
       - name: Configure Git User
         run: |
