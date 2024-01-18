@@ -16,7 +16,7 @@
     "prepare": "husky install",
     "commit": "git-cz",
     "preinstall": "npx only-allow bun",
-    "version": "changeset && changeset version",
+    "cs": "changeset && changeset version",
     "publish-packages": "turbo run build && changeset version && changeset publish"
   },
   "devDependencies": {
