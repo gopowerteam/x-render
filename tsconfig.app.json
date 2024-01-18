@@ -8,11 +8,16 @@
     "src/**/*.ts",
     "src/**/*.tsx",
   ],
-  "exclude": ["packages/**/__tests__/*", "node_modules/**"],
+  "exclude": [
+    "packages/**/__tests__/*", 
+    "node_modules/**"
+  ],
   "compilerOptions": {
     "composite": true,
     "baseUrl": ".",
     "jsx": "preserve",
+    "jsxImportSource": "vue",
+    "jsxFactory": "h",
     "skipLibCheck": true,
-  }
+  },
 }
