@@ -70,6 +70,7 @@ export const FormRender = defineComponent({
     'updateFormField',
     'updateFormSource',
     'reset',
+    'validate',
   ],
   setup(props) {
     const formInstance = ref<FormInstance>()
@@ -139,6 +140,10 @@ export const FormRender = defineComponent({
       formInstance.value?.resetFields()
     }
 
+    function validateForm() {
+      return formInstance.value?.validate()
+    }
+
     window.addEventListener('resize', updateFormColumnValue)
 
     return ({
@@ -152,6 +157,7 @@ export const FormRender = defineComponent({
       updateFormField,
       updateFormSource,
       reset: resetForm,
+      validate: validateForm,
     })
   },
   render() {

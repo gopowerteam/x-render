@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.37
+
+### Patch Changes
+
+- add form validate method
+
 ## 0.0.36
 
 ### Patch Changes
