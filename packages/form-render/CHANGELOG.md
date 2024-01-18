@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.38
+
+### Patch Changes
+
+- fixed jsx.element type
+
 ## 0.0.37
 
 ### Patch Changes

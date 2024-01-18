@@ -1,7 +1,7 @@
 import { type TreeFieldNames, type TreeNodeData, TreeSelect } from '@arco-design/web-vue'
 import { type ComponentPublicInstance, type Ref, isRef, ref } from 'vue'
 import { watchOnce } from '@vueuse/core'
-import type { DataRecord, FormItemOptions } from '../../interfaces'
+import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
 
 const cache = new WeakMap()
 
@@ -11,7 +11,7 @@ function useSelectOptions(): [Ref<SelectOptions>, (value: SelectOptions) => void
 
   return [selectOptions, updateSelectOptions]
 }
-export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItemOptions) {
+export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItemOptions): FormItemRenderReturn<T> {
   let selectInstance: ComponentPublicInstance
   let mounted = false
 

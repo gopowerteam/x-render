@@ -36,13 +36,13 @@ export type FormItemsStringKeyOptions<T = Record<string, any>> = FormItemStringK
 export interface FormItemRender<T = Record<string, any>> {
   (
     render: FormItemRenderFun<T>
-  ):
-  (
-    data: T,
-    itemOptions: FormItemOptions<T>
-  ) => JSX.Element
+  ): FormItemRenderReturn<T>
+
 }
 
+export interface FormItemRenderReturn<T> {
+  (data: T, itemOptions: FormItemOptions<T>): JSX.Element
+}
 /**
  * Render函数模板
  */

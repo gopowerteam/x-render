@@ -1,7 +1,7 @@
 import { Textarea } from '@arco-design/web-vue'
-import type { DataRecord, FormItemOptions } from '../../interfaces'
+import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
 
-export function renderTextareaItem<T=DataRecord>(options?: RenderTextareaItemOptions) {
+export function renderTextareaItem<T=DataRecord>(options?: RenderTextareaItemOptions): FormItemRenderReturn<T> {
   return (data: T, form: FormItemOptions<T>) => {
     return (
       <Textarea
