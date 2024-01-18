@@ -1,5 +1,6 @@
 <template>
   <FormRender
+    id="xxxx"
     footer
     :form="form"
     layout="horizontal"

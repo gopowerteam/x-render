@@ -37,12 +37,12 @@ export const FormRender = defineComponent({
     name: {
       type: String,
       required: false,
-      default: 'form',
+      default: `form-${Math.random().toString(32).slice(2)}`,
     },
-    formId: {
+    id: {
       type: String,
       required: false,
-      default: Math.random().toString(32).slice(2).toUpperCase(),
+      default: `form-${Math.random().toString(32).slice(2)}`,
     },
     submitable: {
       type: Boolean,
@@ -78,7 +78,7 @@ export const FormRender = defineComponent({
     const formCollspased = ref<boolean>(true)
     const toggleFormCollapsed = () => formCollspased.value = !formCollspased.value
 
-    provide(provides.id, props.formId)
+    provide(provides.id, props.id)
     provide(provides.source, formSource)
 
     const formActiosSpan = computed(() => {
@@ -114,8 +114,17 @@ export const FormRender = defineComponent({
       }
     }
 
+    function updateFormElementId() {
+      const form = formInstance.value?.$el as HTMLFormElement
+
+      if (form) {
+        form.id = props.id
+      }
+    }
+
     onMounted(() => {
       updateFormColumnValue()
+      updateFormElementId()
     })
 
     function updateFormField(key: string, value: any) {
@@ -129,6 +138,7 @@ export const FormRender = defineComponent({
     function resetForm() {
       formInstance.value?.resetFields()
     }
+
     window.addEventListener('resize', updateFormColumnValue)
 
     return ({
@@ -212,7 +222,7 @@ export const FormRender = defineComponent({
 
     return (
      <div class="form-render">
-       <Form {...({ name: this.name, id: this.formId })}
+       <Form {...({ name: this.name })}
             labelAlign='left'
             layout={this.$props.layout}
             rules={this.formRules}
