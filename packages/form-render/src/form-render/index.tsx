@@ -132,7 +132,7 @@ export const FormRender = defineComponent({
       formSource.value[key] = value
 
       updateFormSource({
-        ...formSource,
+        ...formSource.value,
       })
     }
 
