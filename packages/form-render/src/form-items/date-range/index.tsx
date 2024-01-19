@@ -1,13 +1,13 @@
 import { RangePicker } from '@arco-design/web-vue'
 import dayjs from 'dayjs'
-import type { DataRecord, FormItemOptions } from '../../interfaces'
+import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
 
 /**
  * 日期节点表单渲染
  * @param options 日期节点配置选项
  * @returns JSX
  */
-export function renderDateRangeItem<T=DataRecord>(options?: RenderDateRangeItemOptions) {
+export function renderDateRangeItem<T=DataRecord>(options?: RenderDateRangeItemOptions): FormItemRenderReturn<T> {
   return (data: T, form: FormItemOptions<T>) => {
     let dates: string[] = []
 

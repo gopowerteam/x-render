@@ -5,14 +5,14 @@ import {
   WeekPicker,
   YearPicker,
 } from '@arco-design/web-vue'
-import type { DataRecord, FormItemOptions } from '../../interfaces'
+import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
 
 /**
  * 日期节点表单渲染
  * @param options 日期节点配置选项
  * @returns JSX
  */
-export function renderDateItem<T = DataRecord>(options?: RenderDateItemOptions) {
+export function renderDateItem<T = DataRecord>(options?: RenderDateItemOptions): FormItemRenderReturn<T> {
   function disabledMethod(value: string, date: Date) {
     if (!options?.disabledDate) {
       return false

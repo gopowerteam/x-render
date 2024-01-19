@@ -1,7 +1,7 @@
 import { Input, InputNumber } from '@arco-design/web-vue'
-import type { DataRecord, FormItemOptions } from '../../interfaces'
+import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
 
-export function renderInputItem<T=DataRecord>(options?: RenderInputItemOptions) {
+export function renderInputItem<T=DataRecord>(options?: RenderInputItemOptions): FormItemRenderReturn<T> {
   return (data: T, form: FormItemOptions<T>) => {
     switch (options?.type) {
       case 'number':

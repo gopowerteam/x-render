@@ -1,10 +1,16 @@
 # @gopowerteam/form-render
 
+## 0.0.39
+
+### Patch Changes
+
+- fixed update form field value
+
 ## 0.0.38
 
 ### Patch Changes
 
-- fix update form field
+- fixed jsx.element type
 
 ## 0.0.37
 

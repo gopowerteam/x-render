@@ -1,7 +1,7 @@
 import { Switch } from '@arco-design/web-vue'
-import type { DataRecord, FormItemOptions } from '../../interfaces'
+import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
 
-export function renderSwitchItem<T=DataRecord>(options?: RenderSwitchItemOptions) {
+export function renderSwitchItem<T=DataRecord>(options?: RenderSwitchItemOptions): FormItemRenderReturn<T> {
   // const events = useEvents(inject<string>('id'))
   function onChange() {
     if (options?.autoSumbit) {
@@ -9,7 +9,7 @@ export function renderSwitchItem<T=DataRecord>(options?: RenderSwitchItemOptions
     }
   }
 
-  return (data: T, form: FormItemOptions) => {
+  return (data: T, form: FormItemOptions<T>) => {
     // 设置默认值
     if (options?.default) {
       data[form.key as keyof T] = options.default as any
