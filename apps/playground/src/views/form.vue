@@ -44,6 +44,9 @@ const form = defineForm([{
     }],
     cache: true,
     autoSumbit: true,
+    treeProps: {
+      defaultExpandAll: true,
+    },
     slots: {
       'footer': () => <div>123</div> as any,
       'tree-slot-title': () => <div>123</div>,

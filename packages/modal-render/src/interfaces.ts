@@ -23,6 +23,8 @@ export interface OpenModalOptions {
   mode?: 'dialog' | 'drawer'
   backgroundColor?: string
   bodyStyle?: CSSProperties
+  submitText?: string
+  cancelText?: string
 }
 
 export interface ModalElement extends OpenModalOptions {

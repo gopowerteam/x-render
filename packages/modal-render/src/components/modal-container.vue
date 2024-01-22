@@ -30,7 +30,7 @@
       </div>
       <div v-if="footer" class="modal-footer space-x-2">
         <button class="cancel-button" type="button" @click="onCancel">
-          取消
+          {{ cancelText }}
         </button>
         <button
           class="submit-button"
@@ -38,7 +38,7 @@
           type="submit"
           @click="onSubmit"
         >
-          确定
+          {{ submitText }}
         </button>
       </div>
       <div v-if="loading" class="modal-loading">
@@ -214,6 +214,8 @@ const props = withDefaults (defineProps<{
   offset?: { x?: number; y?: number }
   backgroundColor?: string
   bodyStyle?: CSSProperties
+  submitText?: string
+  cancelText?: string
 }>()
 , {
   header: true,
@@ -225,6 +227,8 @@ const props = withDefaults (defineProps<{
   esc: false,
   draggable: false,
   mode: 'dialog',
+  submitText: '确定',
+  cancelText: '取消',
 })
 const emits = defineEmits(['submit'])
 const modal = inject(ModalKey)
