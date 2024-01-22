@@ -1,6 +1,7 @@
 import { type TreeFieldNames, type TreeNodeData, TreeSelect } from '@arco-design/web-vue'
 import { type ComponentPublicInstance, type Ref, isRef, ref } from 'vue'
 import { watchOnce } from '@vueuse/core'
+import type { TreeProps } from '@arco-design/web-vue/es/tree/interface'
 import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
 
 const cache = new WeakMap()
@@ -139,9 +140,7 @@ export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItem
         filterTreeNode={filterTreeNode}
         data={selectOptions.value}
         fieldNames={options.fieldNames}
-        treeProps={{
-          defaultExpandAll: options.defaultExpandAll,
-        }}
+        treeProps={options.treeProps}
         >
       </TreeSelect>
     )
@@ -175,5 +174,5 @@ export interface RenderTreeSelectItemOptions {
   // 开启缓存
   cache?: boolean
   // 默认展开所有
-  defaultExpandAll?: boolean
+  treeProps?: TreeProps
 }
