@@ -19,7 +19,7 @@
 
 </style>
 
-<script setup lang="ts">
+<script setup lang="tsx">
 import { FormRender, defineForm } from '@gopowerteam/form-render'
 
 const form = defineForm([{
@@ -33,10 +33,21 @@ const form = defineForm([{
 }, {
   key: 'yyy',
   title: 'yyy',
-  render: r => r.select({
-    options: b,
+  render: r => r.treeSelect({
+    options: [{
+      key: 1,
+      title: '2',
+      children: [{
+        key: 2,
+        title: '3',
+      }],
+    }],
     cache: true,
     autoSumbit: true,
+    slots: {
+      'footer': () => <div>123</div> as any,
+      'tree-slot-title': () => <div>123</div>,
+    },
   }),
 }, {
   key: 'xxx1',

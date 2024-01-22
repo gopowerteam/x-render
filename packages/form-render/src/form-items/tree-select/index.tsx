@@ -142,6 +142,7 @@ export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItem
         fieldNames={options.fieldNames}
         treeProps={options.treeProps}
         >
+          {{ ...options.slots }}
       </TreeSelect>
     )
   }
@@ -174,5 +175,7 @@ export interface RenderTreeSelectItemOptions {
   // 开启缓存
   cache?: boolean
   // 默认展开所有
-  treeProps?: TreeProps
+  treeProps?: Partial<TreeProps>
+  // Slots
+  slots?: Record<'trigger' | 'prefix' | 'label' | 'header' | 'loader' | 'empty' | 'footer' | 'tree-slot-extra' | 'tree-slot-title' | 'tree-slot-icon' | 'tree-slot-switcher-icon', (data?: TreeNodeData) => JSX.Element>
 }

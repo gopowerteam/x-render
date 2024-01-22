@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.41
+
+### Patch Changes
+
+- update tree-select form item
+
 ## 0.0.40
 
 ### Patch Changes
