@@ -177,5 +177,5 @@ export interface RenderTreeSelectItemOptions {
   // 默认展开所有
   treeProps?: Partial<TreeProps>
   // Slots
-  slots?: Record<'trigger' | 'prefix' | 'label' | 'header' | 'loader' | 'empty' | 'footer' | 'tree-slot-extra' | 'tree-slot-title' | 'tree-slot-icon' | 'tree-slot-switcher-icon', (data?: TreeNodeData) => JSX.Element>
+  slots?: Partial<Record<'trigger' | 'prefix' | 'label' | 'header' | 'loader' | 'empty' | 'footer' | 'tree-slot-extra' | 'tree-slot-title' | 'tree-slot-icon' | 'tree-slot-switcher-icon', (data?: TreeNodeData) => JSX.Element>>
 }
