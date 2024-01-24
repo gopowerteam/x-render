@@ -2,9 +2,9 @@ import type { CSSProperties, Component } from 'vue'
 import type { useModal } from './hooks/use-modal'
 
 export interface SizeOptions {
-  small: number
-  middle: number
-  large: number
+  small: string
+  middle: string
+  large: string
 }
 
 export interface OpenModalOptions {

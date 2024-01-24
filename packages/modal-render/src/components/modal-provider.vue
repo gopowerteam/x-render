@@ -69,12 +69,12 @@ withDefaults(defineProps<{
   offset?: { x?: number; y?: number }
 }>(), {
   appendToBody: false,
-  maxWidth: '80%',
-  maxHeight: '80%',
+  maxWidth: '90%',
+  maxHeight: '90%',
   sizes: () => ({
-    small: 520,
-    middle: 860,
-    large: 1190,
+    small: '50%',
+    middle: '70%',
+    large: '90%',
   }),
   offset: () => ({ x: 0, y: 0 }),
 })
