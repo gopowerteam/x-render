@@ -22,6 +22,7 @@ function onClick() {
     title: 'asdasd',
     footer: true,
     submitText: '123',
+    fullscreen: true,
     bodyStyle: {
       padding: '100px',
     },

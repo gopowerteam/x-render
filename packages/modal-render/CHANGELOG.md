@@ -1,5 +1,11 @@
 # @gopowerteam/modal-render
 
+## 0.0.22
+
+### Patch Changes
+
+- fixed modal fullscreen
+
 ## 0.0.21
 
 ### Patch Changes

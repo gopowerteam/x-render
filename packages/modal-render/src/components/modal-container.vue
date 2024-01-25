@@ -89,6 +89,7 @@
   box-sizing: border-box;
   max-height: 10vw;
   overflow: auto;
+  position: relative;
 }
 
 .modal-footer{
