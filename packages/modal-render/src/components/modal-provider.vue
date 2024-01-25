@@ -72,9 +72,9 @@ withDefaults(defineProps<{
   maxWidth: '90%',
   maxHeight: '90%',
   sizes: () => ({
-    small: '50%',
-    middle: '70%',
-    large: '90%',
+    small: 520,
+    middle: 860,
+    large: 1190,
   }),
   offset: () => ({ x: 0, y: 0 }),
 })
