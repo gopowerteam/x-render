@@ -9,7 +9,7 @@
 <style lang="scss" scoped>
 .modal-footer{
   box-sizing: border-box;
-  height: 50px;
+  min-height: 50px;
   border-top: solid 1px var(--color-border-1, rgb(232, 232, 232));
   padding: 10px;
 

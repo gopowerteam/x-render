@@ -25,9 +25,11 @@
           <div v-if="closeable" class="i-icon-park-outline:close block cursor-pointer" @click="onClose" />
         </div>
       </div>
+      <div id="modal-header-slot" />
       <div class="modal-body" :style="bodyStyle">
         <Component :is="component" v-bind="componentProps" />
       </div>
+      <div id="modal-footer-slot" />
       <div v-if="footer" class="modal-footer space-x-2">
         <button class="cancel-button" type="button" @click="onCancel">
           {{ cancelText }}
@@ -41,7 +43,6 @@
           {{ submitText }}
         </button>
       </div>
-      <div id="modal-footer-slot" />
       <div v-if="loading" class="modal-loading">
         <div class="lds-ring">
           <div />
