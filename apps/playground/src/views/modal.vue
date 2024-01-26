@@ -11,18 +11,18 @@
 
 <script setup lang="tsx">
 import { useModal } from '@gopowerteam/modal-render'
+import Test1 from '../components/test1.vue'
 
 const modal = useModal()
 
 function onClick() {
-  const instance = modal.open(<div style={{ backgroundColor: 'red' }}>123</div>, {
+  const instance = modal.open(Test1, {
     content: 'asdasd',
   }, {
     mode: 'dialog',
     title: 'asdasd',
-    footer: true,
+    footer: false,
     submitText: '123',
-    fullscreen: true,
     bodyStyle: {
       padding: '100px',
     },

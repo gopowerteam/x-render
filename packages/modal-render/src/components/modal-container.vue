@@ -41,6 +41,7 @@
           {{ submitText }}
         </button>
       </div>
+      <div id="modal-footer-slot" />
       <div v-if="loading" class="modal-loading">
         <div class="lds-ring">
           <div />
