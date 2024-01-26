@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.43
+
+### Patch Changes
+
+- fixed ssr support
+
 ## 0.0.42
 
 ### Patch Changes

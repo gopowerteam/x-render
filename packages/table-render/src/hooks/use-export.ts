@@ -95,7 +95,7 @@ export function getTableRowValue(
       }
     }
 
-    row[column.options.key] = getRowValue()
+    row[column.options.key as string] = getRowValue()
   })
 
   return row

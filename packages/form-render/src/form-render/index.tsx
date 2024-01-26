@@ -144,7 +144,11 @@ export const FormRender = defineComponent({
       return formInstance.value?.validate()
     }
 
-    window.addEventListener('resize', updateFormColumnValue)
+    onMounted(() => {
+      if (window) {
+        window.addEventListener('resize', updateFormColumnValue)
+      }
+    })
 
     return ({
       formSource,

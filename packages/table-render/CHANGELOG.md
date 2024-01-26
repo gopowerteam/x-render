@@ -1,5 +1,13 @@
 # @gopowerteam/table-render
 
+## 0.0.77
+
+### Patch Changes
+
+- fixed ssr support
+- Updated dependencies
+  - @gopowerteam/form-render@0.0.43
+
 ## 0.0.76
 
 ### Patch Changes
