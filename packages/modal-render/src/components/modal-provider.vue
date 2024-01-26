@@ -70,7 +70,7 @@ withDefaults(defineProps<{
 }>(), {
   appendToBody: false,
   maxWidth: '90%',
-  maxHeight: '90%',
+  maxHeight: '80%',
   sizes: () => ({
     small: 520,
     middle: 860,
