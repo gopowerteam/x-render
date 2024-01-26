@@ -11,8 +11,6 @@
   box-sizing: border-box;
   height: 50px;
   border-top: solid 1px var(--color-border-1, rgb(232, 232, 232));
-  display: flex;
-  justify-content: end;
   padding: 10px;
 
   button{
