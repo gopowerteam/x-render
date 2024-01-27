@@ -232,6 +232,7 @@ const props = withDefaults (defineProps<{
   mode: 'dialog',
   submitText: '确定',
   cancelText: '取消',
+  maxHeight: 90,
 })
 const emits = defineEmits(['submit'])
 const modal = inject(ModalKey)
@@ -246,8 +247,9 @@ const headerRef = shallowRef<HTMLDivElement>()
 const footerRef = shallowRef<HTMLDivElement>()
 const headerSlotRef = shallowRef<HTMLDivElement>()
 const footerSlotRef = shallowRef<HTMLDivElement>()
-const { height: headerHeight } = useElementSize(headerRef)
-const { height: footerHeight } = useElementSize(footerRef)
+const { height: wrapperHeight } = useElementSize(wrapperRef)
+const { height: headerHeight } = useElementSize(headerRef, undefined, { box: 'border-box' })
+const { height: footerHeight } = useElementSize(footerRef, undefined, { box: 'border-box' })
 const { height: headerSlotHeight } = useElementSize(headerSlotRef)
 const { height: footerSlotHeight } = useElementSize(footerSlotRef)
 
@@ -259,12 +261,11 @@ function onClose() {
   modal?.close(props.id)
 }
 
-function formatSizeValue(value: string | number | undefined): string | undefined {
+function formatSizeValue(value: string | number): string {
   if (typeof value === 'number') {
     return `${value}px`
   }
-
-  if (typeof value === 'string') {
+  else {
     return value
   }
 }
@@ -346,14 +347,15 @@ const headerStyle = computed<CSSProperties>(() => {
 const bodyStyle = computed<CSSProperties>(() => {
   const styles: CSSProperties = {}
   const extraHeight = headerSlotHeight.value + footerSlotHeight.value + headerHeight.value + footerHeight.value
+  const containerMaxHeight = Math.floor(wrapperHeight.value * (Number(formatSizeValue(props.maxHeight).replace('%', '')) / 100))
 
   if (props.maxHeight) {
-    styles.maxHeight = `calc(${formatSizeValue(props.maxHeight)?.replace('%', 'vh')} - ${extraHeight}px)`
+    styles.maxHeight = `${containerMaxHeight - extraHeight}px`
   }
 
   if (props.mode === 'drawer') {
     styles.maxHeight = 'unset'
-    styles.height = `calc(100% - ${extraHeight}px)`
+    styles.height = `${containerMaxHeight - extraHeight}px`
   }
 
   if (props.fullscreen) {

@@ -21,7 +21,7 @@ function onClick() {
   }, {
     mode: 'dialog',
     title: 'asdasd',
-    footer: false,
+    footer: true,
     submitText: '123',
     bodyStyle: {
       padding: '100px',

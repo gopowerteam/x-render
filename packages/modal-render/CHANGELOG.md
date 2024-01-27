@@ -1,5 +1,11 @@
 # @gopowerteam/modal-render
 
+## 0.0.31
+
+### Patch Changes
+
+- fixed height compute
+
 ## 0.0.30
 
 ### Patch Changes
