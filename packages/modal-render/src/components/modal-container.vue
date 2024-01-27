@@ -5,7 +5,6 @@
     :style="wrapperStyle"
     @click.self="maskClosable && onClose()"
   >
-    {{ headerSlotHeight }}
     <div
       ref="contentRef"
       class="modal-content"
@@ -355,7 +354,7 @@ const bodyStyle = computed<CSSProperties>(() => {
 
   if (props.mode === 'drawer') {
     styles.maxHeight = 'unset'
-    styles.height = `${containerMaxHeight - extraHeight}px`
+    styles.height = `${wrapperHeight.value - extraHeight}px`
   }
 
   if (props.fullscreen) {
