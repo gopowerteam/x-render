@@ -1,5 +1,11 @@
 # @gopowerteam/modal-render
 
+## 0.0.30
+
+### Patch Changes
+
+- fixed max height compute
+
 ## 0.0.29
 
 ### Patch Changes

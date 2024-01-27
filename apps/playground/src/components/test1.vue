@@ -12,12 +12,6 @@
   <div v-for="i in 200" :key="i" style="width:2000px;">
     test-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxx
   </div>
-  <ModalFooter>
-    123123xxx
-  </ModalFooter>
-  <ModalHeader>
-    123123xxx
-  </ModalHeader>
 </template>
 
 <style scoped>
@@ -27,7 +21,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import { Form as AForm, type FieldRule } from '@arco-design/web-vue'
-import { ModalFooter, ModalHeader, onSubmit, useModal } from '@gopowerteam/modal-render'
+import { onSubmit, useModal } from '@gopowerteam/modal-render'
 
 const modal = useModal()
 const formModel = reactive({

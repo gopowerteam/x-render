@@ -5,6 +5,7 @@
     :style="wrapperStyle"
     @click.self="maskClosable && onClose()"
   >
+    {{ headerSlotHeight }}
     <div
       ref="contentRef"
       class="modal-content"
@@ -25,12 +26,12 @@
           <div v-if="closeable" class="i-icon-park-outline:close block cursor-pointer" @click="onClose" />
         </div>
       </div>
-      <div id="modal-header-slot" />
+      <div id="modal-header-slot" ref="headerSlotRef" />
       <div class="modal-body" :style="bodyStyle">
         <Component :is="component" v-bind="componentProps" />
       </div>
-      <div id="modal-footer-slot" />
-      <div v-if="footer" class="modal-footer space-x-2">
+      <div id="modal-footer-slot" ref="footerSlotRef" />
+      <div v-if="footer" ref="footerRef" class="modal-footer space-x-2">
         <button class="cancel-button" type="button" @click="onCancel">
           {{ cancelText }}
         </button>
@@ -89,7 +90,6 @@
 .modal-body{
   padding: 10px 10px;
   box-sizing: border-box;
-  max-height: 10vw;
   overflow: auto;
   position: relative;
 }
@@ -190,7 +190,7 @@ import {
   shallowRef,
   triggerRef,
 } from 'vue'
-import { useDraggable } from '@vueuse/core'
+import { useDraggable, useElementSize } from '@vueuse/core'
 import { ModalKey } from '../constants'
 import type { SizeOptions } from '../interfaces'
 
@@ -240,9 +240,17 @@ const loading = ref(false)
 let offsetX = 0
 let offsetY = 0
 let observer: MutationObserver
-const wrapperRef = shallowRef<any>()
-const contentRef = shallowRef<any>()
-const headerRef = shallowRef<any>()
+const wrapperRef = shallowRef<HTMLDivElement>()
+const contentRef = shallowRef<HTMLDivElement>()
+const headerRef = shallowRef<HTMLDivElement>()
+const footerRef = shallowRef<HTMLDivElement>()
+const headerSlotRef = shallowRef<HTMLDivElement>()
+const footerSlotRef = shallowRef<HTMLDivElement>()
+const { height: headerHeight } = useElementSize(headerRef)
+const { height: footerHeight } = useElementSize(footerRef)
+const { height: headerSlotHeight } = useElementSize(headerSlotRef)
+const { height: footerSlotHeight } = useElementSize(footerSlotRef)
+
 const { x, y } = useDraggable(headerRef, {
   initialValue: { x: 0, y: 0 },
 })
@@ -337,19 +345,20 @@ const headerStyle = computed<CSSProperties>(() => {
 
 const bodyStyle = computed<CSSProperties>(() => {
   const styles: CSSProperties = {}
+  const extraHeight = headerSlotHeight.value + footerSlotHeight.value + headerHeight.value + footerHeight.value
 
   if (props.maxHeight) {
-    styles.maxHeight = `calc(${formatSizeValue(props.maxHeight)?.replace('%', 'vh')} - 50px)`
+    styles.maxHeight = `calc(${formatSizeValue(props.maxHeight)?.replace('%', 'vh')} - ${extraHeight}px)`
   }
 
   if (props.mode === 'drawer') {
     styles.maxHeight = 'unset'
-    styles.height = `calc(100% - ${(props.header ? 50 : 0) + (props.footer ? 50 : 0)}px)`
+    styles.height = `calc(100% - ${extraHeight}px)`
   }
 
   if (props.fullscreen) {
     styles.maxHeight = 'unset'
-    styles.height = `calc(100% - ${(props.header ? 50 : 0) + (props.footer ? 50 : 0)}px)`
+    styles.height = `calc(100% - ${extraHeight}px)`
   }
 
   if (props.type !== 'component') {
@@ -409,8 +418,8 @@ function onKeyboard() {
 }
 
 function onMouseDown() {
-  offsetX = contentRef.value.offsetLeft
-  offsetY = contentRef.value.offsetTop
+  offsetX = contentRef.value!.offsetLeft
+  offsetY = contentRef.value!.offsetTop
 }
 
 onMounted(() => {
