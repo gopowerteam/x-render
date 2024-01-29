@@ -1,10 +1,12 @@
 import { type PropType, type RendererNode, type VNode, computed, defineComponent, onMounted, provide, ref } from 'vue'
 import { Button, type FieldRule, Form, type FormInstance, FormItem, Grid, GridItem, Space } from '@arco-design/web-vue'
-import { IconDown, IconUp } from '@arco-design/web-vue/es/icon'
-import type { FormItemsOptions } from '../interfaces'
+import { IconDown, IconSearch, IconUp } from '@arco-design/web-vue/es/icon'
+import { ModalProvider } from '@gopowerteam/modal-render'
+import type { DataRecord, FormItemsOptions } from '../interfaces'
 import { provides } from '../config/provide.config'
 import { createFormSource } from '../utils/create-form-source'
 import { renderFormItem } from './form-item-render'
+import FormCollapsedDialog from './form-collapsed-dialog'
 
 export const FormRender = defineComponent({
   props: {
@@ -44,6 +46,11 @@ export const FormRender = defineComponent({
       required: false,
       default: `form-${Math.random().toString(32).slice(2)}`,
     },
+    collapsedMode: {
+      type: String as PropType<'append' | 'dialog'>,
+      required: false,
+      default: 'append',
+    },
     submitable: {
       type: Boolean,
       required: false,
@@ -72,15 +79,19 @@ export const FormRender = defineComponent({
     'reset',
     'validate',
   ],
-  setup(props) {
+  setup(props, { emit }) {
     const formInstance = ref<FormInstance>()
-    const [formSource, updateFormSource] = createFormSource(props.form, props.modelValue || props.value)
+    const [formSource, _updateFormSource] = createFormSource(props.form, props.modelValue || props.value)
     const formColumns = ref(props.columns || 0)
     const formCollspased = ref<boolean>(true)
+    const modalInstance = ref<any>()
     const toggleFormCollapsed = () => formCollspased.value = !formCollspased.value
-
     provide(provides.id, props.id)
     provide(provides.source, formSource)
+    const onSubmitSuccess = () => {
+      emit('submit', formSource)
+      emit('update:model-value', formSource)
+    }
 
     const formActiosSpan = computed(() => {
       if (!formColumns.value) {
@@ -123,10 +134,32 @@ export const FormRender = defineComponent({
       }
     }
 
+    function openCollapsedDialog() {
+      modalInstance.value.open(FormCollapsedDialog, {
+        form: props.form,
+      }, {
+        title: '高级搜索',
+        footer: true,
+        submitText: '搜索',
+      }).then((data: DataRecord) => {
+        if (data) {
+          updateFormSource(data)
+          onSubmitSuccess()
+        }
+      })
+    }
+
     onMounted(() => {
       updateFormColumnValue()
       updateFormElementId()
     })
+
+    function updateFormSource(value: DataRecord) {
+      _updateFormSource({
+        ...formSource.value,
+        ...(value || {}),
+      })
+    }
 
     function updateFormField(key: string, value: any) {
       formSource.value[key] = value
@@ -162,14 +195,12 @@ export const FormRender = defineComponent({
       updateFormSource,
       reset: resetForm,
       validate: validateForm,
+      onSubmitSuccess,
+      openCollapsedDialog,
+      modalInstance,
     })
   },
   render() {
-    const onSubmitSuccess = () => {
-      this.$emit('submit', this.formSource)
-      this.$emit('update:model-value', this.formSource)
-    }
-
     const renderFormActions = () => {
       const buttons: (JSX.Element | VNode<RendererNode>)[] = []
 
@@ -192,10 +223,19 @@ export const FormRender = defineComponent({
       }
 
       if (this.form.some(item => !!item.collapsed)) {
-        buttons.push(<Button onClick={this.toggleFormCollapsed}>{{
-          default: () => this.formCollspased ? '展开' : '收起',
-          icon: () => this.formCollspased ? (<IconDown></IconDown>) : (<IconUp></IconUp>),
-        }}</Button>)
+        if (this.collapsedMode === 'append') {
+          buttons.push(<Button onClick={this.toggleFormCollapsed}>{{
+            default: () => this.formCollspased ? '展开' : '收起',
+            icon: () => this.formCollspased ? (<IconDown></IconDown>) : (<IconUp></IconUp>),
+          }}</Button>)
+        }
+
+        if (this.collapsedMode === 'dialog') {
+          buttons.push(<Button onClick={this.openCollapsedDialog}>{{
+            default: () => '高级搜索',
+            icon: () => <IconSearch></IconSearch>,
+          }}</Button>)
+        }
       }
 
       if (this.$slots.actions) {
@@ -232,11 +272,12 @@ export const FormRender = defineComponent({
 
     return (
      <div class="form-render">
+       <ModalProvider ref={ (modal: any) => this.modalInstance = modal as any}>
        <Form {...({ name: this.name })}
             labelAlign='left'
             layout={this.$props.layout}
             rules={this.formRules}
-            onSubmitSuccess={onSubmitSuccess}
+            onSubmitSuccess={this.onSubmitSuccess}
             auto-label-width
             ref={instance => this.formInstance = instance as any}
             model={this.formSource}>
@@ -253,6 +294,7 @@ export const FormRender = defineComponent({
           }
         </Grid>
       </Form>
+      </ModalProvider>
      </div>
     )
   },

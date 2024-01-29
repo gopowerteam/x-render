@@ -9,6 +9,7 @@ export interface FormItemOptions<T = Record<string, any>> {
   title: string
   default?: any | (() => any) | (() => Promise<any>)
   collapsed?: boolean
+  group?: string | string[]
   visiable?: boolean | ((record: T) => boolean)
   span?: number
   rule?: FieldRule | FieldRule[]

@@ -1,6 +1,7 @@
 <template>
   <FormRender
     id="xxxx"
+    collapsed-mode="dialog"
     footer
     :form="form"
     layout="horizontal"
@@ -25,6 +26,8 @@ import { FormRender, defineForm } from '@gopowerteam/form-render'
 const form = defineForm([{
   key: 'xxx',
   title: 'xxx',
+  collapsed: true,
+  group: ['xx'],
   render: r => r.input(),
   rule: [{
     required: true,

@@ -21,9 +21,8 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import { Form as AForm, type FieldRule } from '@arco-design/web-vue'
-import { onSubmit, useModal } from '@gopowerteam/modal-render'
+import { onSubmit } from '@gopowerteam/modal-render'
 
-const modal = useModal()
 const formModel = reactive({
   a: 'tt',
   b: '',
