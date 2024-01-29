@@ -16,6 +16,7 @@ export interface TableColumnSharedOptions {
 export interface TableFormSharedOptions {
   minWidth?: number
   columns?: number
+  collapsedMode?: 'append' | 'dialog'
 }
 
 /**
