@@ -1,4 +1,4 @@
-export function FormRenderResolver({ importStyle }: { importStyle: boolean }) {
+export function FormRenderResolver({ sideEffect }: { sideEffect?: boolean } = {}) {
   return {
     type: 'component' as const,
     resolve: (name: string) => {
@@ -7,7 +7,7 @@ export function FormRenderResolver({ importStyle }: { importStyle: boolean }) {
         return {
           name: 'FormRender',
           from: packageName,
-          sideEffects: importStyle ? [`${packageName}/dist/style.css`] : [],
+          sideEffects: sideEffect ? [`${packageName}/dist/style.css`] : [],
         }
       }
     },

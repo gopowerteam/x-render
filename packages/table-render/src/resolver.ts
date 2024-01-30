@@ -1,4 +1,4 @@
-export function TableRenderResolver({ importStyle }: { importStyle: boolean }) {
+export function TableRenderResolver({ sideEffect }: { sideEffect?: boolean } = {}) {
   return {
     type: 'component' as const,
     resolve: (name: string) => {
@@ -7,7 +7,7 @@ export function TableRenderResolver({ importStyle }: { importStyle: boolean }) {
         return {
           name: 'TableRender',
           from: packageName,
-          sideEffects: importStyle ? [`${packageName}/dist/style.css`] : [],
+          sideEffects: sideEffect ? [`${packageName}/dist/style.css`] : [],
         }
       }
     },
