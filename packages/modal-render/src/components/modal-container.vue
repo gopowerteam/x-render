@@ -57,7 +57,7 @@
 
 <style lang="less" scoped>
 .modal-wrapper {
-  z-index: 1000;
+  z-index: v-bind(zIndex);
   position: fixed;
   top: 0;
   bottom: 0;
@@ -133,7 +133,7 @@
 
 .modal-loading{
   position: absolute;
-  z-index: 1001;
+  z-index: v-bind(loadingZIndex);
   inset:0;
   display: flex;
   justify-content: center;
@@ -218,6 +218,7 @@ const props = withDefaults (defineProps<{
   bodyStyle?: CSSProperties
   submitText?: string
   cancelText?: string
+  zIndex?: number
 }>()
 , {
   header: true,
@@ -232,6 +233,7 @@ const props = withDefaults (defineProps<{
   submitText: '确定',
   cancelText: '取消',
   maxHeight: 90,
+  zIndex: 1000,
 })
 const emits = defineEmits(['submit'])
 const modal = inject(ModalKey)
@@ -252,6 +254,7 @@ const { height: footerHeight } = useElementSize(footerRef, undefined, { box: 'bo
 const { height: headerSlotHeight } = useElementSize(headerSlotRef)
 const { height: footerSlotHeight } = useElementSize(footerSlotRef)
 
+const loadingZIndex = computed(() => props.zIndex + 100)
 const { x, y } = useDraggable(headerRef, {
   initialValue: { x: 0, y: 0 },
 })
