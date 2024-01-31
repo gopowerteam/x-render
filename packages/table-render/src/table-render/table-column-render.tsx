@@ -1,4 +1,5 @@
 import { type TableColumnData, type TableData } from '@arco-design/web-vue'
+import type { Ref } from 'vue'
 import type { TableColumnOptions, TableColumnSharedOptions, TableColumnsOptions } from '../interfaces'
 import { TableColumnRenders } from '../table-columns'
 import { RenderColumnType } from '../utils'
@@ -37,13 +38,13 @@ export function toRenderColumn<T>(
   }
 }
 
-export function renderTableColumns(columns: TableColumnsOptions, columnsOptions: TableColumnSharedOptions | undefined, pageMode: 'client' | 'server', events: EventEmits) {
+export function renderTableColumns(columns: TableColumnsOptions, columnsOptions: TableColumnSharedOptions | undefined, pageMode: 'client' | 'server', collapsedColumns: Ref<{ key: string;title: string;collapsed: boolean }[]>, events: EventEmits) {
   return columns
     .map(column => ({
       ...columnsOptions || {},
       ...column,
     }))
-    .map(column => renderTableColumn(column, pageMode, events))
+    .map(column => renderTableColumn(column, pageMode, collapsedColumns, events))
     .filter(Boolean) as TableColumnData[]
 }
 
@@ -52,13 +53,21 @@ export function renderTableColumns(columns: TableColumnsOptions, columnsOptions:
  * @param options
  * @returns
  */
-export function renderTableColumn<T>(options: TableColumnOptions<T>, pageMode: 'client' | 'server', events: EventEmits): TableColumnData | undefined {
+export function renderTableColumn<T>(options: TableColumnOptions<T>, pageMode: 'client' | 'server', collapsedColumns: Ref<{ key: string;title: string;collapsed: boolean }[]>, events: EventEmits): TableColumnData | undefined {
   const { render, disableColumnMode } = toRenderColumn(options, {
     previewing: false,
     emits: events,
   }) || {}
 
-  if (disableColumnMode || options.visiable === false || (typeof options.visiable === 'function' && options.visiable() === false)) {
+  if (disableColumnMode || options.visiable === false) {
+    return
+  }
+
+  if (typeof options.visiable === 'function' && options.visiable() === false) {
+    return
+  }
+
+  if (collapsedColumns.value.find(item => item.key === options.key && item.collapsed === true)) {
     return
   }
 

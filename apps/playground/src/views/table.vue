@@ -8,6 +8,7 @@
       v-model:checkbox-keys="checkboxKeys"
       v-model:radio-key="radioKey"
       v-model:radio-row="radioRow"
+      collapsable
       :columns="columns"
       :data-load="onTableLoad"
       :draggable="draggable"
@@ -17,6 +18,7 @@
         minWidth: 400,
       }"
       pageable="client"
+      refreshable
       row-key="age"
       :selection="{
         type: 'checkbox',

@@ -26,12 +26,15 @@ export function tableActionsRender(
           }}>
           <div class="built-in">
             <Space>
-             { props.refreshable && <Button type='primary'>
+             { props.refreshable && <Button type='primary' onClick={() => tableEvents('reload')}>
                 刷新
               </Button>
               }
-              { props.exportable && <Button type='primary'>
+              { props.exportable && <Button type='primary' onClick={() => tableEvents('export')}>
                 导出
+              </Button>}
+              { props.collapsable && <Button type='primary' onClick={() => tableEvents('collapse')}>
+                显示
               </Button>}
             </Space>
           </div>

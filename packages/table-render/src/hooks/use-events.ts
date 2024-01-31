@@ -1,7 +1,7 @@
 import type { FormItemsOptions } from '@gopowerteam/form-render'
 import type { DataRecord, TableColumnsOptions } from '..'
 
-export type TableEvent = 'export' | 'reload' | 'preview' | 'edit'
+export type TableEvent = 'export' | 'reload' | 'preview' | 'edit' | 'collapse'
 
 export interface TableReloadEventOptions {
   reset?: boolean
@@ -29,11 +29,16 @@ export interface TableExportEventOptions {
   filename?: string
 }
 
+export interface TableCollapsedOptions {
+
+}
+
 export interface EventEmits {
   (event: 'reload', options?: TableReloadEventOptions): void
   (event: 'preview', options?: TablePreviewEventOptions): void
   (event: 'export', options?: TableExportEventOptions): void
   (event: 'edit', options: TableEditEventOptions): void
+  (event: 'collapse', options: TableCollapsedOptions): void
   (event: TableEvent, options?: TableExportEventOptions | TableReloadEventOptions | TablePreviewEventOptions | TableEditEventOptions): void
 }
 
@@ -42,6 +47,7 @@ export function useEvents(events: {
   export: (options?: TableExportEventOptions) => void
   preview: (options?: TablePreviewEventOptions) => void
   edit: (options: TableEditEventOptions) => void
+  collapse: (options: TableCollapsedOptions) => void
 }): EventEmits {
   return (event, options) => events[event](options as any)
 }

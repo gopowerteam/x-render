@@ -35,6 +35,7 @@ export interface TableColumnOptions<T> {
   ellipsis?: boolean
   preview?: TableColumnPreviewOptions
   exportable?: ExportColumnOptions | boolean
+  collapsed?: boolean
   sortable?: 'asc' | 'desc'
   treeNode?: boolean
   visiable?: boolean | (() => boolean)

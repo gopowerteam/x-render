@@ -19,6 +19,7 @@ import { tableActionsRender } from './table-actions-render'
 import { tableFormRender } from './table-form-render'
 import { tableSecletionRender } from './table-selection-render'
 import { tablePaginationRender } from './table-pagination-render'
+import { TableCollapsedRender } from './table-collapsed-render'
 import tableEditRender from './table-edit-render'
 
 export const TableRender = defineComponent({
@@ -61,6 +62,11 @@ export const TableRender = defineComponent({
     columnsOptions: {
       type: Object as PropType<TableColumnSharedOptions>,
       required: false,
+    },
+    collapsable: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
     selection: {
       type: [String, Object] as PropType<
@@ -147,6 +153,15 @@ export const TableRender = defineComponent({
     const tableForm: FormItemsOptions = props.form ?? createTableForm(props.columns)
     const pageService: (RequestPlugin & PageableOptions) | undefined = createPageService()
     const sortService: (RequestPlugin & SortableOptions) | undefined = createSortService()
+
+    const collapsedColumns = ref<{ key: string;title: string;collapsed: boolean }[]>(
+      props.columns.map(item => (
+        {
+          key: item.key as string,
+          title: item.title,
+          collapsed: !!item.collapsed,
+        })),
+    )
 
     function createPageService() {
       switch (true) {
@@ -284,6 +299,18 @@ export const TableRender = defineComponent({
       }
     }
 
+    function onTableCollaspe() {
+      modalInstance.value.open(TableCollapsedRender, {
+        collapsedColumns: collapsedColumns.value,
+      }, {
+        title: '显示列',
+        size: 'small',
+        footer: true,
+      }).then((data: { key: string;title: string;collapsed: boolean }[]) => {
+        collapsedColumns.value = data
+      })
+    }
+
     const onTableChange = (data: TableData[], { type }: TableChangeExtra) => {
       switch (type) {
         case 'drag':{
@@ -308,6 +335,7 @@ export const TableRender = defineComponent({
       preview: onTablePreview,
       export: onTableExport,
       edit: onTableEdit,
+      collapse: onTableCollaspe,
     })
 
     function onSorterChange(dataIndex: string, direction: string) {
@@ -325,7 +353,7 @@ export const TableRender = defineComponent({
       tableEvents('reload')
     }
 
-    const tableColumns = ref<TableColumnData[]>(renderTableColumns(props.columns, props.columnsOptions, pageMode, tableEvents))
+    const tableColumns = ref<TableColumnData[]>(renderTableColumns(props.columns, props.columnsOptions, pageMode, collapsedColumns, tableEvents))
 
     const renderOptions: TableRenderOptions = {
       tableEvents,
@@ -368,7 +396,7 @@ export const TableRender = defineComponent({
     }))
 
     function reloadColumns() {
-      tableColumns.value = renderTableColumns(props.columns, props.columnsOptions, pageMode, tableEvents)
+      tableColumns.value = renderTableColumns(props.columns, props.columnsOptions, pageMode, collapsedColumns, tableEvents)
     }
 
     onMounted(() => {
@@ -412,6 +440,7 @@ export const TableRender = defineComponent({
     }
   },
   render() {
+    this.reloadColumns()
     const renderTable = () => (
       <div class="table-body">
         <Table

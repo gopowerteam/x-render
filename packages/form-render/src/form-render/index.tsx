@@ -247,7 +247,7 @@ export const FormRender = defineComponent({
       if (buttons.length) {
         return (
         <GridItem {...gridOptions}>
-          <FormItem hideLabel contentClass={this.footer ? 'form-footer' : ''}>
+          <FormItem contentClass={this.footer ? 'form-footer' : ''}>
             <Space>
               {buttons}
             </Space>
@@ -273,27 +273,27 @@ export const FormRender = defineComponent({
     return (
      <div class="form-render">
        <ModalProvider ref={ (modal: any) => this.modalInstance = modal as any}>
-       <Form {...({ name: this.name })}
-            labelAlign='left'
-            layout={this.$props.layout}
-            rules={this.formRules}
-            onSubmitSuccess={this.onSubmitSuccess}
-            auto-label-width
-            ref={instance => this.formInstance = instance as any}
-            model={this.formSource}>
-        <Grid cols={this.formColumns} col-gap={24} rol-gap={10}>
-          {
-            formItems.filter(() => this.formColumns !== 0).map(item => (
-              <GridItem span={item.span}>
-                {renderFormItem(this.formSource, item)}
-              </GridItem>
-            ))
-          }
-          {
-            renderFormActions()
-          }
-        </Grid>
-      </Form>
+          <Form {...({ name: this.name })}
+                labelAlign='right'
+                layout={this.$props.layout}
+                rules={this.formRules}
+                onSubmitSuccess={this.onSubmitSuccess}
+                auto-label-width
+                ref={instance => this.formInstance = instance as any}
+                model={this.formSource}>
+                <Grid cols={this.formColumns} col-gap={24} rol-gap={10}>
+                  {
+                    formItems.filter(() => this.formColumns !== 0).map(item => (
+                      <GridItem span={item.span}>
+                        {renderFormItem(this.formSource, item)}
+                      </GridItem>
+                    ))
+                  }
+                  {
+                    renderFormActions()
+                  }
+                </Grid>
+          </Form>
       </ModalProvider>
      </div>
     )
