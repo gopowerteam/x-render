@@ -105,15 +105,15 @@ function openModal(component: Component | 'confirm' | 'info' | 'warning' | 'erro
 
   const id = Math.random().toString(32).slice(2)
 
-  const elementProps = Object.assign({ zIndex: zIndex++ }, props)
+  const elementOptions = Object.assign({ zIndex: zIndex++ }, options)
 
   const promise = new Promise((resolve, reject) => {
     elements.value.push({
       id,
       component: instance,
-      props: elementProps,
+      props: props || {},
       options: {
-        ...options,
+        ...elementOptions,
         type: typeof component === 'string' ? component : 'component',
       },
       resolve,
