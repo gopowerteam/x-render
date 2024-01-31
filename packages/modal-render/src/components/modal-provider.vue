@@ -111,9 +111,9 @@ function openModal(component: Component | 'confirm' | 'info' | 'warning' | 'erro
     elements.value.push({
       id,
       component: instance,
-      props: props || {},
+      props: elementProps,
       options: {
-        ...elementProps,
+        ...options,
         type: typeof component === 'string' ? component : 'component',
       },
       resolve,
