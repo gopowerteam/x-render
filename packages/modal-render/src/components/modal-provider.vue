@@ -84,7 +84,7 @@ const elements = shallowRef<ModalElement[]>([])
 // 处理SSR错误
 const clientMounted = ref<boolean>(false)
 const instance = getCurrentInstance()
-let zIndex = 1100
+// const zIndex = 1100
 /**
  * 打开Modal
  */
@@ -105,7 +105,9 @@ function openModal(component: Component | 'confirm' | 'info' | 'warning' | 'erro
 
   const id = Math.random().toString(32).slice(2)
 
-  const elementOptions = Object.assign({ zIndex: zIndex++ }, options)
+  const elementOptions = Object.assign({
+    zIndex: typeof component === 'string' ? 1000 : 1100,
+  }, options)
 
   const promise = new Promise((resolve, reject) => {
     elements.value.push({
