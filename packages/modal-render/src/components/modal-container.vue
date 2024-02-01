@@ -133,7 +133,6 @@
 
 .modal-loading{
   position: absolute;
-  z-index: v-bind(loadingZIndex);
   inset:0;
   display: flex;
   justify-content: center;
@@ -254,7 +253,6 @@ const { height: footerHeight } = useElementSize(footerRef, undefined, { box: 'bo
 const { height: headerSlotHeight } = useElementSize(headerSlotRef)
 const { height: footerSlotHeight } = useElementSize(footerSlotRef)
 
-const loadingZIndex = computed(() => props.zIndex + 100)
 const { x, y } = useDraggable(headerRef, {
   initialValue: { x: 0, y: 0 },
 })

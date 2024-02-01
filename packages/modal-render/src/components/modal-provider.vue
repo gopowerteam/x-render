@@ -106,7 +106,7 @@ function openModal(component: Component | 'confirm' | 'info' | 'warning' | 'erro
   const id = Math.random().toString(32).slice(2)
 
   const elementOptions = Object.assign({
-    zIndex: typeof component === 'string' ? 1000 : 1100,
+    zIndex: typeof component === 'string' ? 1100 : 1000,
   }, options)
 
   const promise = new Promise((resolve, reject) => {
