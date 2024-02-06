@@ -88,9 +88,10 @@ export const FormRender = defineComponent({
     const toggleFormCollapsed = () => formCollspased.value = !formCollspased.value
     provide(provides.id, props.id)
     provide(provides.source, formSource)
+
     const onSubmitSuccess = () => {
-      emit('submit', formSource)
-      emit('update:model-value', formSource)
+      emit('submit', formSource.value)
+      emit('update:model-value', formSource.value)
     }
 
     const formActiosSpan = computed(() => {
