@@ -14,13 +14,13 @@ export interface TablePreviewEventOptions {
   title?: string
 }
 
-export interface TableEditEventOptions<T=DataRecord> {
+export interface TableEditEventOptions<T = DataRecord> {
   key?: string | number
   record?: T
   mode?: 'dialog' | 'drawer'
   title?: string
   form: FormItemsOptions<T>
-  onSubmit?: (record: DataRecord) => void
+  onSubmit?: (record: T) => void
 }
 
 export interface TableExportEventOptions {

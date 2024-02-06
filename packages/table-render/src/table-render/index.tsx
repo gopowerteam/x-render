@@ -233,7 +233,7 @@ export const TableRender = defineComponent({
       })
     }
 
-    const onTableEdit = <T=DataRecord> (options: TableEditEventOptions<T>): Promise<DataRecord> => {
+    const onTableEdit = <T = DataRecord> (options: TableEditEventOptions<T>): Promise<DataRecord> => {
       let record: T | undefined
 
       switch (true) {
