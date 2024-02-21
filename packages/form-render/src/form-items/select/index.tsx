@@ -122,6 +122,7 @@ export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions)
         placeholder={options.placeholder}
         allowClear={options.clearable}
         allowSearch={options.searchable}
+        allow-create={options.createable}
         maxTagCount={options.maxTagCount ?? 2}
         onChange={onSelectChange}>
         {Array.from(selectOptions.value.entries()).map(([value, label]) => (
@@ -144,6 +145,8 @@ export interface RenderSelectItemOptions {
   clearable?: boolean
   // 可搜索
   searchable?: boolean
+  // 可创建
+  createable?: boolean
   // select options列表
   options:
   | SelectOptions
