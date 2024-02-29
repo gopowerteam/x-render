@@ -7,6 +7,7 @@
     layout="horizontal"
     resetable
     searchable
+    @submit="aaa"
   >
     <template #actions>
       <AButton type="primary">
@@ -61,12 +62,24 @@ const form = defineForm([{
   render: r => r.dateRange(),
 
 }, {
+  key: 'amount',
+  title: 'amount',
+  render: r => r.currency({
+    inputUnit: '元',
+    outputUnit: '分',
+  }),
+
+}, {
   key: 'cascader',
   title: 'cascader',
   render: r => r.cascader({
     options: getCascaderOptions,
   }),
 }])
+
+function aaa(...a: any) {
+  console.log(a)
+}
 
 function getCascaderOptions() {
   return [

@@ -7,6 +7,7 @@ import { renderTextareaItem } from './textarea'
 import { renderTreeSelectItem } from './tree-select'
 import { renderCascaderItem } from './cascader'
 import { renderRenderItem } from './render'
+import { renderCurrencyItem } from './currency'
 
 export function FormItemRenders<T>() {
   return {
@@ -19,5 +20,6 @@ export function FormItemRenders<T>() {
     dateRange: renderDateRangeItem<T>,
     render: renderRenderItem<T>,
     cascader: renderCascaderItem<T>,
+    currency: renderCurrencyItem<T>,
   }
 }

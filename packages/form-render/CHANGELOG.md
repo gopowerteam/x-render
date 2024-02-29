@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.54
+
+### Patch Changes
+
+- add currency form item
+
 ## 0.0.53
 
 ### Patch Changes
