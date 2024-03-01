@@ -17,7 +17,7 @@ const unitMaps = {
 export function renderCurrencyItem<T=DataRecord>(options?: RenderCurrencyOptions): FormItemRenderReturn<T> {
   options = { ...defaultOptions, ...(options || {}) }
 
-  const transformToInputUnit = (value: number) => {
+  const transformToInputUnit = (value?: number) => {
     if (value === null || value === undefined) {
       return
     }
@@ -30,7 +30,11 @@ export function renderCurrencyItem<T=DataRecord>(options?: RenderCurrencyOptions
     return value * scale
   }
 
-  const transformToOutputUnit = (value: number) => {
+  const transformToOutputUnit = (value?: number) => {
+    if (value === null || value === undefined) {
+      return
+    }
+
     if (options?.inputUnit === options?.outputUnit) {
       return value
     }
@@ -75,9 +79,9 @@ export function renderCurrencyItem<T=DataRecord>(options?: RenderCurrencyOptions
         allowClear={options?.clearable}>
       {{
         prefix: options?.prefix && (() => (
-          typeof options?.suffix === 'string'
-            ? (<span>{options.suffix}</span>)
-            : options!.suffix!()
+          typeof options?.prefix === 'string'
+            ? (<span>{options.prefix}</span>)
+            : options!.prefix!()
         )),
         suffix: () => (
           typeof options?.suffix === 'string'
