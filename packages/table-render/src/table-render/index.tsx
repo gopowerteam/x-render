@@ -198,7 +198,7 @@ export const TableRender = defineComponent({
       }
     }
 
-    const onTableExport = (options?: TableExportEventOptions) => {
+    function onTableExport(options?: TableExportEventOptions) {
       const { exportExcel } = useExport()
 
       exportExcel(
@@ -208,7 +208,7 @@ export const TableRender = defineComponent({
       )
     }
 
-    const onTablePreview = (options?: TablePreviewEventOptions) => {
+    function onTablePreview(options?: TablePreviewEventOptions) {
       let record: DataRecord | undefined
 
       switch (true) {
@@ -233,7 +233,7 @@ export const TableRender = defineComponent({
       })
     }
 
-    const onTableEdit = <T = DataRecord> (options: TableEditEventOptions<T>): Promise<DataRecord> => {
+    function onTableEdit <T = DataRecord>(options: TableEditEventOptions<T>): Promise<DataRecord> {
       let record: T | undefined
 
       switch (true) {
@@ -264,7 +264,7 @@ export const TableRender = defineComponent({
     /**
      * 加载表单数据
      */
-    const onTableReload = (options?: TableReloadEventOptions) => {
+    function onTableReload(options?: TableReloadEventOptions) {
       if (!props.dataLoad) {
         return
       }
@@ -410,7 +410,7 @@ export const TableRender = defineComponent({
       tableInstance,
       tableSource,
       tableOptions,
-      tableColumns,
+      tableColumns: tableColumns as any,
       tableEvents,
       tableForm,
       tableLoading,
