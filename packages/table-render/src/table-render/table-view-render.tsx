@@ -18,7 +18,7 @@ export default defineComponent({
     minWidth: {
       type: Number,
       required: false,
-      default: 350,
+      default: 320,
     },
     border: {
       type: Boolean,

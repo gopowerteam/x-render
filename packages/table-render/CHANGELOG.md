@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.99
+
+### Patch Changes
+
+- update min-width size
+
 ## 0.0.98
 
 ### Patch Changes
