@@ -1,26 +1,34 @@
 import type { DataRecord, TableColumnOptions } from '../../interfaces'
 import { createColumnRender, getColumnValue } from '../../utils'
 
-export interface TagColumnOptions {
+export interface TagColumnOptions<T> {
   textColors?: string[] | ((tag: any, index: number) => string)
   backgroundColors?: string[] | ((tag: any, index: number) => string)
   border?: string
   radius?: number
+  maxCount?: number
+  minWidth?: number
+  formatter?: (record: T) => string[]
 }
 
 export function renderTagColumn<T = DataRecord>(
-  options?: TagColumnOptions,
+  options?: TagColumnOptions<T>,
 ) {
   const render = (record: T, column: TableColumnOptions<T>) => {
-    const value = getColumnValue(record, column)
+    const maxCount = options?.maxCount || 5
+    const value = options?.formatter ? options.formatter(record) : getColumnValue(record, column)
     const textColors = options?.textColors || ['#F87335']
     const backgroundColor = options?.backgroundColors || ['#FFF4E8']
+    const isMoreThanMax = value.length > maxCount
+    const minWidth = options?.minWidth
 
     return (
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {value.map((v: string, i: number) => (
+        {value.slice(0, maxCount).map((v: string, i: number) => (
           <span
             style={{
+              minWidth: minWidth ? `${minWidth}px` : 'unset',
+              textAlign: 'center',
               margin: '2px',
               padding: '2px 5px',
               border: `solid 2px ${options?.border || 'transparent'}`,
@@ -37,6 +45,7 @@ export function renderTagColumn<T = DataRecord>(
             {v}
           </span>
         ))}
+        {isMoreThanMax && '...'}
       </div>
     )
   }

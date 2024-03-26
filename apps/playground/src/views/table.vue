@@ -158,6 +158,13 @@ const columns = defineColumns<t>([{
   render: r => r.render(() => <div>123</div>),
 },
 {
+  key: 'tags',
+  title: 'tags',
+  render: r => r.tag({
+    formatter: record => [`${record.name}`],
+  }),
+},
+{
   key: 'actions',
   title: 'xx',
   width: 200,
@@ -238,6 +245,7 @@ const onTableLoad = defineTableLoad(({ form, update, page, sort }) => {
         age: i === 3 ? i.toString().repeat(200) : i.toString(),
         text: i,
         image: 'https://lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg',
+        tags: ['1', '22', '33'],
       })))
       resolve(true)
     }, 1000)

@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.100
+
+### Patch Changes
+
+- update tag column
+
 ## 0.0.99
 
 ### Patch Changes
