@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.56
+
+### Patch Changes
+
+- update selelct form-item on-change event
+
 ## 0.0.55
 
 ### Patch Changes
