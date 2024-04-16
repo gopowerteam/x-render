@@ -1,5 +1,13 @@
 # @gopowerteam/table-render
 
+## 0.0.103
+
+### Patch Changes
+
+- fixed span compute
+- Updated dependencies
+  - @gopowerteam/form-render@0.0.57
+
 ## 0.0.102
 
 ### Patch Changes

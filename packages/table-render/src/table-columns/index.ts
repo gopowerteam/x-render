@@ -1,5 +1,6 @@
 import { renderButtonColumn } from './button'
 import { renderCurrencyColumn } from './currency'
+import { renderDateColumn } from './date'
 import { renderDictColumn } from './dict'
 import { renderDropdownColumn } from './dropdown'
 import { renderImageColumn } from './image'
@@ -18,7 +19,7 @@ export function TableColumnRenders<T>() {
     phone: renderPhoneColumn<T>,
     image: renderImageColumn<T>,
     currency: renderCurrencyColumn<T>,
-    date: renderCurrencyColumn<T>,
+    date: renderDateColumn<T>,
     button: renderButtonColumn<T>,
   }
 }

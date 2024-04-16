@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.57
+
+### Patch Changes
+
+- fixed span compute
+
 ## 0.0.56
 
 ### Patch Changes

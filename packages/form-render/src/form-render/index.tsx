@@ -94,12 +94,27 @@ export const FormRender = defineComponent({
       emit('update:model-value', formSource.value)
     }
 
+    const formItems = computed(() => {
+      return props.form
+        .filter(item => formCollspased.value ? !item.collapsed : true)
+        .filter((item) => {
+          switch (true) {
+            case typeof item.visiable === 'boolean':
+              return item.visiable
+            case typeof item.visiable === 'function':
+              return (item.visiable as Function)(formSource.value)
+            default:
+              return true
+          }
+        })
+    })
+
     const formActiosSpan = computed(() => {
       if (!formColumns.value) {
         return 1
       }
 
-      const itemSpans = props.form.reduce((result, item) => {
+      const itemSpans = formItems.value.reduce((result, item) => {
         return result + (item?.span || 1)
       }, 0)
 
@@ -123,7 +138,7 @@ export const FormRender = defineComponent({
       const form = formInstance.value?.$el as HTMLFormElement
 
       if (form) {
-        formColumns.value = Math.floor(form.offsetWidth / props.minWidth)
+        formColumns.value = Math.max(Math.floor(form.offsetWidth / props.minWidth), 1)
       }
     }
 
@@ -191,6 +206,7 @@ export const FormRender = defineComponent({
       formRules,
       formCollspased,
       formActiosSpan,
+      formItems,
       toggleFormCollapsed,
       updateFormField,
       updateFormSource,
@@ -258,19 +274,6 @@ export const FormRender = defineComponent({
       }
     }
 
-    const formItems = this.form
-      .filter(item => this.formCollspased ? !item.collapsed : true)
-      .filter((item) => {
-        switch (true) {
-          case typeof item.visiable === 'boolean':
-            return item.visiable
-          case typeof item.visiable === 'function':
-            return item.visiable(this.formSource)
-          default:
-            return true
-        }
-      })
-
     return (
      <div class="form-render">
        <ModalProvider ref={ (modal: any) => this.modalInstance = modal as any}>
@@ -280,11 +283,11 @@ export const FormRender = defineComponent({
                 rules={this.formRules}
                 onSubmitSuccess={this.onSubmitSuccess}
                 auto-label-width
-                ref={instance => this.formInstance = instance as any}
+                ref={(instance: unknown) => this.formInstance = instance as any}
                 model={this.formSource}>
                 <Grid cols={this.formColumns} col-gap={24} rol-gap={10}>
                   {
-                    formItems.filter(() => this.formColumns !== 0).map(item => (
+                    this.formItems.filter(() => this.formColumns !== 0).map(item => (
                       <GridItem span={item.span}>
                         {renderFormItem(this.formSource, item)}
                       </GridItem>
