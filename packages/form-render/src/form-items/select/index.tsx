@@ -18,7 +18,11 @@ export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions)
 
   const [selectOptions, updateSelectOptions] = useSelectOptions()
 
-  const onSelectChange = () => {
+  const onSelectChange = (value: string | number | boolean | Record<string, any> | (string | number | boolean | Record<string, any>)[]) => {
+    if (options.onChange) {
+      options.onChange(value)
+    }
+
     if (!options.autoSumbit || !selectInstance) {
       return
     }
@@ -95,7 +99,7 @@ export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions)
       break
     }
     case isRef(options.options): {
-      watchOnce(options.options, () => {
+      watchOnce(() => options.options, () => {
         updateSelectOptions((options.options as Ref<SelectOptions>).value)
       }, {
         immediate: true,
@@ -116,7 +120,7 @@ export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions)
 
     return (
       <Select
-        ref={instance => selectInstance = (instance as ComponentPublicInstance)}
+        ref={(instance: unknown) => selectInstance = (instance as ComponentPublicInstance)}
         multiple={options.multiple}
         v-model={data[form.key as keyof T]}
         placeholder={options.placeholder}
@@ -163,4 +167,6 @@ export interface RenderSelectItemOptions {
   autoSumbit?: boolean
   // 开启缓存
   cache?: boolean
+  // change事件
+  onChange?: (value: string | number | boolean | Record<string, any> | (string | number | boolean | Record<string, any>)[]) => void
 }

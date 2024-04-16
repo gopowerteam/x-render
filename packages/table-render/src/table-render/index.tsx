@@ -447,7 +447,7 @@ export const TableRender = defineComponent({
           loading={this.tableLoading}
           data={this.tableSource}
           columns={this.tableColumns}
-          ref={table => this.tableInstance = table as any}
+          ref={((table: any) => this.tableInstance = table) as any }
           onSelect={this.tableSelection.onSelect}
           onSelectAll={this.tableSelection.onSelectAll}
           onChange={this.onTableChange}
