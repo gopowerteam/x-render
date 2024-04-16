@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.102
+
+### Patch Changes
+
+- change table align to center
+
 ## 0.0.101
 
 ### Patch Changes

@@ -17,7 +17,7 @@ export interface TableColumnRenderResult<T>
       previewing?: boolean
       emits?: EventEmits
     }
-  ): JSX.Element
+  ): JSX.Element | any
 }
 /**
  * Render函数

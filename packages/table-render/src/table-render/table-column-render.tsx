@@ -75,7 +75,7 @@ export function renderTableColumn<T>(options: TableColumnOptions<T>, pageMode: '
     dataIndex: options.index || options.key as string,
     title: options.title,
     width: options.width === 'auto' ? undefined : options.width,
-    align: options.align ?? 'left',
+    align: options.align ?? 'center',
     fixed: options.fixed,
     ellipsis: options.ellipsis ?? true,
     sortable: options.sortable
