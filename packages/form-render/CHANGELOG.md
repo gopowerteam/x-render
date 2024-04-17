@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.58
+
+### Patch Changes
+
+- fixed range date filter
+
 ## 0.0.57
 
 ### Patch Changes

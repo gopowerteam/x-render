@@ -33,7 +33,7 @@ export function renderDateRangeItem<T=DataRecord>(options?: RenderDateRangeItemO
         return false
       }
 
-      return options.disabledDate(dates, date)
+      return options.disabledDate(dates.filter(Boolean), date)
     }
 
     return (
