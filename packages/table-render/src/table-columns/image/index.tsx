@@ -6,22 +6,25 @@ import type { EventEmits } from '../..'
 export interface ImageColumnOptions<T> {
   width?: string
   height?: string
-  size?: 'small' | 'middle' | 'large'
+  size?: number
   radius?: string
   preview?: boolean
   rotate?: number
   parse?: (key: string, record: T) => Promise<string> | string
 }
 
-const sizeOptions = {
-  small: '20px',
-  middle: '30px',
-  large: '40px',
+const defaultOptions = {
+  size: 30,
 }
 
 export function renderImageColumn<T = DataRecord>(
   options?: ImageColumnOptions<T>,
 ) {
+  options = {
+    ...defaultOptions,
+    ...(options || {}),
+  }
+
   function showPreview(id: string, url: string) {
     const rect = document.getElementById(id)?.getBoundingClientRect()
 
@@ -62,12 +65,8 @@ export function renderImageColumn<T = DataRecord>(
     const id = Math.random().toString(32).slice(2).toUpperCase()
 
     const style: CSSProperties = {
-      width: ctx?.previewing ? options?.width || 'auto' : sizeOptions[options?.size || 'middle'],
-      height: ctx?.previewing ? options?.height || 'auto' : 'auto',
+      width: '100%',
       borderRadius: options?.radius,
-      maxWidth: !options?.height && !options?.width ? '150px' : 'auto',
-      display: 'block',
-      margin: 'auto',
       objectFit: 'contain',
       transform: `rotate(${options?.rotate || 0}deg)`,
       cursor: options?.preview ? 'pointer' : 'unset',
@@ -93,13 +92,19 @@ export function renderImageColumn<T = DataRecord>(
     else {
       const url = (record as Record<string, string>)[parsedKey] || value
       return url
-        ? (<img
+        ? (<div
           id={id}
           onMouseenter={() => options?.preview && !ctx?.previewing && showPreview(id, url)}
           onMouseleave={() => options?.preview && !ctx?.previewing && closePreview(id)}
-          src={url}
-          style={style}
-        />)
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: `${options?.size}px`,
+          }}
+        >
+             <img alt="image" style={style} src={url}></img>
+        </div>)
         : <></>
     }
   }

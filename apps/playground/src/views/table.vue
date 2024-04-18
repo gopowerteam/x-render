@@ -133,9 +133,10 @@ const columns = defineColumns<t>([{
 }, {
   key: 'image',
   title: 'image',
-  visiable: () => a1.value === '2',
+  // visiable: () => a1.value === '2',
   render: r => r.image({
     preview: true,
+    size: 100,
   }),
 }, { key: 'a', title: 'a' }, { key: 'b', title: 'b' }, { key: 'c', title: 'c' }, { key: 'd', title: 'd' }, { key: 'e', title: 'e' }, {
   key: 'name',

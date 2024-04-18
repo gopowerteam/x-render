@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.105
+
+### Patch Changes
+
+- update image table item size
+
 ## 0.0.104
 
 ### Patch Changes
