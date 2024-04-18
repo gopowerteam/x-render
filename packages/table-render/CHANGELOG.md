@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.106
+
+### Patch Changes
+
+- image column set max height
+
 ## 0.0.105
 
 ### Patch Changes

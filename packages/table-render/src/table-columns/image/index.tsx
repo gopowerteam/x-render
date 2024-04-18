@@ -65,7 +65,8 @@ export function renderImageColumn<T = DataRecord>(
     const id = Math.random().toString(32).slice(2).toUpperCase()
 
     const style: CSSProperties = {
-      width: '100%',
+      maxWidth: '100%',
+      maxHeight: '100%',
       borderRadius: options?.radius,
       objectFit: 'contain',
       transform: `rotate(${options?.rotate || 0}deg)`,
