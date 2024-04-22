@@ -23,7 +23,7 @@
   </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .modal-fade-enter-active,
   .modal-fade-leave-active{
     transition: opacity 0.5s ease;
@@ -37,8 +37,17 @@
   .modal-fade-leave-to{
     opacity: 0;
 
-    &:deep(.modal-content.drawer-mode){
+    &:deep(.modal-content.drawer-mode.left-position){
+      transform: translate3d(-100%,0,0);
+    }
+    &:deep(.modal-content.drawer-mode.right-position){
       transform: translate3d(100%,0,0);
+    }
+    &:deep(.modal-content.drawer-mode.top-position){
+      transform: translate3d(0,-100%,0);
+    }
+    &:deep(.modal-content.drawer-mode.bottom-position){
+      transform: translate3d(0,100%,0);
     }
   }
   </style>
@@ -72,9 +81,9 @@ withDefaults(defineProps<{
   maxWidth: '90%',
   maxHeight: '90%',
   sizes: () => ({
-    small: 520,
-    middle: 860,
-    large: 1190,
+    small: '50%',
+    middle: '70%',
+    large: '90%',
   }),
   offset: () => ({ x: 0, y: 0 }),
 })

@@ -16,11 +16,13 @@ export interface OpenModalOptions {
   header?: boolean
   footer?: boolean
   width?: number | string
+  height?: number | string
   size?: 'large' | 'middle' | 'small'
   fullscreen?: boolean
   draggable?: boolean
   form?: string
   mode?: 'dialog' | 'drawer'
+  position?: 'top' | 'right' | 'bottom' | 'left'
   backgroundColor?: string
   bodyStyle?: CSSProperties
   submitText?: string

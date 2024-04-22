@@ -1,16 +1,18 @@
 <template>
-  <AForm
-    :model="formModel"
-    name="form"
-    :rules="formRules"
-    @submit-success="onSubmitSuccess"
-  >
-    <AFormItem field="a" label="123123">
-      <AInput v-model="formModel.a" />
-    </AFormItem>
-  </AForm>
-  <div v-for="i in 200" :key="i" style="width:2000px;">
-    test-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxx
+  <div style="height:355px;overflow: auto;">
+    <AForm
+      :model="formModel"
+      name="form"
+      :rules="formRules"
+      @submit-success="onSubmitSuccess"
+    >
+      <AFormItem field="a" label="123123">
+        <AInput v-model="formModel.a" />
+      </AFormItem>
+    </AForm>
+    <div v-for="i in 200" :key="i" style="width:2000px;">
+      test-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxxtest-1xxxx
+    </div>
   </div>
 </template>
 

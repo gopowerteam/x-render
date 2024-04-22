@@ -8,7 +8,7 @@
     <div
       ref="contentRef"
       class="modal-content"
-      :class="{ [`${mode}-mode`]: true }"
+      :class="{ [`${mode}-mode`]: true, [`${position}-position`]: true }"
       :style="contentStyle"
     >
       <div
@@ -198,6 +198,7 @@ const props = withDefaults (defineProps<{
   component: Component
   componentProps: Record<string, any>
   width?: number | string
+  height?: number | string
   maxWidth?: number | string
   maxHeight?: number | string
   sizes: SizeOptions
@@ -211,6 +212,7 @@ const props = withDefaults (defineProps<{
   maskClosable?: boolean
   draggable?: boolean
   mode?: 'dialog' | 'drawer'
+  position?: 'left' | 'right' | 'bottom' | 'top'
   type?: string
   offset?: { x?: number; y?: number }
   backgroundColor?: string
@@ -229,6 +231,7 @@ const props = withDefaults (defineProps<{
   esc: false,
   draggable: false,
   mode: 'dialog',
+  position: 'right',
   submitText: '确定',
   cancelText: '取消',
   maxHeight: 90,
@@ -248,6 +251,7 @@ const footerRef = shallowRef<HTMLDivElement>()
 const headerSlotRef = shallowRef<HTMLDivElement>()
 const footerSlotRef = shallowRef<HTMLDivElement>()
 const { height: wrapperHeight } = useElementSize(wrapperRef)
+const { height: contentHeight } = useElementSize(contentRef)
 const { height: headerHeight } = useElementSize(headerRef, undefined, { box: 'border-box' })
 const { height: footerHeight } = useElementSize(footerRef, undefined, { box: 'border-box' })
 const { height: headerSlotHeight } = useElementSize(headerSlotRef)
@@ -278,7 +282,19 @@ const wrapperStyle = computed(() => {
   }
 
   if (props.mode === 'drawer') {
-    styles.justifyContent = 'flex-end'
+    styles.justifyContent = ({
+      left: 'flex-start',
+      right: 'flex-end',
+      top: 'flex-start',
+      bottom: 'flex-end',
+    }[props.position]) as 'flex-start' | 'flex-end'
+
+    styles.flexDirection = ({
+      left: 'row',
+      right: 'row',
+      top: 'column',
+      bottom: 'column',
+    }[props.position]) as 'row' | 'column'
   }
 
   return styles
@@ -290,16 +306,21 @@ const wrapperStyle = computed(() => {
 const contentStyle = computed(() => {
   const styles: HTMLAttributes['style'] = {}
 
-  if (props.size) {
+  if (props.mode === 'drawer' && ['top', 'bottom'].includes(props.position)) {
+    // styles.height = formatSizeValue(props.sizes[props.size])
+    styles.maxHeight = formatSizeValue(props.maxHeight!)
+  }
+  else {
     styles.width = formatSizeValue(props.sizes[props.size])
+    styles.maxWidth = formatSizeValue(props.maxWidth!)
   }
 
   if (props.width) {
     styles.width = formatSizeValue(props.width)
   }
 
-  if (props.maxWidth) {
-    styles.maxWidth = formatSizeValue(props.maxWidth)
+  if (props.height) {
+    styles.height = formatSizeValue(props.height)
   }
 
   if (props.fullscreen) {
@@ -319,7 +340,12 @@ const contentStyle = computed(() => {
 
   if (props.mode === 'drawer') {
     styles.borderRadius = 0
-    styles.height = '100%'
+    if (['left', 'right'].includes(props.position)) {
+      styles.height = '100%'
+    }
+    else {
+      styles.width = '100%'
+    }
   }
 
   if (props.offset && props.mode === 'dialog') {
@@ -355,7 +381,10 @@ const bodyStyle = computed<CSSProperties>(() => {
 
   if (props.mode === 'drawer') {
     styles.maxHeight = 'unset'
-    styles.height = `${wrapperHeight.value - extraHeight}px`
+
+    if (['left', 'right'].includes(props.position)) {
+      styles.height = `${wrapperHeight.value - extraHeight}px`
+    }
   }
 
   if (props.fullscreen) {

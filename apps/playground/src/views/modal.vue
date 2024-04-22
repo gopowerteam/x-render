@@ -20,11 +20,12 @@ function onClick() {
     content: 'asdasd',
   }, {
     mode: 'dialog',
+    position: 'right',
     title: 'asdasd',
     footer: true,
     submitText: '123',
     bodyStyle: {
-      padding: '100px',
+      // padding: '100px',
     },
   })
 
