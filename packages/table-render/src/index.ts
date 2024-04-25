@@ -1,3 +1,5 @@
+import 'vue/jsx'
+
 export * from './table-render'
 export * from './interfaces'
 export * from './hooks'

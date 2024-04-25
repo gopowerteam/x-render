@@ -10,7 +10,13 @@ export function getColumnValue<T>(
   record: T,
   column: TableColumnOptions<T>,
 ): any {
-  return (column.index || column.key)
-    .split('.')
-    .reduce<any>((r, i) => r?.[i], record)
+  if (column.index) {
+    column.index
+      .split('.')
+      .reduce<any>((r, i) => r?.[i], record)
+  }
+  else {
+    return [column.key]
+      .reduce<any>((r, i) => r?.[i], record)
+  }
 }

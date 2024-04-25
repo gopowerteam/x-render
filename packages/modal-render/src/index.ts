@@ -1,4 +1,5 @@
 import 'virtual:uno.css'
+import 'vue/jsx'
 import ModalProvider from './components/modal-provider.vue'
 import ModalContainer from './components/modal-container.vue'
 import ModalFooter from './components/modal-footer.vue'

@@ -11,9 +11,8 @@ export function setColumnValue<T = DataRecord>(
   column: TableColumnOptions<T>,
   value: any,
 ): any {
-  const [key, ...rest] = (column.index || column.key).split('.').reverse()
+  const [key, ...rest] = column.index ? column.index.split('.').reverse() : [column.key]
+  const props = rest.reverse().reduce((r, i) => r?.[i as any], record)
 
-  const props = rest.reverse().reduce((r, i) => r?.[i], record)
-
-  props[key] = value
+  props[key as string | number] = value
 }

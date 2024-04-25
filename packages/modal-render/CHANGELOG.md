@@ -1,5 +1,11 @@
 # @gopowerteam/modal-render
 
+## 0.0.40
+
+### Patch Changes
+
+- upgrade vue 3.3 to 3.4
+
 ## 0.0.39
 
 ### Patch Changes

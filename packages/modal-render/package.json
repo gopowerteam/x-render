@@ -1,7 +1,7 @@
 {
   "name": "@gopowerteam/modal-render",
   "type": "module",
-  "version": "0.0.39",
+  "version": "0.0.40",
   "author": {
     "name": "zhuchentong",
     "email": "2037630@gmail.com"
@@ -56,6 +56,7 @@
     "@unocss/preset-icons": "^0.59.4",
     "@unocss/preset-uno": "^0.59.4",
     "@vitejs/plugin-vue": "5.0.4",
+    "@vitejs/plugin-vue-jsx": "^3.1.0",
     "@vue/compiler-sfc": "3.4.23",
     "@vueuse/core": "^10.9.0",
     "less": "^4.2.0",

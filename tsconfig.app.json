@@ -13,11 +13,7 @@
     "node_modules/**"
   ],
   "compilerOptions": {
-    "composite": true,
     "baseUrl": ".",
-    "jsx": "preserve",
-    "jsxImportSource": "vue",
-    "jsxFactory": "h",
     "skipLibCheck": true,
   },
 }

@@ -1,5 +1,13 @@
 # @gopowerteam/form-render
 
+## 0.0.61
+
+### Patch Changes
+
+- upgrade vue 3.3 to 3.4
+- Updated dependencies
+  - @gopowerteam/modal-render@0.0.40
+
 ## 0.0.60
 
 ### Patch Changes
