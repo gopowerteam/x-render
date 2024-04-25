@@ -1,5 +1,14 @@
 # @gopowerteam/table-render
 
+## 0.0.108
+
+### Patch Changes
+
+- fixed button size
+- Updated dependencies
+  - @gopowerteam/modal-render@0.0.39
+  - @gopowerteam/form-render@0.0.60
+
 ## 0.0.107
 
 ### Patch Changes

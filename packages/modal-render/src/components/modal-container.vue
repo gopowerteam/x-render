@@ -102,15 +102,15 @@
   padding: 10px;
 
   button{
-    height: 28px;
+    height: 32px;
     line-height: 28px;
-    width: 80px;
+    min-width: 80px;
     outline: none;
     border-color: transparent;
     font-size: 14px;
     border-radius: 4px;
-    padding: 0;
-    box-sizing: content-box;
+    padding: 0 10px;
+    box-sizing: border-box;
 
     &.submit-button{
       color: #fff;
@@ -119,12 +119,19 @@
       &:hover{
         background-color: rgb(var(--primary-5, 28, 76, 207));
       }
+      &:active{
+        background-color: rgb(var(--primary-7, 14,66,210));
+      }
     }
     &.cancel-button{
       color: rgb(var(--color-text-2, 78, 89, 105));
       background-color: var(--color-fill-1, #f5f5f5);
 
       &:hover{
+        background-color: var(--color-fill-3, #e5e6eb);
+      }
+
+      &:active{
         background-color: var(--color-fill-4, #c9cdd4);
       }
     }

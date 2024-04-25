@@ -1,5 +1,11 @@
 # @gopowerteam/modal-render
 
+## 0.0.39
+
+### Patch Changes
+
+- fixed button size
+
 ## 0.0.38
 
 ### Patch Changes

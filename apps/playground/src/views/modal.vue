@@ -23,7 +23,7 @@ function onClick() {
     position: 'right',
     title: 'asdasd',
     footer: true,
-    submitText: '123',
+    submitText: '1231231231239871928739123',
     bodyStyle: {
       // padding: '100px',
     },

@@ -52,8 +52,8 @@ const form = defineForm([{
       defaultExpandAll: true,
     },
     slots: {
-      'footer': () => <div>123</div> as any,
-      'tree-slot-title': () => <div>123</div>,
+      'footer': () => (<div>123</div>),
+      'tree-slot-title': () => (<div>123</div>),
     },
   }),
 }, {

@@ -55,15 +55,15 @@
   padding: 0 10px;
 
   button{
-    height: 28px;
+    height: 32px;
     line-height: 28px;
-    width: 80px;
+    min-width: 80px;
     outline: none;
     border-color: transparent;
     font-size: 14px;
     border-radius: 4px;
     padding: 0;
-    box-sizing: content-box;
+    box-sizing: border-box;
 
     &.submit-button{
       color: #fff;
@@ -71,6 +71,9 @@
 
       &:hover{
         background-color: rgb(var(--primary-5, 28, 76, 207));
+      }
+      &:active{
+        background-color: rgb(var(--primary-7, 14,66,210));
       }
     }
     &.cancel-button{
