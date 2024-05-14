@@ -3,6 +3,10 @@
   <button @click="onClick">
     12312
   </button>
+
+  <button @click="onShowLoading">
+    showLoading
+  </button>
 </template>
 
 <style scoped>
@@ -32,5 +36,14 @@ function onClick() {
   instance.then((a: any) => {
     console.log(a)
   })
+}
+
+function onShowLoading() {
+  const a = modal.showLoading({
+    text: 'test221',
+  })
+  setTimeout(() => {
+    a()
+  }, 3000)
 }
 </script>

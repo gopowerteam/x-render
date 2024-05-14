@@ -7,6 +7,11 @@ export interface SizeOptions {
   large: string | number
 }
 
+export interface ShowLoadingOptions {
+  duration?: number
+  text?: string
+}
+
 export interface OpenModalOptions {
   closeable?: boolean
   esc?: boolean
@@ -51,4 +56,6 @@ export interface ModalActions {
   close: (id: string, data?: any) => void
   closeAll: () => void
   addEventListener: (id: string, event: 'submit', callback: (modal: ReturnType<typeof useModal>) => void) => void
+  showLoading: (id?: string, options?: ShowLoadingOptions) => () => void
+  hideLoading: (id?: string) => void
 }

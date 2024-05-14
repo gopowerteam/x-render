@@ -2,7 +2,7 @@ import type { Component } from 'vue'
 import { getCurrentInstance, inject } from 'vue'
 import { findContainer } from '../utils/find-container'
 import { ModalKey } from '../constants'
-import type { OpenModalOptions } from '../interfaces'
+import type { OpenModalOptions, ShowLoadingOptions } from '../interfaces'
 
 export function useModal() {
   const modal = inject(ModalKey)
@@ -65,7 +65,7 @@ export function useModal() {
 
       modal.closeAll()
     },
-    showLoading() {
+    showLoading(options?: ShowLoadingOptions) {
       if (!modal) {
         throw new Error('Not Found Modal Provider Component')
       }
@@ -73,13 +73,7 @@ export function useModal() {
       const container = findContainer(ctx, 'ModalContainer')
       const id = container?.props?.id as string | undefined
 
-      if (!id) {
-        throw new Error('Not Found Current Modal Container')
-      }
-
-      if (container?.exposed) {
-        container?.exposed.showLoading()
-      }
+      return modal.showLoading(id, options)
     },
     hideLoading() {
       if (!modal) {
@@ -89,13 +83,7 @@ export function useModal() {
       const container = findContainer(ctx, 'ModalContainer')
       const id = container?.props?.id as string | undefined
 
-      if (!id) {
-        throw new Error('Not Found Current Modal Container')
-      }
-
-      if (container?.exposed) {
-        container?.exposed.hideLoading()
-      }
+      return modal.hideLoading(id)
     },
     confirm(props: {
       title?: string

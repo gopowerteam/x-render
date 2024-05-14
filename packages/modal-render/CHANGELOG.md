@@ -1,5 +1,11 @@
 # @gopowerteam/modal-render
 
+## 0.0.41
+
+### Patch Changes
+
+- add show loading function
+
 ## 0.0.40
 
 ### Patch Changes

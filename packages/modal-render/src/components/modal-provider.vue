@@ -65,10 +65,11 @@ import {
   triggerRef,
 } from 'vue'
 import { ModalKey } from '../constants'
-import type { ModalElement, OpenModalOptions, SizeOptions } from '../interfaces'
+import type { ModalElement, OpenModalOptions, ShowLoadingOptions, SizeOptions } from '../interfaces'
 import type { useModal } from '../hooks/use-modal'
 import ModalContainer from './modal-container.vue'
 import ModalDialog from './modal-dialog.vue'
+import ModalLoading from './modal-loading.vue'
 
 withDefaults(defineProps<{
   appendToBody: boolean | string
@@ -209,19 +210,38 @@ function onEvent(id: string, event: string) {
   }
 }
 
-function showModalLoading(id: string) {
+function showModalLoading(id?: string, options?: ShowLoadingOptions) {
   if (!instance) {
     return
   }
 
-  const [container] = instance.refs[`modal-container_${id}`] as any[]
+  const [container] = (instance.refs[`modal-container_${id}`] || []) as any[]
 
   if (container) {
     return container.showLoading()
   }
+  else {
+    const { close } = openModal(ModalLoading, {
+      text: options?.text,
+    }, {
+      footer: false,
+      header: false,
+      closeable: false,
+      backgroundColor: 'transparent',
+    })
+
+    if (options?.duration) {
+      setTimeout(() => {
+        close()
+      },
+      options?.duration)
+    }
+
+    return close
+  }
 }
 
-function hideModalLoading(id: string) {
+function hideModalLoading(id?: string) {
   if (!instance) {
     return
   }
@@ -249,6 +269,8 @@ provide(ModalKey, {
   close: closeModal,
   closeAll: closeAllModal,
   addEventListener,
+  showLoading: showModalLoading,
+  hideLoading: hideModalLoading,
 })
 
 defineExpose({
