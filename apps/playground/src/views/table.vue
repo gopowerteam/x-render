@@ -131,6 +131,15 @@ const columns = defineColumns<t>([{
   fixed: 'left',
   sortable: 'desc',
 }, {
+  key: 'price',
+  title: 'price',
+  index: 'price.value',
+  render: r => r.currency({
+    inputUnit: '分',
+    outputUnit: '元',
+    precision: 2,
+  }),
+}, {
   key: 'image',
   title: 'image',
   // visiable: () => a1.value === '2',
@@ -245,6 +254,9 @@ const onTableLoad = defineTableLoad(({ form, update, page, sort }) => {
         name: i,
         age: i === 3 ? i.toString().repeat(200) : i.toString(),
         text: i,
+        price: {
+          value: 10099,
+        },
         image: 'https://lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg',
         tags: ['1', '22', '33'],
       })))

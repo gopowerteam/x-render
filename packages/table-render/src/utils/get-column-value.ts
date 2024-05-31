@@ -11,7 +11,7 @@ export function getColumnValue<T>(
   column: TableColumnOptions<T>,
 ): any {
   if (column.index) {
-    column.index
+    return column.index
       .split('.')
       .reduce<any>((r, i) => r?.[i], record)
   }
