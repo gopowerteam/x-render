@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.111
+
+### Patch Changes
+
+- fixed colunm index config
+
 ## 0.0.110
 
 ### Patch Changes
