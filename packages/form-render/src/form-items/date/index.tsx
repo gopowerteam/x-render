@@ -1,3 +1,6 @@
+import type {
+  ShortcutType,
+} from '@arco-design/web-vue'
 import {
   DatePicker,
   MonthPicker,
@@ -63,6 +66,7 @@ export function renderDateItem<T = DataRecord>(options?: RenderDateItemOptions):
             v-model={data[form.key as keyof T]}
             disabled-date={disabledMethod}
             format={options?.labelFormat}
+            shortcuts={options?.shortcuts}
             value-format={options?.valueFormat}></DatePicker>
         )
     }
@@ -76,4 +80,5 @@ export interface RenderDateItemOptions {
   type?: 'date' | 'year' | 'quarter' | 'month' | 'week'
   valueFormat?: string
   labelFormat?: string
+  shortcuts?: ShortcutType[]
 }

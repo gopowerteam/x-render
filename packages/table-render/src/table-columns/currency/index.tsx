@@ -9,6 +9,8 @@ export interface CurrencyColumnOptions {
   inputUnit?: CurrencyUnit
   outputUnit?: CurrencyUnit
   thousands?: boolean
+  zeroString?: string // 当值为0时，是否使用字符串代替
+  nullString?: string
 }
 
 const defaultOptions: Partial<CurrencyColumnOptions> = {
@@ -54,6 +56,14 @@ export function renderCurrencyColumn<T = DataRecord>(
 
   // 千分位显示
   const formatter = (value: string | number) => {
+    if (options?.zeroString !== undefined && Number(value) === 0) {
+      return options?.zeroString
+    }
+
+    if (options?.nullString !== undefined && isNaN(Number(value))) {
+      return options?.nullString
+    }
+
     const data = transformToOutputUnit(Number(value))
     return options?.thousands ? toThousands(data) : data
   }

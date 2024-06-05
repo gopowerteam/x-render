@@ -1,3 +1,4 @@
+import type { ShortcutType } from '@arco-design/web-vue'
 import { RangePicker } from '@arco-design/web-vue'
 import dayjs from 'dayjs'
 import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
@@ -45,6 +46,7 @@ export function renderDateRangeItem<T=DataRecord>(options?: RenderDateRangeItemO
           onSelect={onSelect}
           onChange={onChange}
           mode={options?.type}
+          shortcuts={options?.shortcuts}
           allowClear={options?.clearable}
           disabled-date={disabledMethod}
           format={options?.labelFormat}
@@ -62,4 +64,5 @@ export interface RenderDateRangeItemOptions {
   valueFormat?: string
   labelFormat?: string
   disabledDate?: (value: string[], date: Date) => boolean
+  shortcuts?: ShortcutType[]
 }
