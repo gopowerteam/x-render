@@ -464,6 +464,7 @@ export const TableRender = defineComponent({
           <div class="table-render-content">
             {this.renders.renderTableForm()}
             {this.renders.renderTableActions()}
+            {this.$slots.header && this.$slots.header()}
             {renderTable()}
             {this.renders.renderTablePagination()}
           </div>
