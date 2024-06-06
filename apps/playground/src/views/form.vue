@@ -22,6 +22,7 @@
 </style>
 
 <script setup lang="tsx">
+import dayjs from 'dayjs'
 import { FormRender, defineForm } from '@gopowerteam/form-render'
 
 const form = defineForm([{
@@ -59,7 +60,49 @@ const form = defineForm([{
 }, {
   key: 'xxx1',
   title: 'xx',
-  render: r => r.dateRange(),
+  render: r => r.dateRange({
+    shortcuts: [{
+      label: 'next 2 days',
+      value: () => [dayjs(), dayjs().add(2, 'day')].map(x => x.toDate()),
+    },
+    {
+      label: 'next 7 days',
+      value: () => [dayjs(), dayjs().add(1, 'month')],
+    },
+    {
+      label: 'next 30 days',
+      value: () => [dayjs(), dayjs().add(1, 'month')].map(x => x.toDate()),
+    },
+    {
+      label: 'next 6 months',
+      value: () => [dayjs(), dayjs().add(6, 'month')].map(x => x.toDate()),
+    },
+    {
+      label: 'next 12 months',
+      value: () => [dayjs(), dayjs().add(1, 'year')].map(x => x.toDate()),
+    },
+    {
+      label: 'next 10 years',
+      value: () => [dayjs(), dayjs().add(10, 'year')].map(x => x.toDate()),
+    }],
+  }),
+}, {
+  key: 'xxx2',
+  title: 'xx',
+  render: r => r.date({
+    shortcuts: [{
+      label: '今天',
+      value: () => dayjs(),
+    },
+    {
+      label: '昨天',
+      value: () => dayjs().subtract(1, 'day').toDate(),
+    },
+    {
+      label: 'next 30 days',
+      value: () => dayjs().toDate(),
+    }],
+  }),
 
 }, {
   key: 'amount',

@@ -12,6 +12,7 @@
     "@gopowerteam/form-render": "workspace:*",
     "@gopowerteam/modal-render": "workspace:*",
     "@gopowerteam/table-render": "workspace:*",
+    "dayjs": "^1.11.11",
     "less": "^4.2.0",
     "vue": "^3.2.47",
     "vue-router": "^4.2.5"
