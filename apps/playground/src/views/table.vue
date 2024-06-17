@@ -82,6 +82,7 @@ function b() {
 const form = defineForm<t>([{
   key: 'age',
   title: 'age',
+  hideLabel: true,
   render: r => r.input({ type: 'number' }),
   rule: [{
     required: true,
