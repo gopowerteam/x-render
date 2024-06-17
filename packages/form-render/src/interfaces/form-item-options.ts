@@ -1,4 +1,5 @@
 import type { FieldRule } from '@arco-design/web-vue'
+import type { CSSProperties } from 'vue'
 import type { FormItemRenders } from '../form-items'
 
 /**
@@ -12,6 +13,9 @@ export interface FormItemOptions<T = Record<string, any>> {
   group?: string | string[]
   visiable?: boolean | ((record: T) => boolean)
   span?: number
+  hideLabel?: boolean
+  labelStyle?: CSSProperties
+  contentStyle?: CSSProperties
   rule?: FieldRule | FieldRule[]
   render?: FormItemRender<T>
 }

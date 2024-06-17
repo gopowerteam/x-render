@@ -34,6 +34,9 @@ export function renderFormItem(source: DataRecord, options: FormItemOptions) {
     {
       field: options.key,
       label: options.title,
+      hideLabel: options.hideLabel,
+      labelColStyle: options.labelStyle,
+      wrapperColStyle: options.contentStyle,
     },
 
     toRenderTemplate(source, options),
