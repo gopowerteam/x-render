@@ -272,6 +272,8 @@ export const TableRender = defineComponent({
       if (options?.reset) {
         pageService && pageService.reset()
         sortService && sortService.reset()
+
+        tableInstance.value?.resetSorters()
       }
 
       const formSource = { ...formInstance.value?.formSource || {} }
