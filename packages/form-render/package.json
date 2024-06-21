@@ -1,7 +1,7 @@
 {
   "name": "@gopowerteam/form-render",
   "type": "module",
-  "version": "0.0.65",
+  "version": "0.0.66",
   "author": {
     "name": "zhuchentong",
     "email": "2037630@gmail.com"
@@ -15,14 +15,11 @@
   "bugs": {
     "url": "https://github.com/gopowerteam/x-render/issues"
   },
-  "main": "./dist/cjs/index.cjs",
-  "module": "./dist/es/index.mjs",
-  "types": "./dist/es/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/es/index.d.ts",
-      "import": "./dist/es/index.mjs",
-      "require": "./dist/cjs/index.cjs"
+      "require": "./dist/cjs/index.cjs",
+      "import": "./dist/es/index.mjs"
     },
     "./es": {
       "types": "./dist/es/index.d.ts",
@@ -38,6 +35,9 @@
     },
     "./*": "./*"
   },
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/es/index.mjs",
+  "types": "./dist/es/index.d.ts",
   "files": [
     "dist",
     "README.md"
@@ -48,14 +48,14 @@
     "npm:publish": "npm run build && npm publish --access publish"
   },
   "peerDependencies": {
-    "vue": "^3.0.0",
     "@arco-design/web-vue": "^2.52.1",
-    "@gopowerteam/modal-render": "^0.0.41"
+    "@gopowerteam/modal-render": "^0.0.42",
+    "vue": "^3.0.0"
   },
   "devDependencies": {
     "@arco-design/web-vue": "^2.55.1",
-    "@iconify-json/icon-park-outline": "^1.1.15",
     "@gopowerteam/modal-render": "workspace:*",
+    "@iconify-json/icon-park-outline": "^1.1.15",
     "@types/node": "18.16.0",
     "@unocss/preset-icons": "^0.59.4",
     "@unocss/preset-uno": "^0.59.4",

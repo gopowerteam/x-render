@@ -1,7 +1,7 @@
 {
   "name": "@gopowerteam/table-render",
   "type": "module",
-  "version": "0.0.115",
+  "version": "0.0.116",
   "author": {
     "name": "zhuchentong",
     "email": "2037630@gmail.com"
@@ -15,14 +15,11 @@
   "bugs": {
     "url": "https://github.com/gopowerteam/x-render/issues"
   },
-  "main": "./dist/cjs/index.cjs",
-  "module": "./dist/es/index.mjs",
-  "types": "./dist/es/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/es/index.d.ts",
-      "import": "./dist/es/index.mjs",
-      "require": "./dist/cjs/index.cjs"
+      "require": "./dist/cjs/index.cjs",
+      "import": "./dist/es/index.mjs"
     },
     "./es": {
       "types": "./dist/es/index.d.ts",
@@ -37,12 +34,15 @@
       "import": "./dist/style.css"
     },
     "./resolver": {
+      "types": "./dist/es/resolver.d.ts",
       "require": "./dist/cjs/resolver.cjs",
-      "import": "./dist/es/resolver.mjs",
-      "types": "./dist/es/resolver.d.ts"
+      "import": "./dist/es/resolver.mjs"
     },
     "./*": "./*"
   },
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/es/index.mjs",
+  "types": "./dist/es/index.d.ts",
   "files": [
     "dist",
     "README.md"
@@ -54,16 +54,17 @@
   },
   "peerDependencies": {
     "@arco-design/web-vue": "^2.52.1",
-    "@gopowerteam/form-render": "^0.0.65",
-    "@gopowerteam/modal-render": "^0.0.41",
+    "@gopowerteam/form-render": "^0.0.66",
+    "@gopowerteam/modal-render": "^0.0.42",
     "vue": "^3.0.0"
   },
+  "dependencies": {},
   "devDependencies": {
-    "@gopowerteam/request": "latest",
     "@arco-design/web-vue": "^2.55.1",
     "@arco-plugins/vite-vue": "^1.4.5",
     "@gopowerteam/form-render": "workspace:*",
     "@gopowerteam/modal-render": "workspace:*",
+    "@gopowerteam/request": "latest",
     "@iconify-json/icon-park-outline": "^1.1.15",
     "@types/node": "18.16.0",
     "@unocss/preset-icons": "^0.59.4",
@@ -72,18 +73,17 @@
     "@vitejs/plugin-vue-jsx": "^3.1.0",
     "@vue/compiler-sfc": "3.4.23",
     "@vueuse/core": "^10.9.0",
+    "exceljs": "^4.4.0",
     "less": "^4.2.0",
     "typescript": "5.4.5",
     "unocss": "^0.59.4",
     "vite": "5.2.10",
     "vite-plugin-dts": "^3.8.3",
     "vue": "3.4.23",
-    "vue-tsc": "2.0.14",
-    "exceljs": "^4.4.0"
+    "vue-tsc": "2.0.14"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
     "access": "public"
-  },
-  "dependencies": {}
+  }
 }

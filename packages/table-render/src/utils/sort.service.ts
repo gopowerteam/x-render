@@ -3,10 +3,12 @@ import type { SortableOptions } from '../interfaces'
 
 export class SortService implements RequestPlugin, SortableOptions {
   private sort: { [key: string]: 'asc' | 'desc' } = {}
+  private readonly defaultSort = {}
 
-  constructor(data?: Record<string, 'desc' | 'asc'>) {
+  constructor(data?: Record<string, 'asc' | 'desc'>) {
     if (data) {
       this.sort = data
+      this.defaultSort = data
     }
   }
 
@@ -51,7 +53,7 @@ export class SortService implements RequestPlugin, SortableOptions {
    * 重置分页数据
    */
   public reset() {
-    this.sort = {}
+    this.sort = this.defaultSort || {}
   }
 
   /**
