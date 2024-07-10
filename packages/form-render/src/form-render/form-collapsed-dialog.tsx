@@ -67,7 +67,14 @@ export default defineComponent({
   render() {
     const defaultGroup = this.groupForms.find(x => x.group === this.activeTab)
     if (!this.groups.length) {
-      return <FormRender form={this.formItems} ref={(instance: any) => defaultGroup!.instance = instance}></FormRender>
+      return <>
+        <FormRender form={this.formItems} ref={(instance: any) => defaultGroup!.instance = instance}></FormRender>
+        <Divider></Divider>
+        <div class="flex items-center justify-between space-x-2">
+          <Button type="secondary" size="large" onClick={this.onReset}>重置</Button>
+          <Button class="w-100px" type="primary" size="large" onClick={this.onSubmit}>搜索</Button>
+        </div>
+      </>
     }
     else {
       return <Tabs v-model:active-key={this.activeTab}>
@@ -75,9 +82,9 @@ export default defineComponent({
            <TabPane title={item.group} key={item.group}>
             <FormRender form={item.form} value={this.value} ref={(instance: any) => item.instance = instance}></FormRender>
             <Divider></Divider>
-            <div class="flex items-center justify-end space-x-2">
-              <Button type="primary" size="large" onClick={this.onSubmit}>搜索</Button>
+            <div class="flex items-center justify-between space-x-2">
               <Button type="secondary" size="large" onClick={this.onReset}>重置</Button>
+              <Button class="w-100px" type="primary" size="large" onClick={this.onSubmit}>搜索</Button>
             </div>
            </TabPane>
         ))}

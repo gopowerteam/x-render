@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.68
+
+### Patch Changes
+
+- update form dialog button
+
 ## 0.0.67
 
 ### Patch Changes
