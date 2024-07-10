@@ -1,5 +1,12 @@
 # @gopowerteam/table-render
 
+## 0.0.120
+
+### Patch Changes
+
+- Updated dependencies
+  - @gopowerteam/form-render@0.0.69
+
 ## 0.0.119
 
 ### Patch Changes

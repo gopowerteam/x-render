@@ -29,7 +29,7 @@ const form = defineForm([{
   key: 'xxx',
   title: 'xxx',
   collapsed: true,
-  group: ['xx'],
+  // group: ['xx'],
   render: r => r.input(),
   rule: [{
     required: true,

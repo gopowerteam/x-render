@@ -68,7 +68,7 @@ export default defineComponent({
     const defaultGroup = this.groupForms.find(x => x.group === this.activeTab)
     if (!this.groups.length) {
       return <>
-        <FormRender form={this.formItems} ref={(instance: any) => defaultGroup!.instance = instance}></FormRender>
+        <FormRender form={this.formItems} value={this.value} ref={(instance: any) => defaultGroup!.instance = instance}></FormRender>
         <Divider></Divider>
         <div class="flex items-center justify-between space-x-2">
           <Button type="secondary" size="large" onClick={this.onReset}>重置</Button>
