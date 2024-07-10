@@ -1,6 +1,6 @@
 import { type PropType, defineComponent, ref } from 'vue'
-import { TabPane, Tabs } from '@arco-design/web-vue'
-import { onSubmit, useModal } from '@gopowerteam/modal-render'
+import { Button, Divider, TabPane, Tabs } from '@arco-design/web-vue'
+import { useModal } from '@gopowerteam/modal-render'
 import { type FormItemsOptions, FormRender } from '..'
 
 export default defineComponent({
@@ -8,6 +8,9 @@ export default defineComponent({
     form: {
       type: Object as PropType<FormItemsOptions>,
       required: true,
+    },
+    value: {
+      type: Object,
     },
   },
   setup(props) {
@@ -34,7 +37,7 @@ export default defineComponent({
     })
     const activeTab = ref('默认')
 
-    onSubmit(() => {
+    const onSubmit = () => {
       const group = groupForms.find(x => x.group === activeTab.value)
 
       if (group && group.instance) {
@@ -43,13 +46,22 @@ export default defineComponent({
           modal.close(formSource)
         })
       }
-    })
+    }
+
+    const onReset = () => {
+      const group = groupForms.find(x => x.group === activeTab.value)
+      if (group && group.instance) {
+        group.instance.reset()
+      }
+    }
 
     return {
       formItems,
       groups,
       groupForms,
       activeTab,
+      onSubmit,
+      onReset,
     }
   },
   render() {
@@ -61,9 +73,15 @@ export default defineComponent({
       return <Tabs v-model:active-key={this.activeTab}>
         { this.groupForms.map(item => (
            <TabPane title={item.group} key={item.group}>
-            <FormRender form={item.form} ref={(instance: any) => item.instance = instance}></FormRender>
+            <FormRender form={item.form} value={this.value} ref={(instance: any) => item.instance = instance}></FormRender>
+            <Divider></Divider>
+            <div class="flex items-center justify-end space-x-2">
+              <Button type="primary" size="large" onClick={this.onSubmit}>搜索</Button>
+              <Button type="secondary" size="large" onClick={this.onReset}>重置</Button>
+            </div>
            </TabPane>
         ))}
+
       </Tabs>
     }
   },

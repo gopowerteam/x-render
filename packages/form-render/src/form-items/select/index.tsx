@@ -118,25 +118,51 @@ export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions)
       mounted = true
     }
 
-    return (
-      <Select
-        ref={(instance: unknown) => selectInstance = (instance as ComponentPublicInstance)}
-        multiple={options.multiple}
-        v-model={data[form.key as keyof T]}
-        placeholder={options.placeholder}
-        allowClear={options.clearable}
-        allowSearch={options.searchable}
-        allow-create={options.createable}
-        maxTagCount={options.maxTagCount ?? 2}
-        onChange={onSelectChange}>
-        {Array.from(selectOptions.value.entries()).map(([value, label]) => (
-          <Option
-            key={value}
-            value={value}
-            label={label}></Option>
-        ))}
-      </Select>
-    )
+    function renderText() {
+      const value = data[form.key as keyof T]
+
+      if (options.multiple) {
+        return (
+        <span>{(value as string[]).map(item => selectOptions.value.get(item)).join(' ,')}</span>
+        )
+      }
+      else {
+        return (
+        <span>{selectOptions.value.get(value as string)}</span>
+        )
+      }
+    }
+
+    function renderComponent() {
+      return (
+        <Select
+          ref={(instance: unknown) => selectInstance = (instance as ComponentPublicInstance)}
+          multiple={options.multiple}
+          v-model={data[form.key as keyof T]}
+          placeholder={options.placeholder}
+          allowClear={options.clearable}
+          allowSearch={options.searchable}
+          allow-create={options.createable}
+          maxTagCount={options.maxTagCount ?? 2}
+          onChange={onSelectChange}>
+          {Array.from(selectOptions.value.entries()).map(([value, label]) => (
+            <Option
+              key={value}
+              value={value}
+              label={label}></Option>
+          ))}
+        </Select>
+      )
+    }
+
+    switch (form.mode) {
+      case 'text':
+        return renderText()
+      case 'component':
+      default:{
+        return renderComponent()
+      }
+    }
   }
 }
 

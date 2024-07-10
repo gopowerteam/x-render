@@ -1,5 +1,11 @@
 # @gopowerteam/modal-render
 
+## 0.0.43
+
+### Patch Changes
+
+- update form text render
+
 ## 0.0.42
 
 ### Patch Changes

@@ -3,13 +3,30 @@ import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../in
 
 export function renderTextareaItem<T=DataRecord>(options?: RenderTextareaItemOptions): FormItemRenderReturn<T> {
   return (data: T, form: FormItemOptions<T>) => {
-    return (
-      <Textarea
-        v-model={data[form.key as keyof T]}
-        placeholder={options?.placeholder}
-        autoSize={options?.autosize}
-        maxLength={options?.maxLength}></Textarea>
-    )
+    function renderText() {
+      return (
+        <span>{data[form.key as keyof T]}</span>
+      )
+    }
+
+    function renderComponent() {
+      return (
+        <Textarea
+          v-model={data[form.key as keyof T]}
+          placeholder={options?.placeholder}
+          autoSize={options?.autosize}
+          maxLength={options?.maxLength}></Textarea>
+      )
+    }
+
+    switch (form.mode) {
+      case 'text':
+        return renderText()
+      case 'component':
+      default:{
+        return renderComponent()
+      }
+    }
   }
 }
 

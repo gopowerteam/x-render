@@ -17,6 +17,7 @@ export interface FormItemOptions<T = Record<string, any>> {
   labelStyle?: CSSProperties
   contentStyle?: CSSProperties
   rule?: FieldRule | FieldRule[]
+  mode?: 'component' | 'text'
   render?: FormItemRender<T>
 }
 

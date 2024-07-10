@@ -38,7 +38,7 @@ export default defineConfig({
       entryRoot: resolve(__dirname, 'src'),
       outDir: ['dist/cjs', 'dist/es'],
       copyDtsFiles: false,
-      tsconfigPath: './tsconfig.dts.json',
+      tsconfigPath: './tsconfig.json',
     }),
     arco({
       style: 'css',

@@ -2,6 +2,7 @@ import { Cascader, type CascaderOption } from '@arco-design/web-vue'
 import { type ComponentPublicInstance, type Ref, isRef, ref } from 'vue'
 import { watchOnce } from '@vueuse/core'
 import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
+import { findTreePathByKey, findTreePathByKeyPath } from '../../utils/tree'
 
 const cache = new WeakMap()
 
@@ -114,20 +115,84 @@ export function renderCascaderItem<T=DataRecord>(options: RenderCascaderItemOpti
       mounted = true
     }
 
-    return (
-      <Cascader
-      pathMode={options.pathMode}
-        ref={instance => selectInstance = (instance as ComponentPublicInstance)}
-        multiple={options.multiple}
-        v-model={data[form.key as keyof T]}
-        placeholder={options.placeholder}
-        allowClear={options.clearable}
-        allowSearch={options.searchable}
-        maxTagCount={options.maxTagCount ?? 2}
-        onChange={onSelectChange}
-        options={selectOptions.value}>
-      </Cascader>
-    )
+    function renderText() {
+      const value = data[form.key as keyof T]
+
+      const findPathByKey = (key: string) => {
+        const items = findTreePathByKey({
+          data: selectOptions.value,
+          labelProp: 'label',
+          valueProp: 'value',
+          key,
+        })
+
+        return items.map(x => x.label).join('/')
+      }
+
+      const findPathByPath = (path: string[]) => {
+        const items = findTreePathByKeyPath({
+          data: selectOptions.value,
+          labelProp: 'label',
+          valueProp: 'value',
+          path,
+        })
+
+        return items.map(x => x.label).join('/')
+      }
+
+      switch (true) {
+        case !options.pathMode && !options.multiple:{
+          const labelPath = findPathByKey(value as string)
+          return (<span>{labelPath}</span>)
+        }
+        case !options.pathMode && options.multiple:{
+          const list = (value as string[]).map((key) => {
+            return findPathByKey(key)
+          })
+
+          return (<span>{list.join(', ')}</span>)
+        }
+        case options.pathMode && !options.multiple:{
+          const labelPath = findPathByPath(value as string[])
+          return (<span>{labelPath}</span>)
+        }
+        case options.pathMode && options.multiple:{
+          const list = (value as string[][]).map((key) => {
+            return findPathByPath(key)
+          })
+
+          return (<span>{list.join(', ')}</span>)
+        }
+        default:
+          return <span></span>
+      }
+    }
+
+    function renderComponent() {
+      return (
+        <Cascader
+          pathMode={options.pathMode}
+          ref={instance => selectInstance = (instance as ComponentPublicInstance)}
+          multiple={options.multiple}
+          v-model={data[form.key as keyof T]}
+          placeholder={options.placeholder}
+          allowClear={options.clearable}
+          allowSearch={options.searchable}
+          maxTagCount={options.maxTagCount ?? 2}
+          onChange={onSelectChange}
+          options={selectOptions.value}>
+        </Cascader>
+      )
+    }
+
+    switch (form.mode) {
+      case 'text':
+        return renderText()
+      case 'component':
+      default:{
+        return renderComponent()
+      }
+    }
   }
 }
 

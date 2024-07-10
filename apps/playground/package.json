@@ -7,7 +7,7 @@
     "dev": "vite"
   },
   "dependencies": {
-    "@arco-design/web-vue": "^2.52.1",
+    "@arco-design/web-vue": "^2.55.3",
     "@arco-themes/vue-tuboshi": "^0.0.12",
     "@gopowerteam/form-render": "workspace:*",
     "@gopowerteam/modal-render": "workspace:*",

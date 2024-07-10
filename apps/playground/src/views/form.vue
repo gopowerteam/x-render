@@ -36,6 +36,21 @@ const form = defineForm([{
     message: 'xxx',
   }],
 }, {
+  key: 'switch',
+  title: 'switch',
+  default: false,
+  render: r => r.switch(),
+}, {
+  key: 'select',
+  title: 'select',
+  render: r => r.select({
+    multiple: true,
+    options: new Map([
+      ['a', 'aaa'],
+      ['b', 'bbb'],
+    ]),
+  }),
+}, {
   key: 'yyy',
   title: 'yyy',
   render: r => r.treeSelect({
@@ -67,7 +82,7 @@ const form = defineForm([{
     },
     {
       label: 'next 7 days',
-      value: () => [dayjs(), dayjs().add(1, 'month')],
+      value: () => [dayjs().toDate(), dayjs().add(1, 'month').toDate()],
     },
     {
       label: 'next 30 days',
@@ -90,9 +105,10 @@ const form = defineForm([{
   key: 'xxx2',
   title: 'xx',
   render: r => r.date({
+    type: 'year',
     shortcuts: [{
       label: '今天',
-      value: () => dayjs(),
+      value: () => dayjs().toDate(),
     },
     {
       label: '昨天',
@@ -116,6 +132,8 @@ const form = defineForm([{
   key: 'cascader',
   title: 'cascader',
   render: r => r.cascader({
+    pathMode: true,
+    multiple: true,
     options: getCascaderOptions,
   }),
 }])
@@ -177,22 +195,22 @@ function getCascaderOptions() {
   ]
 }
 
-let x = 0
-let y = 0
+// const x = 0
+// const y = 0
 
-function a(): Promise<Map<string, string>> {
-  return new Promise<Map<string, string>>((resolve, reject) => {
-    console.log(x++)
-    resolve(new Map<string, string>([['a', 'b'], ['c', 'd']]))
-  })
-}
+// function a(): Promise<Map<string, string>> {
+//   return new Promise<Map<string, string>>((resolve, reject) => {
+//     console.log(x++)
+//     resolve(new Map<string, string>([['a', 'b'], ['c', 'd']]))
+//   })
+// }
 
-function b() {
-  console.log(y++)
-  return new Promise<Map<string, string>>((resolve) => {
-    setTimeout(() => {
-      resolve(new Map<string, string>([['x', 'x'], ['y', 'y']]))
-    }, 2000)
-  })
-}
+// function b() {
+//   console.log(y++)
+//   return new Promise<Map<string, string>>((resolve) => {
+//     setTimeout(() => {
+//       resolve(new Map<string, string>([['x', 'x'], ['y', 'y']]))
+//     }, 2000)
+//   })
+// }
 </script>

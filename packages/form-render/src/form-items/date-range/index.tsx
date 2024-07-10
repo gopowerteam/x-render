@@ -37,22 +37,56 @@ export function renderDateRangeItem<T=DataRecord>(options?: RenderDateRangeItemO
       return options.disabledDate(dates.filter(Boolean), date)
     }
 
-    return (
-      <div>
-        <RangePicker
-          disabled-input
-          style={{ width: '300px' }}
-          v-model={data[form.key as keyof T]}
-          onSelect={onSelect}
-          onChange={onChange}
-          mode={options?.type}
-          shortcuts={options?.shortcuts}
-          allowClear={options?.clearable}
-          disabled-date={disabledMethod}
-          format={options?.labelFormat}
-          value-format={options?.valueFormat}></RangePicker>
-      </div>
-    )
+    function renderText() {
+      const range = data[form.key as keyof T] as string[] | number[] | Date[]
+      const [startDate, endDate] = range
+
+      const getDateText = (value: string | number | Date) => {
+        switch (options?.type) {
+          case 'week':
+            return (<span>{`${dayjs(value).format('YYYY年')}${dayjs(value).week()}周`}</span>)
+          case 'month':
+            return (<span>{dayjs(value).format('YYYY年MM月')}</span>)
+          case 'quarter':
+            return (<span>{`${dayjs(value).format('YYYY年')}${dayjs(value).quarter()}季度`}</span>)
+          case 'year':
+            return (<span>{dayjs(value).format('YYYY年')}</span>)
+          case 'date':
+          default:
+            return (<span>{dayjs(value).format('YYYY年MM月DD日')}</span>)
+        }
+      }
+
+      return (<span>{getDateText(startDate)} - {getDateText(endDate)}</span>)
+    }
+
+    function renderComponent() {
+      return (
+        <div>
+          <RangePicker
+            disabled-input
+            style={{ width: '300px' }}
+            v-model={data[form.key as keyof T]}
+            onSelect={onSelect}
+            onChange={onChange}
+            mode={options?.type}
+            shortcuts={options?.shortcuts}
+            allowClear={options?.clearable}
+            disabled-date={disabledMethod}
+            format={options?.labelFormat}
+            value-format={options?.valueFormat}></RangePicker>
+        </div>
+      )
+    }
+
+    switch (form.mode) {
+      case 'text':
+        return renderText()
+      case 'component':
+      default:{
+        return renderComponent()
+      }
+    }
   }
 }
 

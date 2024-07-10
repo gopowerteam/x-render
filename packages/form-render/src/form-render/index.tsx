@@ -1,5 +1,5 @@
 import { type PropType, type RendererNode, type VNode, computed, defineComponent, onMounted, provide, ref } from 'vue'
-import { Button, type FieldRule, Form, type FormInstance, FormItem, Grid, GridItem, Space } from '@arco-design/web-vue'
+import { Button, type FieldRule, Form, type FormInstance, FormItem, Grid, GridItem, Space, Tag } from '@arco-design/web-vue'
 import { IconDown, IconSearch, IconUp } from '@arco-design/web-vue/es/icon'
 import { ModalProvider } from '@gopowerteam/modal-render'
 import type { DataRecord, FormItemsOptions } from '../interfaces'
@@ -50,6 +50,11 @@ export const FormRender = defineComponent({
       type: String as PropType<'append' | 'dialog'>,
       required: false,
       default: 'append',
+    },
+    showFormResult: {
+      type: Boolean,
+      required: false,
+      default: (props: { collapsedMode: 'append' | 'dialog' }) => props.collapsedMode === 'dialog',
     },
     submitable: {
       type: Boolean,
@@ -153,9 +158,10 @@ export const FormRender = defineComponent({
     function openCollapsedDialog() {
       modalInstance.value.open(FormCollapsedDialog, {
         form: props.form,
+        value: formSource.value,
       }, {
         title: '高级搜索',
-        footer: true,
+        footer: false,
         submitText: '搜索',
       }).then((data: DataRecord) => {
         if (data) {
@@ -218,6 +224,48 @@ export const FormRender = defineComponent({
     })
   },
   render() {
+    const renderFormResult = () => {
+      if (!this.showFormResult) {
+        return
+      }
+
+      const items = this.form.filter((item) => {
+        const value = this.formSource[item.key as string]
+        return value !== null && value !== undefined
+      })
+
+      return (
+        <GridItem span={this.formColumns}>
+        <FormItem label='搜索条件'>
+         <div class="w-full mt-5px text-left">
+            <Space wrap={true} align="center">
+              {
+                items.length > 0
+                  ? items.map((item) => {
+                    return (
+                      <Tag key={item.key} closable onClose={() => this.formInstance?.resetFields(item.key as string)}>
+                        <div class="flex space-x-2">
+                          <div class="text-#999">{item.title}:</div>
+                          <div class="text-#333">
+                             {renderFormItem(this.formSource, {
+                               ...item,
+                               key: item.key as string,
+                               mode: 'text',
+                             })}
+                          </div>
+                        </div>
+                      </Tag>
+                    )
+                  })
+                  : (<div class="text-#999">暂无搜索条件</div>)
+              }
+            </Space>
+         </div>
+        </FormItem>
+      </GridItem>
+      )
+    }
+
     const renderFormActions = () => {
       const buttons: (JSX.Element | VNode<RendererNode>)[] = []
 
@@ -292,6 +340,9 @@ export const FormRender = defineComponent({
                         {renderFormItem(this.formSource, item)}
                       </GridItem>
                     ))
+                  }
+                  {
+                    renderFormResult()
                   }
                   {
                     renderFormActions()

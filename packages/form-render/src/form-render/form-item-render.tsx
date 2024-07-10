@@ -29,16 +29,22 @@ function toRenderTemplate(source: DataRecord, options: FormItemOptions) {
  * @returns
  */
 export function renderFormItem(source: DataRecord, options: FormItemOptions) {
-  return h(
-    FormItem,
-    {
-      field: options.key,
-      label: options.title,
-      hideLabel: options.hideLabel,
-      labelColStyle: options.labelStyle,
-      wrapperColStyle: options.contentStyle,
-    },
+  switch (options.mode) {
+    case 'text':
+      return h(toRenderTemplate(source, options).default)
+    case 'component':
+    default:
+      return h(
+        FormItem,
+        {
+          field: options.key,
+          label: options.title,
+          hideLabel: options.hideLabel,
+          labelColStyle: options.labelStyle,
+          wrapperColStyle: options.contentStyle,
+        },
 
-    toRenderTemplate(source, options),
-  )
+        toRenderTemplate(source, options),
+      )
+  }
 }

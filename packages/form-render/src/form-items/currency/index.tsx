@@ -1,5 +1,5 @@
-import { InputNumber } from '@arco-design/web-vue'
 import { ref, watch } from 'vue'
+import { InputNumber } from '@arco-design/web-vue'
 import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
 
 const defaultOptions: Partial<RenderCurrencyOptions> = {
@@ -67,30 +67,49 @@ export function renderCurrencyItem<T=DataRecord>(options?: RenderCurrencyOptions
       data[form.key as keyof T] = transformToOutputUnit(value) as T[keyof T]
     })
 
-    return (
-      <InputNumber
-        v-model={currentValue.value}
-        formatter={formatter}
-        parser={parser}
-        precision={options?.precision}
-        hideButton
-        read-only={options?.readonly}
-        placeholder={options?.placeholder}
-        allowClear={options?.clearable}>
-      {{
-        prefix: options?.prefix && (() => (
-          typeof options?.prefix === 'string'
-            ? (<span>{options.prefix}</span>)
-            : options!.prefix!()
-        )),
-        suffix: () => (
-          typeof options?.suffix === 'string'
-            ? (<span>{options.suffix}</span>)
-            : typeof options?.suffix === 'function' ? options.suffix() : options?.inputUnit
-        ),
-      }}
-     </InputNumber>
-    )
+    const prefix = options?.prefix && (() => (
+      typeof options?.prefix === 'string'
+        ? (<span>{options.prefix}</span>)
+        : options!.prefix!()
+    ))
+
+    const suffix = () => typeof options?.suffix === 'string'
+      ? (<span>{options.suffix}</span>)
+      : typeof options?.suffix === 'function' ? options.suffix() : options?.inputUnit
+
+    function renderText() {
+      return (
+        <span>{formatter(currentValue.value!.toString())}{suffix()}</span>
+      )
+    }
+
+    function renderComponent() {
+      return (
+          <InputNumber
+            v-model={currentValue.value}
+            formatter={formatter}
+            parser={parser}
+            precision={options?.precision}
+            hideButton
+            read-only={options?.readonly}
+            placeholder={options?.placeholder}
+            allowClear={options?.clearable}>
+          {{
+            prefix,
+            suffix,
+          }}
+         </InputNumber>
+      )
+    }
+
+    switch (form.mode) {
+      case 'text':
+        return renderText()
+      case 'component':
+      default:{
+        return renderComponent()
+      }
+    }
   }
 }
 

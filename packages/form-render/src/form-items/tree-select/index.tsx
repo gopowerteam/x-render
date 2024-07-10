@@ -3,6 +3,7 @@ import { type ComponentPublicInstance, type Ref, isRef, ref } from 'vue'
 import { watchOnce } from '@vueuse/core'
 import type { TreeProps } from '@arco-design/web-vue/es/tree/interface'
 import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
+import { findTreePathByKey } from '../../utils/tree'
 
 const cache = new WeakMap()
 
@@ -127,24 +128,62 @@ export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItem
       mounted = true
     }
 
-    return (
-      <TreeSelect
-        ref={instance => selectInstance = (instance as ComponentPublicInstance)}
-        multiple={options.multiple}
-        v-model={data[form.key as keyof T]}
-        placeholder={options.placeholder}
-        allowClear={options.clearable}
-        allowSearch={options.searchable}
-        maxTagCount={options.maxTagCount ?? 2}
-        onChange={onSelectChange}
-        filterTreeNode={filterTreeNode}
-        data={selectOptions.value}
-        fieldNames={options.fieldNames}
-        treeProps={options.treeProps}
-        >
-          {{ ...options.slots }}
-      </TreeSelect>
-    )
+    function renderText() {
+      const value = data[form.key as keyof T]
+
+      const findPathByKey = (key: string) => {
+        const [item] = findTreePathByKey({
+          data: selectOptions.value,
+          labelProp: 'title',
+          valueProp: 'key',
+          key,
+        }).reverse() || []
+
+        return item?.title
+      }
+
+      if (options.multiple) {
+        const list = (value as string[]).map((key) => {
+          return findPathByKey(key)
+        })
+
+        return (<span>{list.join(', ')}</span>)
+      }
+      else {
+        const labelPath = findPathByKey(value as string)
+        return (<span>{labelPath}</span>)
+      }
+    }
+
+    function renderComponent() {
+      return (
+        <TreeSelect
+          ref={instance => selectInstance = (instance as ComponentPublicInstance)}
+          multiple={options.multiple}
+          v-model={data[form.key as keyof T]}
+          placeholder={options.placeholder}
+          allowClear={options.clearable}
+          allowSearch={options.searchable}
+          maxTagCount={options.maxTagCount ?? 2}
+          onChange={onSelectChange}
+          filterTreeNode={filterTreeNode}
+          data={selectOptions.value}
+          fieldNames={options.fieldNames}
+          treeProps={options.treeProps}
+          >
+            {{ ...options.slots }}
+        </TreeSelect>
+      )
+    }
+
+    switch (form.mode) {
+      case 'text':
+        return renderText()
+      case 'component':
+      default:{
+        return renderComponent()
+      }
+    }
   }
 }
 
