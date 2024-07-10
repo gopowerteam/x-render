@@ -2,7 +2,6 @@
   <FormRender
     id="xxxx"
     collapsed-mode="dialog"
-    footer
     :form="form"
     layout="horizontal"
     resetable

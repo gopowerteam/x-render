@@ -191,6 +191,13 @@ export const FormRender = defineComponent({
       })
     }
 
+    function resetFormField(key: string) {
+      const formItem = props.form.find(item => item.key === key)!
+      const value = (typeof formItem.default === 'function' ? formItem.default() : formItem.default) || null
+
+      updateFormField(key, value)
+    }
+
     function resetForm() {
       formInstance.value?.resetFields()
     }
@@ -215,6 +222,7 @@ export const FormRender = defineComponent({
       formItems,
       toggleFormCollapsed,
       updateFormField,
+      resetFormField,
       updateFormSource,
       reset: resetForm,
       validate: validateForm,
@@ -231,36 +239,58 @@ export const FormRender = defineComponent({
 
       const items = this.form.filter((item) => {
         const value = this.formSource[item.key as string]
-        return value !== null && value !== undefined
+        if (value !== null && value !== undefined) {
+          return true
+        }
+
+        if (typeof item.visiable === 'boolean') {
+          return item.visiable
+        }
+
+        if (typeof item.visiable === 'function') {
+          return (item.visiable as Function)(this.formSource)
+        }
+
+        return false
       })
+
+      const resetField = (key: string) => {
+        const formItem = this.formItems.find(item => item.key === key)
+        if (formItem && !formItem?.collapsed) {
+          this.formInstance?.resetFields(key as string)
+        }
+        else {
+          this.resetFormField(key)
+        }
+      }
 
       return (
         <GridItem span={this.formColumns}>
-        <FormItem label='搜索条件'>
-         <div class="w-full mt-5px text-left">
-            <Space wrap={true} align="center">
-              {
-                items.length > 0
-                  ? items.map((item) => {
-                    return (
-                      <Tag key={item.key} closable onClose={() => this.formInstance?.resetFields(item.key as string)}>
-                        <div class="flex space-x-2">
-                          <div class="text-#999">{item.title}:</div>
-                          <div class="text-#333">
-                             {renderFormItem(this.formSource, {
-                               ...item,
-                               key: item.key as string,
-                               mode: 'text',
-                             })}
-                          </div>
-                        </div>
-                      </Tag>
-                    )
-                  })
-                  : (<div class="text-#999">暂无搜索条件</div>)
-              }
-            </Space>
-         </div>
+          <FormItem label='搜索条件'>
+            <div class="w-full mt-5px text-left">
+                <Space wrap={true} align="center">
+                  {
+                    items.length > 0
+                      ? items.map((item) => {
+                        return (
+                          <Tag key={item.key} closable onClose={() => resetField(item.key as string)}>
+                            <div class="flex space-x-2">
+                              <div class="text-#999">{item.title}:</div>
+                              <div class="text-#333">
+                                {renderFormItem(this.formSource, {
+                                  ...item,
+                                  key: item.key as string,
+                                  mode: 'text',
+                                })}
+                              </div>
+                            </div>
+                          </Tag>
+                        )
+                      })
+                      : (<div class="text-#999">暂无搜索条件</div>)
+                  }
+              </Space>
+          </div>
         </FormItem>
       </GridItem>
       )
@@ -342,10 +372,10 @@ export const FormRender = defineComponent({
                     ))
                   }
                   {
-                    renderFormResult()
+                    renderFormActions()
                   }
                   {
-                    renderFormActions()
+                    renderFormResult()
                   }
                 </Grid>
           </Form>

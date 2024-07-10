@@ -42,8 +42,10 @@ export default defineComponent({
 
       if (group && group.instance) {
         const formSource = group.instance.formSource
-        group.instance.validate().then(() => {
-          modal.close(formSource)
+        group.instance.validate().then((error: unknown) => {
+          if (!error) {
+            modal.close(formSource)
+          }
         })
       }
     }

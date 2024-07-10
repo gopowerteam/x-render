@@ -4,7 +4,7 @@ import { createColumnRender, getColumnValue } from '../../utils'
 export interface TagColumnOptions<T> {
   textColors?: string[] | ((tag: any, index: number) => string)
   backgroundColors?: string[] | ((tag: any, index: number) => string)
-  border?: string
+  border?: boolean
   radius?: number
   maxCount?: number
   minWidth?: number
@@ -24,27 +24,31 @@ export function renderTagColumn<T = DataRecord>(
 
     return (
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {value.slice(0, maxCount).map((v: string, i: number) => (
-          <span
-            style={{
-              minWidth: minWidth ? `${minWidth}px` : 'unset',
-              textAlign: 'center',
-              margin: '2px',
-              padding: '2px 5px',
-              border: `solid 2px ${options?.border || 'transparent'}`,
-              borderRadius: `${options?.radius || 0}px`,
-              color:
-                typeof textColors === 'function'
-                  ? textColors(v, i)
-                  : textColors[i % textColors.length],
-              backgroundColor:
-                typeof backgroundColor === 'function'
-                  ? backgroundColor(v, i)
-                  : backgroundColor[i % backgroundColor.length],
-            }}>
+        {value.slice(0, maxCount).map((v: string, i: number) => {
+          const textColor = typeof textColors === 'function'
+            ? textColors(v, i)
+            : textColors[i % textColors.length]
+
+          const bgColor = typeof backgroundColor === 'function'
+            ? backgroundColor(v, i)
+            : backgroundColor[i % backgroundColor.length]
+
+          return (
+            <span
+              style={{
+                minWidth: minWidth ? `${minWidth}px` : 'unset',
+                textAlign: 'center',
+                margin: '2px',
+                padding: '2px 5px',
+                border: `solid 2px ${options?.border ? textColor : 'transparent'}`,
+                borderRadius: `${options?.radius || 0}px`,
+                color: textColor,
+                backgroundColor: bgColor,
+              }}>
             {v}
-          </span>
-        ))}
+            </span>
+          )
+        })}
         {isMoreThanMax && '...'}
       </div>
     )
