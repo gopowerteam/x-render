@@ -126,10 +126,32 @@ export const FormRender = defineComponent({
       return formColumns.value - itemSpans % formColumns.value
     })
 
+    const proxyFormItemRule = (rule: FieldRule<any>) => {
+      if (rule?.validator) {
+        return {
+          ...rule,
+          validator: (value: any, callback: (error?: string) => void) => {
+            const cb = rule.validator!(value, callback) as unknown
+            if (typeof cb === 'function') {
+              return cb(formSource.value)
+            }
+          },
+        }
+      }
+      else {
+        return rule
+      }
+    }
+
     const formRules = computed(() => {
       return props.form.reduce<Record<string, FieldRule | FieldRule[]>>((rules, item) => {
         if (item.rule) {
-          rules[item.key as string] = item.rule
+          if (Array.isArray(item.rule)) {
+            rules[item.key as string] = item.rule.map(proxyFormItemRule)
+          }
+          else {
+            rules[item.key as string] = proxyFormItemRule(item.rule)
+          }
         }
         return rules
       }, {})
@@ -239,19 +261,7 @@ export const FormRender = defineComponent({
 
       const items = this.form.filter((item) => {
         const value = this.formSource[item.key as string]
-        if (value !== null && value !== undefined) {
-          return true
-        }
-
-        if (typeof item.visiable === 'boolean') {
-          return item.visiable
-        }
-
-        if (typeof item.visiable === 'function') {
-          return (item.visiable as Function)(this.formSource)
-        }
-
-        return false
+        return value !== null && value !== undefined
       })
 
       const resetField = (key: string) => {

@@ -33,6 +33,11 @@ const form = defineForm([{
   rule: [{
     required: true,
     message: 'xxx',
+    validator: (rule, cb) => {
+      return (data) => {
+        console.log(data, 33)
+      }
+    },
   }],
 }, {
   key: 'switch',
