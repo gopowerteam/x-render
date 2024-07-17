@@ -7,6 +7,7 @@ import '@arco-design/web-vue/dist/arco.less'
 import '@arco-themes/vue-tuboshi/index.less'
 import '@gopowerteam/modal-render/dist/style.css'
 import '@gopowerteam/form-render/dist/style.css'
+import '@gopowerteam/table-render/dist/style.css'
 
 import Modal from './views/modal.vue'
 import Form from './views/form.vue'

@@ -1,3 +1,4 @@
+import './style.less'
 import 'vue/jsx'
 
 export * from './table-render'

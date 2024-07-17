@@ -125,6 +125,21 @@ export const TableRender = defineComponent({
       type: Boolean,
       required: false,
     },
+    hoverable: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    bordered: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    stripe: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
   },
   expose: [
     'preview',
@@ -384,7 +399,9 @@ export const TableRender = defineComponent({
     const tableOptions = computed<Partial<TableInstance['$props']>>(() => ({
       rowKey: props.rowKey,
       size: props.size,
-      bordered: false,
+      bordered: props.bordered,
+      hoverable: props.hoverable,
+      stripe: props.stripe,
       scroll: {
         x: props.columns.reduce((r, item) =>
           r += (typeof item.width !== 'number' ? Math.max(item.title.length * 16, 80) : item.width),
