@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.125
+
+### Patch Changes
+
+- add columnsGroups options
+
 ## 0.0.124
 
 ### Patch Changes

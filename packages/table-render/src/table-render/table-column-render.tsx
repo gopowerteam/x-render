@@ -1,6 +1,6 @@
 import { type TableColumnData, type TableData } from '@arco-design/web-vue'
 import type { Ref } from 'vue'
-import type { TableColumnOptions, TableColumnSharedOptions, TableColumnsOptions } from '../interfaces'
+import type { ColumnsGroup, TableColumnOptions, TableColumnSharedOptions, TableColumnsOptions } from '../interfaces'
 import { TableColumnRenders } from '../table-columns'
 import { RenderColumnType } from '../utils'
 import type { EventEmits } from '../hooks'
@@ -38,14 +38,73 @@ export function toRenderColumn<T>(
   }
 }
 
-export function renderTableColumns(columns: TableColumnsOptions, columnsOptions: TableColumnSharedOptions | undefined, pageMode: 'client' | 'server', collapsedColumns: Ref<{ key: string;title: string;collapsed: boolean }[]>, events: EventEmits) {
-  return columns
+export function renderTableColumns({
+  columns,
+  columnsOptions,
+  columnsGroups,
+  pageMode,
+  collapsedColumns,
+  events,
+}: {
+  columns: TableColumnsOptions
+  columnsOptions: TableColumnSharedOptions | undefined
+  columnsGroups: ColumnsGroup[]
+  pageMode: 'client' | 'server'
+  collapsedColumns: Ref<{ key: string;title: string;collapsed: boolean }[]>
+  events: EventEmits
+}) {
+  const data = columns
     .map(column => ({
       ...columnsOptions || {},
       ...column,
     }))
     .map(column => renderTableColumn(column, pageMode, collapsedColumns, events))
     .filter(Boolean) as TableColumnData[]
+
+  return transformColumnsGroups(data, columnsGroups)
+}
+
+function generateColumnsGroup(group: ColumnsGroup, columns: TableColumnData[]) {
+  const includes: TableColumnData[] = []
+  const generate = (node: ColumnsGroup | ColumnsGroup['children'][number]): any => {
+    if ('children' in node) {
+      node.children = node.children.map(generate)
+    }
+
+    if ('key' in node) {
+      const column = columns.find(x =>
+        Object.getOwnPropertyDescriptor(x, 'key')?.value === node.key,
+      )
+
+      if (column) {
+        includes.push(column)
+        return column
+      }
+    }
+
+    return node
+  }
+
+  const columnsGroup = generate(group)
+
+  if (includes?.length && columnsGroup) {
+    const index = Math.min(...includes.map(x => columns.indexOf(x)))
+    // 删除column
+    includes.forEach((column) => {
+      const index = columns.indexOf(column)
+      columns.splice(index, 1)
+    })
+    // 添加group
+    columns.splice(index, 0, columnsGroup)
+  }
+}
+
+function transformColumnsGroups(columns: TableColumnData[], columnsGroups: ColumnsGroup[] = []): TableColumnData[] {
+  columnsGroups.forEach((group) => {
+    generateColumnsGroup(group, columns)
+  })
+
+  return columns
 }
 
 /**
@@ -87,6 +146,9 @@ export function renderTableColumn<T>(options: TableColumnOptions<T>, pageMode: '
       : undefined,
     tooltip: true,
     ...options.extraProps,
+    ...{
+      key: options.key,
+    },
     render,
   }
 }

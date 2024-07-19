@@ -4,7 +4,7 @@ import { type PropType, type Ref, computed, defineComponent, onMounted, readonly
 import { ModalProvider } from '@gopowerteam/modal-render'
 import { type DataRecord, type FormItemsOptions, type FormRenderInstance } from '@gopowerteam/form-render'
 import type { RequestPlugin } from '@gopowerteam/request'
-import type { SortableOptions, TableColumnSharedOptions, TableColumnsOptions, TableFormSharedOptions, TableLoadParams } from '../interfaces'
+import type { ColumnsGroup, SortableOptions, TableColumnSharedOptions, TableColumnsOptions, TableFormSharedOptions, TableLoadParams } from '../interfaces'
 import { createTableSource } from '../utils/create-table-source'
 import { createTableForm } from '../utils/create-table-form'
 import { type EventEmits, type TableEditEventOptions, type TableExportEventOptions, type TablePreviewEventOptions, type TableReloadEventOptions, useEvents } from '../hooks'
@@ -139,6 +139,15 @@ export const TableRender = defineComponent({
       type: Boolean,
       required: false,
       default: true,
+    },
+    columnsGroups: {
+      type: Array as PropType<ColumnsGroup[]>,
+      required: false,
+      default: () => [],
+    },
+    rowClass: {
+      type: Function as PropType<(record: any) => string>,
+      required: false,
     },
   },
   expose: [
@@ -370,7 +379,14 @@ export const TableRender = defineComponent({
       tableEvents('reload')
     }
 
-    const tableColumns = ref<TableColumnData[]>(renderTableColumns(props.columns, props.columnsOptions, pageMode, collapsedColumns, tableEvents))
+    const tableColumns = ref<TableColumnData[]>(renderTableColumns({
+      columns: props.columns,
+      columnsOptions: props.columnsOptions,
+      columnsGroups: props.columnsGroups,
+      pageMode,
+      collapsedColumns,
+      events: tableEvents,
+    }))
 
     const renderOptions: TableRenderOptions = {
       tableEvents,
@@ -415,7 +431,14 @@ export const TableRender = defineComponent({
     }))
 
     function reloadColumns() {
-      tableColumns.value = renderTableColumns(props.columns, props.columnsOptions, pageMode, collapsedColumns, tableEvents)
+      tableColumns.value = renderTableColumns({
+        columns: props.columns,
+        columnsOptions: props.columnsOptions,
+        columnsGroups: props.columnsGroups,
+        pageMode,
+        collapsedColumns,
+        events: tableEvents,
+      })
     }
 
     onMounted(() => {
@@ -470,6 +493,7 @@ export const TableRender = defineComponent({
           onSelect={this.tableSelection.onSelect}
           onSelectAll={this.tableSelection.onSelectAll}
           onChange={this.onTableChange}
+          rowClass={this.rowClass}
           onSorterChange={this.onSorterChange}
           v-model:selectedKeys={this.tableSelection.selectedRowKeys.value}
           {...this.tableOptions}>

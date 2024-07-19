@@ -10,6 +10,14 @@
       v-model:radio-row="radioRow"
       collapsable
       :columns="columns"
+      :columns-groups="[{
+        title: 'group1',
+        children: [{
+          key: 'price',
+        }, {
+          key: 'image',
+        }],
+      }]"
       :data-load="onTableLoad"
       :draggable="draggable"
       exportable
@@ -19,6 +27,7 @@
       }"
       pageable="client"
       refreshable
+      :row-class="() => 'tt'"
       row-key="age"
       :selection="{
         type: 'checkbox',

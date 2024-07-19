@@ -55,6 +55,11 @@ export interface ExportColumnOptions {
   content?: (record: DataRecord) => string | number | undefined
 }
 
+export interface ColumnsGroup {
+  title: string
+  children: (ColumnsGroup | { key: string })[]
+}
+
 // 列配置
 export type TableColumnsOptions<T = DataRecord> = TableColumnOptions<T>[]
 export type TableColumnsTypeKeyOptions<T = DataRecord> = TableColumnTypeKeyOptions<T>[]
