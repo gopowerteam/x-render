@@ -1,4 +1,4 @@
-import { Table, type TableChangeExtra, type TableColumnData, type TableData, type TableInstance } from '@arco-design/web-vue'
+import { Table, type TableChangeExtra, type TableColumnData, type TableData, type TableExpandable, type TableInstance } from '@arco-design/web-vue'
 
 import { type PropType, type Ref, computed, defineComponent, onMounted, readonly, ref } from 'vue'
 import { ModalProvider } from '@gopowerteam/modal-render'
@@ -147,6 +147,10 @@ export const TableRender = defineComponent({
     },
     rowClass: {
       type: Function as PropType<(record: any) => string>,
+      required: false,
+    },
+    expandable: {
+      type: Object as PropType<TableExpandable>,
       required: false,
     },
   },
@@ -428,6 +432,7 @@ export const TableRender = defineComponent({
       draggable: props.draggable ? { type: 'handle' as const, width: 40 } : undefined,
       pagination: (props.pageable === undefined || props.pageable === 'client'),
       selectedKeys: selectedRowKeys.value,
+      expandable: props.expandable,
     }))
 
     function reloadColumns() {

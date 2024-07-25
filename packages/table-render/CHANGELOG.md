@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.126
+
+### Patch Changes
+
+- add expandable props
+
 ## 0.0.125
 
 ### Patch Changes
