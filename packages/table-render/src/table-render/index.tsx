@@ -13,6 +13,7 @@ import { useExport } from '../hooks/use-export'
 import type { PageableOptions } from '../interfaces/pageable-options'
 import { SortService } from '../utils/sort.service'
 import { isPromise } from '../utils'
+import { setupTableGrabbable } from '../plugins/table-grabbable'
 import { renderTableColumns } from './table-column-render'
 import TableViewRender from './table-view-render'
 import { tableActionsRender } from './table-actions-render'
@@ -151,6 +152,11 @@ export const TableRender = defineComponent({
     },
     expandable: {
       type: Object as PropType<TableExpandable>,
+      required: false,
+    },
+    grabbable: {
+      type: Boolean,
+      default: true,
       required: false,
     },
   },
@@ -450,6 +456,10 @@ export const TableRender = defineComponent({
       if (props.autoLoad) {
         onTableReload()
       }
+
+      if (props.grabbable) {
+        setupTableGrabbable(tableId)
+      }
     })
 
     return {
@@ -507,7 +517,7 @@ export const TableRender = defineComponent({
     )
 
     return (
-      <div class="table-render">
+      <div class="table-render" id={`table-${this.tableId}`}>
         <ModalProvider ref={modal => this.modalInstance = modal as any}>
           <div class="table-render-content">
             {this.renders.renderTableForm()}
