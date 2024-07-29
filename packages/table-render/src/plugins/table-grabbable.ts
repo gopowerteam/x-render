@@ -17,6 +17,7 @@ export function setupTableGrabbable(id: string) {
     timeout = setTimeout(() => {
       if (timeout) {
         tableScrollContainer.style.cursor = 'grab'
+        tableScrollContainer.style.userSelect = 'none'
         grabbing = true
       }
     }, TouchDuration)
@@ -28,6 +29,8 @@ export function setupTableGrabbable(id: string) {
       timeout = undefined
       grabbing = false
       tableScrollContainer.style.cursor = ''
+      tableScrollContainer.style.userSelect = ''
+      x = undefined
     }
   })
 

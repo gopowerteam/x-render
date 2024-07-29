@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.128
+
+### Patch Changes
+
+- fixed grabbable
+
 ## 0.0.127
 
 ### Patch Changes
