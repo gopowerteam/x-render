@@ -182,6 +182,7 @@ export const TableRender = defineComponent({
     const tableInstance = ref<TableInstance>()
     const formInstance = ref<FormRenderInstance>()
     const modalInstance = ref<any>()
+    const tableRenderElement = ref<HTMLElement>()
     const [tableSource, updateTableSource] = createTableSource(props.columns)
     const tableLoading = ref(false)
     const tableForm: FormItemsOptions = props.form ?? createTableForm(props.columns)
@@ -453,12 +454,16 @@ export const TableRender = defineComponent({
     }
 
     onMounted(() => {
+      if (tableRenderElement.value) {
+        tableRenderElement.value.id = `table-${tableId}`
+      }
+
       if (props.autoLoad) {
         onTableReload()
       }
 
-      if (props.grabbable) {
-        setupTableGrabbable(tableId)
+      if (props.grabbable && tableRenderElement.value) {
+        setupTableGrabbable(tableRenderElement.value)
       }
     })
 
@@ -472,6 +477,7 @@ export const TableRender = defineComponent({
       tableForm,
       tableLoading,
       modalInstance,
+      tableRenderElement,
       formSource: readonly(computed(() => formInstance?.value?.formSource)),
       formInstance,
       reload: onTableReload,
@@ -517,7 +523,7 @@ export const TableRender = defineComponent({
     )
 
     return (
-      <div class="table-render" id={`table-${this.tableId}`}>
+      <div class="table-render" ref={((element: HTMLDivElement) => this.tableRenderElement = element) as any }>
         <ModalProvider ref={modal => this.modalInstance = modal as any}>
           <div class="table-render-content">
             {this.renders.renderTableForm()}

@@ -1,8 +1,8 @@
 const TouchDuration = 300
 
-export function setupTableGrabbable(id: string) {
-  const tableDomElement = document.getElementById(`table-${id}`)
-  const tableScrollContainer = tableDomElement?.querySelector<HTMLDivElement>('.arco-scrollbar-container.arco-table-body')
+export function setupTableGrabbable(element: HTMLElement) {
+  const tableDomElement = element
+  const tableScrollContainer = tableDomElement?.querySelector<HTMLElement>('.arco-scrollbar-container.arco-table-body')
 
   if (!tableScrollContainer) {
     return

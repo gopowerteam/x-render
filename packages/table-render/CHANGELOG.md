@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.129
+
+### Patch Changes
+
+- fixed ssr support
+
 ## 0.0.128
 
 ### Patch Changes
