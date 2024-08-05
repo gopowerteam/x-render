@@ -39,12 +39,10 @@ export const FormRender = defineComponent({
     name: {
       type: String,
       required: false,
-      default: `form-${Math.random().toString(32).slice(2)}`,
     },
     id: {
       type: String,
       required: false,
-      default: `form-${Math.random().toString(32).slice(2)}`,
     },
     collapsedMode: {
       type: String as PropType<'append' | 'dialog'>,
@@ -91,7 +89,9 @@ export const FormRender = defineComponent({
     const formCollspased = ref<boolean>(true)
     const modalInstance = ref<any>()
     const toggleFormCollapsed = () => formCollspased.value = !formCollspased.value
-    provide(provides.id, props.id)
+    const formId = ref<string>('')
+    const formName = ref<string>('')
+    provide(provides.id, formId)
     provide(provides.source, formSource)
 
     const onSubmitSuccess = () => {
@@ -173,7 +173,7 @@ export const FormRender = defineComponent({
       const form = formInstance.value?.$el as HTMLFormElement
 
       if (form) {
-        form.id = props.id
+        form.id = formId.value
       }
     }
 
@@ -194,8 +194,16 @@ export const FormRender = defineComponent({
     }
 
     onMounted(() => {
+      const key = Math.random().toString(32).slice(2)
+      formId.value = props.id ?? key
+      formName.value = props.name ?? key
+
       updateFormColumnValue()
       updateFormElementId()
+
+      if (window) {
+        window.addEventListener('resize', updateFormColumnValue)
+      }
     })
 
     function updateFormSource(value: DataRecord) {
@@ -228,13 +236,9 @@ export const FormRender = defineComponent({
       return formInstance.value?.validate()
     }
 
-    onMounted(() => {
-      if (window) {
-        window.addEventListener('resize', updateFormColumnValue)
-      }
-    })
-
     return ({
+      formId,
+      formName,
       formSource,
       formInstance,
       formColumns,
@@ -365,7 +369,7 @@ export const FormRender = defineComponent({
     return (
      <div class="form-render">
        <ModalProvider ref={ (modal: any) => this.modalInstance = modal as any}>
-          <Form {...({ name: this.name })}
+          <Form {...({ name: this.formName })}
                 labelAlign='right'
                 layout={this.$props.layout}
                 rules={this.formRules}
