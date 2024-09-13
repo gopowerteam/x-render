@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.74
+
+### Patch Changes
+
+- fixed number display
+
 ## 0.0.73
 
 ### Patch Changes

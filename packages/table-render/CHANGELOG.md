@@ -1,5 +1,13 @@
 # @gopowerteam/table-render
 
+## 0.0.131
+
+### Patch Changes
+
+- fixed number display
+- Updated dependencies
+  - @gopowerteam/form-render@0.0.74
+
 ## 0.0.130
 
 ### Patch Changes

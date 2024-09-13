@@ -40,7 +40,7 @@ export function renderCurrencyColumn<T = DataRecord>(
     }
 
     const scale = unitMaps[options!.inputUnit!] / unitMaps[options!.outputUnit!]
-    const data = value * scale
+    const data = parseFloat((value * scale).toFixed(10))
     return options?.precision === undefined ? data : data.toFixed(options?.precision)
   }
 

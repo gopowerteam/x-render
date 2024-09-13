@@ -27,7 +27,7 @@ export function renderCurrencyItem<T=DataRecord>(options?: RenderCurrencyOptions
     }
 
     const scale = unitMaps[options!.outputUnit!] / unitMaps[options!.inputUnit!]
-    return value * scale
+    return parseFloat((value * scale).toFixed(10))
   }
 
   const transformToOutputUnit = (value?: number) => {
@@ -40,7 +40,7 @@ export function renderCurrencyItem<T=DataRecord>(options?: RenderCurrencyOptions
     }
 
     const scale = unitMaps[options!.inputUnit!] / unitMaps[options!.outputUnit!]
-    return value * scale
+    return parseFloat((value * scale).toFixed(10))
   }
 
   const toThousands = (value: string) => {
