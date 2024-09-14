@@ -265,7 +265,14 @@ export const FormRender = defineComponent({
 
       const items = this.form.filter((item) => {
         const value = this.formSource[item.key as string]
-        return value !== null && value !== undefined && value !== ''
+        switch (true) {
+          case typeof value === 'string':
+            return value !== ''
+          case Array.isArray(value):
+            return value.length !== 0
+          default:
+            return value !== null && value !== undefined
+        }
       })
 
       const resetField = (key: string) => {

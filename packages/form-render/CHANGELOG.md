@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.75
+
+### Patch Changes
+
+- fixed search filter
+
 ## 0.0.74
 
 ### Patch Changes
