@@ -1,5 +1,13 @@
 # @gopowerteam/table-render
 
+## 0.0.133
+
+### Patch Changes
+
+- update form shared options
+- Updated dependencies
+  - @gopowerteam/form-render@0.0.76
+
 ## 0.0.132
 
 ### Patch Changes

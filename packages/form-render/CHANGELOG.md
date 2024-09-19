@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.76
+
+### Patch Changes
+
+- update form shared options
+
 ## 0.0.75
 
 ### Patch Changes

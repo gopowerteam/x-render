@@ -17,6 +17,10 @@ export interface TableFormSharedOptions {
   minWidth?: number
   columns?: number
   collapsedMode?: 'append' | 'dialog'
+  showFormResult?: boolean
+  submitable?: boolean
+  searchable?: boolean
+  resetable?: boolean
 }
 
 /**

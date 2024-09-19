@@ -27,9 +27,10 @@ import { FormRender, defineForm } from '@gopowerteam/form-render'
 const form = defineForm([{
   key: 'xxx',
   title: 'xxx',
-  collapsed: true,
   // group: ['xx'],
-  render: r => r.input(),
+  render: r => r.input({
+    autoSumbit: true,
+  }),
   rule: [{
     required: true,
     message: 'xxx',
@@ -143,7 +144,7 @@ const form = defineForm([{
 }])
 
 function aaa(...a: any) {
-  console.log(a)
+  console.log(a, 'on-submit')
 }
 
 function getCascaderOptions() {
