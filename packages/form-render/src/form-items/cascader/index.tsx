@@ -20,7 +20,7 @@ export function renderCascaderItem<T=DataRecord>(options: RenderCascaderItemOpti
   const [selectOptions, updateSelectOptions] = useSelectOptions()
 
   const onSelectChange = () => {
-    if (!options.autoSumbit || !selectInstance) {
+    if (!options.autoSubmit || !selectInstance) {
       return
     }
 
@@ -220,7 +220,7 @@ export interface RenderCascaderItemOptions {
   // 默认值
   default?: string | number | boolean
   // 自动提交
-  autoSumbit?: boolean
+  autoSubmit?: boolean
   // 开启缓存
   cache?: boolean
 }

@@ -7,7 +7,7 @@ export function renderSwitchItem<T=DataRecord>(options?: RenderSwitchItemOptions
   let switchInstance: ComponentPublicInstance
 
   function onChange() {
-    if (!options?.autoSumbit || !switchInstance) {
+    if (!options?.autoSubmit || !switchInstance) {
       return
     }
 
@@ -77,5 +77,5 @@ export interface RenderSwitchItemOptions {
   // 默认值
   default?: string | number | boolean
   // 自定更新列表
-  autoSumbit?: boolean
+  autoSubmit?: boolean
 }

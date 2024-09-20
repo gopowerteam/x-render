@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.77
+
+### Patch Changes
+
+- change name sumbit to submit
+
 ## 0.0.76
 
 ### Patch Changes

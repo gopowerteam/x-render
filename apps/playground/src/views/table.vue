@@ -111,7 +111,7 @@ const form = defineForm<t>([{
   render: r => r.select({
     options: xx,
     cache: true,
-    autoSumbit: true,
+    autoSubmit: true,
   }),
 }, {
   key: 'tree1',

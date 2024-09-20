@@ -23,7 +23,7 @@ export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions)
       options.onChange(value)
     }
 
-    if (!options.autoSumbit || !selectInstance) {
+    if (!options.autoSubmit || !selectInstance) {
       return
     }
 
@@ -190,7 +190,7 @@ export interface RenderSelectItemOptions {
   // 默认值
   default?: string | number | boolean
   // 自动提交
-  autoSumbit?: boolean
+  autoSubmit?: boolean
   // 开启缓存
   cache?: boolean
   // change事件

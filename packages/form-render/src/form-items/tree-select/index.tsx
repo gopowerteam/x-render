@@ -20,7 +20,7 @@ export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItem
   const [selectOptions, updateSelectOptions] = useSelectOptions()
 
   const onSelectChange = () => {
-    if (!options.autoSumbit || !selectInstance) {
+    if (!options.autoSubmit || !selectInstance) {
       return
     }
 
@@ -210,7 +210,7 @@ export interface RenderTreeSelectItemOptions {
   // 默认值
   default?: string | number | boolean
   // 自动提交
-  autoSumbit?: boolean
+  autoSubmit?: boolean
   // 开启缓存
   cache?: boolean
   // 默认展开所有

@@ -29,7 +29,8 @@ const form = defineForm([{
   title: 'xxx',
   // group: ['xx'],
   render: r => r.input({
-    autoSumbit: true,
+    autoSubmit: true,
+    clearable: true,
   }),
   rule: [{
     required: true,
@@ -68,7 +69,7 @@ const form = defineForm([{
       }],
     }],
     cache: true,
-    autoSumbit: true,
+    autoSubmit: true,
     treeProps: {
       defaultExpandAll: true,
     },

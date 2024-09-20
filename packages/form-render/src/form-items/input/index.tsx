@@ -3,6 +3,12 @@ import type { ComponentPublicInstance } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
 import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
 
+const dispatchEvent = useDebounceFn((form: HTMLFormElement) => {
+  if (form) {
+    form.dispatchEvent(new Event('submit'))
+  }
+}, 1000)
+
 export function renderInputItem<T=DataRecord>(options?: RenderInputItemOptions): FormItemRenderReturn<T> {
   let inputElement: ComponentPublicInstance
 
@@ -13,14 +19,8 @@ export function renderInputItem<T=DataRecord>(options?: RenderInputItemOptions):
       )
     }
 
-    const dispatchEvent = useDebounceFn((form: HTMLFormElement) => {
-      if (form) {
-        form.dispatchEvent(new Event('submit'))
-      }
-    }, 1000)
-
     function onInputChange() {
-      if (!options?.autoSumbit) {
+      if (!options?.autoSubmit) {
         return
       }
 
@@ -47,6 +47,7 @@ export function renderInputItem<T=DataRecord>(options?: RenderInputItemOptions):
               read-only={options?.readonly}
               placeholder={options?.placeholder}
               onInput={onInputChange}
+              onClear={() => onInputChange()}
               allowClear={options?.clearable}></InputNumber>
           )
         case 'string':
@@ -58,6 +59,7 @@ export function renderInputItem<T=DataRecord>(options?: RenderInputItemOptions):
               placeholder={options?.placeholder}
               readonly={options?.readonly}
               onInput={onInputChange}
+              onClear={() => onInputChange()}
               allowClear={options?.clearable}></Input>
           )
       }
@@ -78,6 +80,6 @@ export interface RenderInputItemOptions {
   placeholder?: string
   clearable?: boolean
   readonly?: boolean
-  autoSumbit?: boolean
+  autoSubmit?: boolean
   type?: 'string' | 'number'
 }
