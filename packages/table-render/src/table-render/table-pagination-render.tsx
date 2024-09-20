@@ -1,4 +1,5 @@
 import { Pagination } from '@arco-design/web-vue'
+import { useBreakpoints } from '@vueuse/core'
 import type { TableRenderContext, TableRenderOptions, TableRenderProps } from '.'
 
 export function tablePaginationRender(
@@ -22,6 +23,12 @@ export function tablePaginationRender(
     }
   }
 
+  const breakpoints = useBreakpoints({
+    mobile: 0,
+    tablet: 640,
+    desktop: 1024,
+  })
+
   if (pageService) {
     return () => (
         <div class="table-pagination" style={{ padding: '10px 0' }}>
@@ -33,6 +40,7 @@ export function tablePaginationRender(
             hide-on-single-page
             show-total
             show-page-size
+            simple={breakpoints.smaller('desktop').value}
             onChange={index => onPageChange(index)}
             onPageSizeChange={size => onPageSizeChange(size)}
             style={{

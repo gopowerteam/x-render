@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.135
+
+### Patch Changes
+
+- add table pageable simple mode
+
 ## 0.0.134
 
 ### Patch Changes

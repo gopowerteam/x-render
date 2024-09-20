@@ -25,7 +25,7 @@
       :form-options="{
         minWidth: 400,
       }"
-      pageable="client"
+      pageable
       refreshable
       :row-class="() => 'tt'"
       row-key="age"
