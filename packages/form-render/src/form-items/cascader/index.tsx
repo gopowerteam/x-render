@@ -1,4 +1,4 @@
-import { Cascader, type CascaderOption } from '@arco-design/web-vue'
+import { Cascader, type CascaderOption, type TriggerProps } from '@arco-design/web-vue'
 import { type ComponentPublicInstance, type Ref, isRef, ref } from 'vue'
 import { watchOnce } from '@vueuse/core'
 import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
@@ -180,6 +180,8 @@ export function renderCascaderItem<T=DataRecord>(options: RenderCascaderItemOpti
           allowSearch={options.searchable}
           maxTagCount={options.maxTagCount ?? 2}
           onChange={onSelectChange}
+          checkStrictly={options.checkStrictly}
+          triggerProps={options.triggerProps}
           options={selectOptions.value}>
         </Cascader>
       )
@@ -221,6 +223,10 @@ export interface RenderCascaderItemOptions {
   default?: string | number | boolean
   // 自动提交
   autoSubmit?: boolean
+  // 是否开启严格选择模式
+  checkStrictly?: boolean
+  // 下拉菜单的触发器属性
+  triggerProps?: TriggerProps
   // 开启缓存
   cache?: boolean
 }

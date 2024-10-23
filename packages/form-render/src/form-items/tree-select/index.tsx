@@ -170,6 +170,8 @@ export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItem
           data={selectOptions.value}
           fieldNames={options.fieldNames}
           treeProps={options.treeProps}
+          treeCheckStrictly={options.treeCheckStrictly}
+          treeCheckedStrategy={options.treeCheckedStrategy}
           >
             {{ ...options.slots }}
         </TreeSelect>
@@ -215,6 +217,10 @@ export interface RenderTreeSelectItemOptions {
   cache?: boolean
   // 默认展开所有
   treeProps?: Partial<TreeProps>
+  // 父子节点是否关联
+  treeCheckStrictly?: boolean
+  // 定制回显方式
+  treeCheckedStrategy?: 'all' | 'parent' | 'child'
   // Slots
   slots?: Partial<Record<'trigger' | 'prefix' | 'label' | 'header' | 'loader' | 'empty' | 'footer' | 'tree-slot-extra' | 'tree-slot-title' | 'tree-slot-icon' | 'tree-slot-switcher-icon', (data?: TreeNodeData) => JSX.Element>>
 }
