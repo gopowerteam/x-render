@@ -22,7 +22,7 @@ const defaultOptions: Partial<CurrencyColumnOptions> = {
 const unitMaps = {
   分: 10 ** 0,
   元: 10 ** 2,
-  万: 10 ** 4,
+  万: 10 ** 6,
 }
 
 export function renderCurrencyColumn<T = DataRecord>(

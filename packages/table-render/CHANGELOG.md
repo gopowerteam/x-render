@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.137
+
+### Patch Changes
+
+- fixed currency unit
+
 ## 0.0.136
 
 ### Patch Changes
