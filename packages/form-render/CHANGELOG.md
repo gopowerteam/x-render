@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.79
+
+### Patch Changes
+
+- update select item types
+
 ## 0.0.78
 
 ### Patch Changes

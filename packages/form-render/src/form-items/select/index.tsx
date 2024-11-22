@@ -145,9 +145,9 @@ export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions)
           allow-create={options.createable}
           maxTagCount={options.maxTagCount ?? 2}
           onChange={onSelectChange}>
-          {Array.from(selectOptions.value.entries()).map(([value, label]) => (
+          {Array.from(selectOptions.value.entries()).map(([value, label], index) => (
             <Option
-              key={value}
+              key={index}
               value={value}
               label={label}></Option>
           ))}
@@ -166,7 +166,7 @@ export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions)
   }
 }
 
-export type SelectOptions = Map<string | number, string>
+export type SelectOptions = Map<string | number | boolean | Record<string, any> | (string | number | boolean | Record<string, any>)[], string>
 
 export interface RenderSelectItemOptions {
   // 占位符
