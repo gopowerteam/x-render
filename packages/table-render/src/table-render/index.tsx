@@ -376,7 +376,7 @@ export const TableRender = defineComponent({
     })
 
     function onSorterChange(dataIndex: string, direction: string) {
-      if (!sortService) {
+      if (!sortService || pageMode === 'client') {
         return
       }
 
