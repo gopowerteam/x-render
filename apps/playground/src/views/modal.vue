@@ -28,6 +28,13 @@ function onClick() {
     title: 'asdasd',
     footer: true,
     submitText: '1231231231239871928739123',
+    onOk({ close }) {
+      console.log('ok')
+      close()
+    },
+    onCancel() {
+      console.log('cancel')
+    },
     bodyStyle: {
       // padding: '100px',
     },

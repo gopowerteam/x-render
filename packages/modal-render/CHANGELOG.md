@@ -1,5 +1,11 @@
 # @gopowerteam/modal-render
 
+## 0.0.44
+
+### Patch Changes
+
+- update modal
+
 ## 0.0.43
 
 ### Patch Changes

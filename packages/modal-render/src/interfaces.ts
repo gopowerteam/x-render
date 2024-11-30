@@ -32,6 +32,8 @@ export interface OpenModalOptions {
   bodyStyle?: CSSProperties
   submitText?: string
   cancelText?: string
+  onOk?: (options: { close: () => void }) => void
+  onCancel?: () => void
 }
 
 export interface ModalElement extends OpenModalOptions {

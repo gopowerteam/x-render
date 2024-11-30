@@ -31,14 +31,14 @@
       </div>
       <div id="modal-footer-slot" ref="footerSlotRef" />
       <div v-if="footer" ref="footerRef" class="modal-footer space-x-2">
-        <button class="cancel-button" type="button" @click="onCancel">
+        <button class="cancel-button" type="button" @click="onCancelClick">
           {{ cancelText }}
         </button>
         <button
           class="submit-button"
           :form="form"
           type="submit"
-          @click="onSubmit"
+          @click="onSubmitClick"
         >
           {{ submitText }}
         </button>
@@ -227,6 +227,8 @@ const props = withDefaults (defineProps<{
   submitText?: string
   cancelText?: string
   zIndex?: number
+  onOk?: (options: { close: () => void }) => void
+  onCancel?: () => void
 }>()
 , {
   header: true,
@@ -410,7 +412,7 @@ const bodyStyle = computed<CSSProperties>(() => {
   return styles
 })
 
-function onSubmit() {
+function onSubmitClick() {
   const content = contentRef.value as HTMLDivElement
 
   if (props.form && content) {
@@ -421,11 +423,21 @@ function onSubmit() {
     }
   }
 
+  if (props.onOk) {
+    props.onOk({
+      close: () => modal?.close(props.id),
+    })
+  }
+
   emits('submit')
 }
 
-function onCancel() {
+function onCancelClick() {
   modal?.close(props.id)
+
+  if (props?.onCancel) {
+    props.onCancel()
+  }
 }
 
 function onResize() {
