@@ -64,6 +64,11 @@ export const FormRender = defineComponent({
       required: false,
       default: false,
     },
+    resetable: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
     footer: {
       type: Boolean,
       required: false,
@@ -287,7 +292,7 @@ export const FormRender = defineComponent({
 
       return (
         <GridItem span={this.formColumns}>
-          <FormItem label='搜索条件'>
+          <FormItem label='搜索条件' class="mb-0!">
             <div class="w-full mt-5px text-left">
                 <Space wrap={true} align="center">
                   {
@@ -330,7 +335,10 @@ export const FormRender = defineComponent({
 
       if (this.searchable) {
         buttons.push(<Button type="primary" htmlType='submit'>搜索</Button>)
-        buttons.push(<Button type="secondary" onClick={() => this.formInstance?.resetFields()}>重置</Button>)
+
+        if (this.resetable) {
+          buttons.push(<Button type="secondary" onClick={() => this.formInstance?.resetFields()}>重置</Button>)
+        }
       }
 
       if (this.submitable) {
@@ -374,7 +382,7 @@ export const FormRender = defineComponent({
     }
 
     return (
-     <div class="form-render">
+     <div class={{ 'form-render': true, 'no-rules': Object.keys(this.formRules).length === 0 }}>
        <ModalProvider ref={ (modal: any) => this.modalInstance = modal as any}>
           <Form {...({ name: this.formName })}
                 labelAlign='right'

@@ -32,15 +32,7 @@ const form = defineForm([{
     autoSubmit: true,
     clearable: true,
   }),
-  rule: [{
-    required: true,
-    message: 'xxx',
-    validator: (rule, cb) => {
-      return (data) => {
-        console.log(data, 33)
-      }
-    },
-  }],
+
 }, {
   key: 'switch',
   title: 'switch',
