@@ -24,6 +24,7 @@ export default defineConfig({
         'vue',
         '@arco-design/web-vue',
         'dayjs',
+        'exceljs',
         '@gopowerteam/form-render',
         '@gopowerteam/modal-render',
       ],
