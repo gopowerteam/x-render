@@ -1,4 +1,4 @@
-import { type Column, Workbook, type Worksheet } from 'exceljs'
+import * as ExcelJS from 'exceljs'
 import { h, render } from 'vue'
 import dayjs from 'dayjs'
 import { getColumnValue } from '../utils'
@@ -10,10 +10,10 @@ import type {
 import { toRenderColumn } from '../table-render/table-column-render'
 
 function createWorkBook() {
-  return new Workbook()
+  return new ExcelJS.Workbook()
 }
 
-function createWorkSheet(workbook: Workbook, name = 'Sheet1') {
+function createWorkSheet(workbook: ExcelJS.Workbook, name = 'Sheet1') {
   const sheet = workbook.addWorksheet(name, {
     headerFooter: { firstHeader: '', firstFooter: '' },
   })
@@ -21,11 +21,11 @@ function createWorkSheet(workbook: Workbook, name = 'Sheet1') {
   return sheet
 }
 
-function setWorkSheetColumns(worksheet: Worksheet, columns: Column[]) {
+function setWorkSheetColumns(worksheet: ExcelJS.Worksheet, columns: ExcelJS.Column[]) {
   worksheet.columns = columns
 }
 
-function setWorkSheetRows(worksheet: Worksheet, rows: any[]) {
+function setWorkSheetRows(worksheet: ExcelJS.Worksheet, rows: any[]) {
   worksheet.addRows(rows)
 }
 
@@ -34,7 +34,7 @@ async function exportExcelFromJSON<T = any>({
   rows,
   filename,
 }: {
-  columns: Column[]
+  columns: ExcelJS.Column[]
   rows: T[]
   filename?: string
 }) {
