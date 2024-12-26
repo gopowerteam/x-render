@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.145
+
+### Patch Changes
+
+- add auto-fill
+
 ## 0.0.144
 
 ### Patch Changes

@@ -8,6 +8,7 @@
       v-model:checkbox-keys="checkboxKeys"
       v-model:radio-key="radioKey"
       v-model:radio-row="radioRow"
+      auto-fill
       collapsable
       :columns="columns"
       :columns-groups="[{

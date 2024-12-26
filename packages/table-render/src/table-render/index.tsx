@@ -159,6 +159,11 @@ export const TableRender = defineComponent({
       default: true,
       required: false,
     },
+    autoFill: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   expose: [
     'preview',
@@ -506,24 +511,26 @@ export const TableRender = defineComponent({
     this.reloadColumns()
     const renderTable = () => (
       <div class="table-body">
-        <Table
-          loading={this.tableLoading}
-          data={this.tableSource}
-          columns={this.tableColumns}
-          ref={((table: any) => this.tableInstance = table) as any }
-          onSelect={this.tableSelection.onSelect}
-          onSelectAll={this.tableSelection.onSelectAll}
-          onChange={this.onTableChange}
-          rowClass={this.rowClass}
-          onSorterChange={this.onSorterChange}
-          v-model:selectedKeys={this.tableSelection.selectedRowKeys.value}
-          {...this.tableOptions}>
-        </Table>
+        <div class="table-body-wrapper">
+          <Table
+            loading={this.tableLoading}
+            data={this.tableSource}
+            columns={this.tableColumns}
+            ref={((table: any) => this.tableInstance = table) as any }
+            onSelect={this.tableSelection.onSelect}
+            onSelectAll={this.tableSelection.onSelectAll}
+            onChange={this.onTableChange}
+            rowClass={this.rowClass}
+            onSorterChange={this.onSorterChange}
+            v-model:selectedKeys={this.tableSelection.selectedRowKeys.value}
+            {...this.tableOptions}>
+          </Table>
+        </div>
       </div>
     )
 
     return (
-      <div class="table-render" ref={((element: HTMLDivElement) => this.tableRenderElement = element) as any }>
+      <div class={{ 'table-render': true, 'auto-fill': this.autoFill }} ref={((element: HTMLDivElement) => this.tableRenderElement = element) as any }>
         <ModalProvider ref={modal => this.modalInstance = modal as any}>
           <div class="table-render-content">
             {this.renders.renderTableForm()}

@@ -10,3 +10,23 @@
 .table-render .arco-table-tr-checked .arco-table-td{
   background-color: #E8F3FF!important;
 }
+
+.table-render.auto-fill{
+    .table-render-content{
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+
+      .table-body{
+        flex: auto;
+        position: relative;
+
+        .table-body-wrapper{
+          position: absolute;
+          inset:0;
+        }
+      }
+    }
+}
