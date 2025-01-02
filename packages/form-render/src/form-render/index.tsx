@@ -371,7 +371,7 @@ export const FormRender = defineComponent({
       if (buttons.length) {
         return (
         <GridItem {...gridOptions}>
-          <FormItem contentClass={this.footer ? 'form-footer' : ''}>
+          <FormItem hideLabel={this.formItems.every(x => !!x.hideLabel)} contentClass={this.footer ? 'form-footer' : ''}>
             <Space>
               {buttons}
             </Space>

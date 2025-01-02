@@ -105,10 +105,12 @@ const form = defineForm<t>([{
 }, {
   key: 'test1',
   title: 'xxx2',
+  hideLabel: true,
   render: r => r.date(),
 }, {
   key: 'yyy',
   title: 'yyy',
+  hideLabel: true,
   render: r => r.select({
     options: xx,
     cache: true,
@@ -117,6 +119,7 @@ const form = defineForm<t>([{
 }, {
   key: 'tree1',
   title: 'tree',
+  hideLabel: true,
   render: r => r.treeSelect({
     options: [{
       key: 'a',
