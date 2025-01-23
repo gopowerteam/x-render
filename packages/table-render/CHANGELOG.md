@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.148
+
+### Patch Changes
+
+- update table & add prop alway-show-pagination
+
 ## 0.0.147
 
 ### Patch Changes

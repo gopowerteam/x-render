@@ -164,6 +164,11 @@ export const TableRender = defineComponent({
       default: false,
       required: false,
     },
+    alwayShowPagination: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   expose: [
     'preview',

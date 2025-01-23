@@ -37,7 +37,7 @@ export function tablePaginationRender(
             v-model:page-size={pageService.pageSize}
             total={pageService.total}
             page-size-options={pageService.pageSizeOpts}
-            hide-on-single-page
+            hide-on-single-page={!props.alwayShowPagination}
             show-total
             show-page-size
             simple={breakpoints.smaller('desktop').value}

@@ -8,6 +8,7 @@
       v-model:checkbox-keys="checkboxKeys"
       v-model:radio-key="radioKey"
       v-model:radio-row="radioRow"
+      alway-show-pagination
       auto-fill
       collapsable
       :columns="columns"
@@ -255,7 +256,7 @@ function c() {
 
 const onTableLoad = defineTableLoad(({ form, update, page, sort }) => {
   if (page) {
-    page.total = 1000
+    page.total = 10
   }
 
   if (sort) {
