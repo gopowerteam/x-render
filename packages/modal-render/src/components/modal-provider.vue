@@ -288,6 +288,6 @@ onMounted(() => {
 <script lang="ts">
 export default {
   name: 'ModalProvider',
-  inheritAttrs: true,
+  inheritAttrs: false,
 }
 </script>

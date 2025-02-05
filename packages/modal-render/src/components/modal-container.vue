@@ -502,6 +502,6 @@ defineExpose({
 <script lang="ts">
 export default {
   name: 'ModalContainer',
-  inheritAttrs: true,
+  inheritAttrs: false,
 }
 </script>
