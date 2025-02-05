@@ -1,5 +1,11 @@
 # @gopowerteam/modal-render
 
+## 0.0.46
+
+### Patch Changes
+
+- fixed inheritAttrs
+
 ## 0.0.45
 
 ### Patch Changes
