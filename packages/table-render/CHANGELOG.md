@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.150
+
+### Patch Changes
+
+- reload return promise
+
 ## 0.0.149
 
 ### Patch Changes
