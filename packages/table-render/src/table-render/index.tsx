@@ -311,7 +311,7 @@ export const TableRender = defineComponent({
      */
     function onTableReload(options?: TableReloadEventOptions) {
       if (!props.dataLoad) {
-        return
+        return Promise.reject()
       }
 
       if (options?.reset) {
@@ -343,6 +343,11 @@ export const TableRender = defineComponent({
         Promise.resolve(promise).finally(() => {
           tableLoading.value = false
         })
+
+        return promise as Promise<any>
+      }
+      else {
+        return Promise.resolve()
       }
     }
 

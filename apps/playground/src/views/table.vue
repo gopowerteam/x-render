@@ -83,6 +83,9 @@ function a() {
   a1.value = '2'
   // table.value.resetSelection()
   table.value.reloadColumns()
+  table.value.reload().then(() => {
+    console.log('ok111')
+  })
 }
 
 function b() {
