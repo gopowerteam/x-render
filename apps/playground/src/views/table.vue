@@ -164,7 +164,9 @@ const columns = defineColumns<t>([{
   width: 200,
   render: r => r.phone({
     safe: true,
-    noSafeWhenHover: true,
+    allowCopy: true,
+    allowDial: true,
+    allowPreview: true,
   }),
 }, {
   key: 'image',
