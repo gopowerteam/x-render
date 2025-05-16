@@ -158,6 +158,15 @@ const columns = defineColumns<t>([{
     precision: 2,
   }),
 }, {
+  key: 'phone',
+  title: 'phone',
+  index: 'phone',
+  width: 200,
+  render: r => r.phone({
+    safe: true,
+    noSafeWhenHover: true,
+  }),
+}, {
   key: 'image',
   title: 'image',
   // visiable: () => a1.value === '2',
@@ -272,6 +281,7 @@ const onTableLoad = defineTableLoad(({ form, update, page, sort }) => {
         name: i,
         age: i === 3 ? i.toString().repeat(200) : i.toString(),
         text: i,
+        phone: '18099992222',
         price: {
           value: 10099,
         },

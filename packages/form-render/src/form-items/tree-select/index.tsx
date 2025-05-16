@@ -96,7 +96,7 @@ export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItem
       break
     }
     case isRef(options.options): {
-      watchOnce(options.options as Ref<SelectOptions>, () => {
+      watchOnce(() => options.options, () => {
         updateSelectOptions((options.options as Ref<SelectOptions>).value)
       }, {
         immediate: true,

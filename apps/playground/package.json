@@ -4,24 +4,24 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite"
+    "dev": "vite --open"
   },
   "dependencies": {
-    "@arco-design/web-vue": "^2.55.3",
-    "@arco-themes/vue-tuboshi": "^0.0.12",
+    "@arco-design/web-vue": "^2.57.0",
+    "@arco-themes/vue-tuboshi": "^0.0.19",
     "@gopowerteam/form-render": "workspace:*",
     "@gopowerteam/modal-render": "workspace:*",
     "@gopowerteam/table-render": "workspace:*",
-    "dayjs": "^1.11.11",
-    "less": "^4.2.0",
-    "vue": "^3.2.47",
-    "vue-router": "^4.2.5"
+    "dayjs": "^1.11.13",
+    "less": "^4.3.0",
+    "vue": "^3.5.14",
+    "vue-router": "^4.5.1"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^4.1.0",
-    "typescript": "^5.0.2",
-    "unplugin-vue-components": "^0.25.2",
-    "vite": "^4.3.9",
-    "vue-tsc": "^1.4.2"
+    "@vitejs/plugin-vue": "^5.2.4",
+    "typescript": "^5.8.3",
+    "unplugin-vue-components": "^28.5.0",
+    "vite": "^6.3.5",
+    "vue-tsc": "^2.2.10"
   }
 }
