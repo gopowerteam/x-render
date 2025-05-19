@@ -46,6 +46,7 @@ export function renderPhoneColumn<T = DataRecord>(
   const clipboard = useClipboard()
   const render = (record: T, column: TableColumnOptions<T>) => {
     const id = Math.random().toString(36).slice(2)
+    const className = '__table__column_phone__'
     const phone = getColumnValue(record, column)
     const encryptValue = formatText(
       encryptText(phone),
@@ -55,20 +56,6 @@ export function renderPhoneColumn<T = DataRecord>(
       phone,
       options?.separator,
     )
-
-    // function onMouseenter(event: MouseEvent) {
-    //   if (options?.safe && options.noSafeWhenHover) {
-    //     const target = event.target as HTMLElement
-    //     target.innerText = originValue
-    //   }
-    // }
-
-    // function onMouseleave(event: MouseEvent) {
-    //   if (options?.safe && options.noSafeWhenHover) {
-    //     const target = event.target as HTMLElement
-    //     target.innerText = encryptValue
-    //   }
-    // }
 
     function onCopyPhone() {
       window.focus()
@@ -82,6 +69,15 @@ export function renderPhoneColumn<T = DataRecord>(
 
     function onPreviewPhone() {
       const element = document.getElementById(id)
+
+      const elemnets = document.querySelectorAll(`.${className}`)
+
+      if (elemnets.length > 0) {
+        elemnets.forEach((item) => {
+          item.innerHTML = encryptValue
+        })
+      }
+
       if (element) {
         element.innerHTML = originValue
       }
@@ -96,7 +92,7 @@ export function renderPhoneColumn<T = DataRecord>(
 
     return (
       <div style="display:flex;align-items:center;gap:4px;">
-         <div id={id} style="use-select:none;font-family: monospace;cursor:pointer;font-variant-numeric: tabular-nums;padding-right: 2px;">
+         <div class={className} id={id} style="use-select:none;font-family: monospace;cursor:pointer;font-variant-numeric: tabular-nums;padding-right: 2px;">
            {options?.safe ? encryptValue : originValue}
          </div>
          {
