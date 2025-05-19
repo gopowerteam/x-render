@@ -289,7 +289,7 @@ const onTableLoad = defineTableLoad(({ form, update, page, sort }) => {
         name: i,
         age: i === 3 ? i.toString().repeat(200) : i.toString(),
         text: i,
-        phone: '18099992222',
+        phone: `180${Math.random().toString().slice(2, 10)}`,
         progress: Math.random(),
         price: {
           value: 10099,

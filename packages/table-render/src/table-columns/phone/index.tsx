@@ -74,7 +74,8 @@ export function renderPhoneColumn<T = DataRecord>(
 
       if (elemnets.length > 0) {
         elemnets.forEach((item) => {
-          item.innerHTML = encryptValue
+          const element = item as HTMLElement
+          element.innerHTML = element.dataset.encrypt!
         })
       }
 
@@ -92,7 +93,7 @@ export function renderPhoneColumn<T = DataRecord>(
 
     return (
       <div style="display:flex;align-items:center;gap:4px;">
-         <div class={className} id={id} style="use-select:none;font-family: monospace;cursor:pointer;font-variant-numeric: tabular-nums;padding-right: 2px;">
+         <div data-encrypt={encryptValue} class={className} id={id} style="use-select:none;font-family: monospace;cursor:pointer;font-variant-numeric: tabular-nums;padding-right: 2px;">
            {options?.safe ? encryptValue : originValue}
          </div>
          {
