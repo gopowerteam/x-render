@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.154
+
+### Patch Changes
+
+- update progress column
+
 ## 0.0.153
 
 ### Patch Changes

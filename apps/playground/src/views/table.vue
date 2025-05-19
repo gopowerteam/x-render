@@ -169,6 +169,12 @@ const columns = defineColumns<t>([{
     allowPreview: true,
   }),
 }, {
+  key: 'progress',
+  title: 'progress',
+  index: 'progress',
+  width: 200,
+  render: r => r.progress(),
+}, {
   key: 'image',
   title: 'image',
   // visiable: () => a1.value === '2',
@@ -284,6 +290,7 @@ const onTableLoad = defineTableLoad(({ form, update, page, sort }) => {
         age: i === 3 ? i.toString().repeat(200) : i.toString(),
         text: i,
         phone: '18099992222',
+        progress: Math.random(),
         price: {
           value: 10099,
         },
