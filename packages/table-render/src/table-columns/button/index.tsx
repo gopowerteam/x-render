@@ -18,7 +18,7 @@ export interface RenderSingleButtonColumnOptions<T> {
   visiable?: boolean | ((record: T) => boolean)
   disabled?: boolean | ((record: T) => boolean)
   confirm?: boolean
-  icon?: () => JSX.Element
+  icon?: (record: T) => JSX.Element
   confirmText?: string
   confirmAppend?: string | HTMLElement
   confirmOffset?: { left: number; top: number }
@@ -134,7 +134,7 @@ export function renderButtonColumn<T>(options: RenderButtonColumnOptions<T>) {
               size="mini"
               disabled={toBooleanValue(button.disabled, false)}>
               {{
-                icon: button.icon,
+                icon: button.icon ? () => button.icon!(record) : undefined,
                 default: () => (typeof button.content === 'function'
                   ? button.content(record)
                   : button.content) || '',
