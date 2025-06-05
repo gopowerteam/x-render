@@ -37,7 +37,7 @@
         <button
           class="submit-button"
           :form="form"
-          type="submit"
+          type="button"
           @click="onSubmitClick"
         >
           {{ submitText }}
