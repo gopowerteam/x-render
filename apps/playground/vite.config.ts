@@ -9,12 +9,15 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
   },
-  plugins: [vue(), jsx(), components({
-    dts: 'src/components.d.ts',
-    resolvers: [
-      TableRenderResolver(),
-    ],
-    include: [/\.vue$/, /\.vue\?vue/],
-  }),
+  plugins: [
+    vue(),
+    jsx(),
+    components({
+      dts: 'src/components.d.ts',
+      resolvers: [
+        TableRenderResolver(),
+      ],
+      include: [/\.vue$/, /\.vue\?vue/],
+    }),
   ],
 })

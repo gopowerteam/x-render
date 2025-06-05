@@ -7,7 +7,7 @@
     "dev": "vite --open"
   },
   "dependencies": {
-    "@arco-design/web-vue": "^2.57.0",
+    "@arco-design/web-vue": "2.56.3",
     "@arco-themes/vue-tuboshi": "^0.0.19",
     "@gopowerteam/form-render": "workspace:*",
     "@gopowerteam/modal-render": "workspace:*",

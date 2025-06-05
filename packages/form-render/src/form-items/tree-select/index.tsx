@@ -158,7 +158,7 @@ export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItem
     function renderComponent() {
       return (
         <TreeSelect
-          ref={instance => selectInstance = (instance as ComponentPublicInstance)}
+          ref={(instance: any) => selectInstance = (instance as ComponentPublicInstance)}
           multiple={options.multiple}
           v-model={data[form.key as keyof T]}
           placeholder={options.placeholder}

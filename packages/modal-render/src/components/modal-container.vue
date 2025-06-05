@@ -37,7 +37,7 @@
         <button
           class="submit-button"
           :form="form"
-          type="button"
+          type="submit"
           @click="onSubmitClick"
         >
           {{ submitText }}
@@ -184,7 +184,7 @@
 </style>
 
 <script setup lang="ts">
-import type { CSSProperties, Component, HTMLAttributes } from 'vue'
+import type { CSSProperties, Component, HTMLAttributes, MaybeRefOrGetter } from 'vue'
 import {
   computed,
   defineProps,
@@ -195,7 +195,7 @@ import {
   shallowRef,
   triggerRef,
 } from 'vue'
-import { useDraggable, useElementSize } from '@vueuse/core'
+import { type MaybeComputedElementRef, useDraggable, useElementSize } from '@vueuse/core'
 import { ModalKey } from '../constants'
 import type { SizeOptions } from '../interfaces'
 
@@ -252,21 +252,21 @@ const loading = ref(false)
 
 let offsetX = 0
 let offsetY = 0
-let observer: MutationObserver
+let observer!: MutationObserver
 const wrapperRef = shallowRef<HTMLDivElement>()
 const contentRef = shallowRef<HTMLDivElement>()
 const headerRef = shallowRef<HTMLDivElement>()
 const footerRef = shallowRef<HTMLDivElement>()
 const headerSlotRef = shallowRef<HTMLDivElement>()
 const footerSlotRef = shallowRef<HTMLDivElement>()
-const { height: wrapperHeight } = useElementSize(wrapperRef)
+const { height: wrapperHeight } = useElementSize(wrapperRef as unknown as MaybeComputedElementRef)
 // const { height: contentHeight } = useElementSize(contentRef)
-const { height: headerHeight } = useElementSize(headerRef, undefined, { box: 'border-box' })
-const { height: footerHeight } = useElementSize(footerRef, undefined, { box: 'border-box' })
-const { height: headerSlotHeight } = useElementSize(headerSlotRef)
-const { height: footerSlotHeight } = useElementSize(footerSlotRef)
+const { height: headerHeight } = useElementSize(headerRef as unknown as MaybeComputedElementRef, undefined, { box: 'border-box' })
+const { height: footerHeight } = useElementSize(footerRef as unknown as MaybeComputedElementRef, undefined, { box: 'border-box' })
+const { height: headerSlotHeight } = useElementSize(headerSlotRef as unknown as MaybeComputedElementRef)
+const { height: footerSlotHeight } = useElementSize(footerSlotRef as unknown as MaybeComputedElementRef)
 
-const { x, y } = useDraggable(headerRef, {
+const { x, y } = useDraggable(headerRef as unknown as MaybeRefOrGetter, {
   initialValue: { x: 0, y: 0 },
 })
 

@@ -12,12 +12,14 @@ import '@gopowerteam/table-render/dist/style.css'
 import Modal from './views/modal.vue'
 import Form from './views/form.vue'
 import Table from './views/table.vue'
+import Test1 from './views/test1.vue'
 
 const routes = [
   { path: '/form', component: Form },
   { path: '/modal', component: Modal },
   { path: '/table', component: Table },
   { path: '/form', component: Form },
+  { path: '/test1', component: Test1 },
 ]
 
 const router = VueRouter.createRouter({

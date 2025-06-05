@@ -15,7 +15,7 @@
       <template v-else>
         <button
           class="submit-button"
-          type="submit"
+          type="button"
           @click="onClickOk"
         >
           {{ okText }}

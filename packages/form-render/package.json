@@ -1,7 +1,7 @@
 {
   "name": "@gopowerteam/form-render",
   "type": "module",
-  "version": "0.0.86",
+  "version": "0.0.87",
   "author": {
     "name": "zhuchentong",
     "email": "2037630@gmail.com"
@@ -48,12 +48,12 @@
     "npm:publish": "npm run build && npm publish --access publish"
   },
   "peerDependencies": {
-    "@arco-design/web-vue": "^2.55.3",
-    "@gopowerteam/modal-render": "^0.0.47",
+    "@arco-design/web-vue": "^2.56.3",
+    "@gopowerteam/modal-render": "^0.0.48",
     "vue": "^3.0.0"
   },
   "devDependencies": {
-    "@arco-design/web-vue": "^2.55.3",
+    "@arco-design/web-vue": "2.56.3",
     "@gopowerteam/modal-render": "workspace:*",
     "@iconify-json/icon-park-outline": "^1.1.15",
     "@types/node": "18.16.0",

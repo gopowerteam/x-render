@@ -1,7 +1,7 @@
 {
   "name": "@gopowerteam/table-render",
   "type": "module",
-  "version": "0.0.157",
+  "version": "0.0.158",
   "author": {
     "name": "zhuchentong",
     "email": "2037630@gmail.com"
@@ -53,15 +53,15 @@
     "npm:publish": "npm run build && npm publish --access publish"
   },
   "peerDependencies": {
-    "@arco-design/web-vue": "^2.55.3",
-    "@gopowerteam/form-render": "^0.0.86",
-    "@gopowerteam/modal-render": "^0.0.47",
+    "@arco-design/web-vue": "^2.56.3",
+    "@gopowerteam/form-render": "^0.0.87",
+    "@gopowerteam/modal-render": "^0.0.48",
     "exceljs": "^4.4.0",
     "vue": "^3.0.0"
   },
   "dependencies": {},
   "devDependencies": {
-    "@arco-design/web-vue": "^2.55.3",
+    "@arco-design/web-vue": "2.56.3",
     "@arco-plugins/vite-vue": "^1.4.5",
     "@gopowerteam/form-render": "workspace:*",
     "@gopowerteam/modal-render": "workspace:*",

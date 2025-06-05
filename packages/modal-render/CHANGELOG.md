@@ -1,5 +1,11 @@
 # @gopowerteam/modal-render
 
+## 0.0.48
+
+### Patch Changes
+
+- fixed modal button submit
+
 ## 0.0.47
 
 ### Patch Changes

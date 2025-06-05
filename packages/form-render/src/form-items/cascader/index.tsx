@@ -172,7 +172,7 @@ export function renderCascaderItem<T=DataRecord>(options: RenderCascaderItemOpti
       return (
         <Cascader
           pathMode={options.pathMode}
-          ref={instance => selectInstance = (instance as ComponentPublicInstance)}
+          ref={(instance: any) => selectInstance = (instance as ComponentPublicInstance)}
           multiple={options.multiple}
           v-model={data[form.key as keyof T]}
           placeholder={options.placeholder}

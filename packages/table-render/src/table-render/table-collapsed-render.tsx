@@ -33,7 +33,7 @@ export const TableCollapsedRender = defineComponent({
     })
 
     return () => <div class="table-collapsed-render">
-      <Transfer data={columns.value} default-value={selected.value} onChange={(value: string) => selected.value = [...value]} title={['显示列', '隐藏列']} style={{ justifyContent: 'center' }}>
+      <Transfer data={columns.value} default-value={selected.value} onChange={value => selected.value = [...value]} title={['显示列', '隐藏列']} style={{ justifyContent: 'center' }}>
        <template v-slot:source></template>
      </Transfer>
     </div>

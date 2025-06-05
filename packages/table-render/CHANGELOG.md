@@ -1,5 +1,14 @@
 # @gopowerteam/table-render
 
+## 0.0.158
+
+### Patch Changes
+
+- fixed modal button submit
+- Updated dependencies
+  - @gopowerteam/modal-render@0.0.48
+  - @gopowerteam/form-render@0.0.87
+
 ## 0.0.157
 
 ### Patch Changes

@@ -12,5 +12,6 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     TableRender: typeof import('@gopowerteam/table-render')['TableRender']
     Test1: typeof import('./components/test1.vue')['default']
+    Test2: typeof import('./components/test2.vue')['default']
   }
 }

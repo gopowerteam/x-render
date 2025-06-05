@@ -149,6 +149,6 @@ export function renderTableColumn<T>(options: TableColumnOptions<T>, pageMode: '
     ...{
       key: options.key,
     },
-    render,
+    render: render as any,
   }
 }
