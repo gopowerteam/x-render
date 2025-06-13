@@ -16,6 +16,7 @@ export interface TableColumnRenderResult<T>
     ctx?: {
       previewing?: boolean
       emits?: EventEmits
+      rowIndex?: number
     }
   ): JSX.Element
 }

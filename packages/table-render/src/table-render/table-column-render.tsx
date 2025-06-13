@@ -29,7 +29,10 @@ export function toRenderColumn<T>(
 
   // 获取deault slot
   return {
-    render: ({ record }: { record: TableData }) => templateRender(record as T, options, context),
+    render: ({ record, rowIndex }: { record: TableData; rowIndex?: number }) => templateRender(record as T, options, {
+      ...(context || {}),
+      rowIndex,
+    }),
     [RenderColumnType]: templateRender.$type,
     disableColumnMode: templateRender.$disableColumnMode,
     disableViewMode: templateRender.$disableViewMode,

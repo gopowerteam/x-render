@@ -41,17 +41,17 @@ const onDataLoad = defineTableLoad(({ update }) => {
   update([{ actions: 1 }])
 })
 
-const formRules: Record<string, FieldRule<any>> = {
-  a: {
-    required: true,
-    message: '不能为空',
-  },
-}
+// const formRules: Record<string, FieldRule<any>> = {
+//   a: {
+//     required: true,
+//     message: '不能为空',
+//   },
+// }
 
 function onSubmit() {
   console.log('onSubmit')
 }
 
-function onSubmitSuccess() {
-}
+// // function onSubmitSuccess() {
+// }
 </script>

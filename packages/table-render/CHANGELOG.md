@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.160
+
+### Patch Changes
+
+- add serial column
+
 ## 0.0.159
 
 ### Patch Changes

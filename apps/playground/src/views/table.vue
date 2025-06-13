@@ -142,96 +142,101 @@ const form = defineForm<t>([{
   }),
 }])
 
-const columns = defineColumns<t>([{
-  key: 'age',
-  title: '年龄',
-  width: 200,
-  fixed: 'left',
-  sortable: 'desc',
-}, {
-  key: 'price',
-  title: 'price',
-  index: 'price.value',
-  render: r => r.currency({
-    inputUnit: '分',
-    outputUnit: '元',
-    precision: 2,
-  }),
-}, {
-  key: 'phone',
-  title: 'phone',
-  index: 'phone',
-  width: 200,
-  render: r => r.phone({
-    safe: true,
-    allowCopy: true,
-    allowDial: true,
-    allowPreview: true,
-  }),
-}, {
-  key: 'progress',
-  title: 'progress',
-  index: 'progress',
-  width: 200,
-  render: r => r.progress(),
-}, {
-  key: 'image',
-  title: 'image',
-  // visiable: () => a1.value === '2',
-  render: r => r.image({
-    preview: true,
-    size: 100,
-  }),
-}, { key: 'a', title: 'a' }, { key: 'b', title: 'b' }, { key: 'c', title: 'c' }, { key: 'd', title: 'd' }, { key: 'e', title: 'e' }, {
-  key: 'name',
-  title: '名称',
-  width: 200,
-  form: true,
-  sortable: 'asc',
-  formatter: record => `${record.name}x`,
-}, {
-  key: 'text',
-  title: 'text',
-  render: r => r.dict({
-    dict: new Map([[3, 'xxx']]),
-    tag: 'success',
-  }),
-},
-{
-  key: 'render',
-  title: 'render',
-  render: r => r.render(() => <div>123</div>),
-},
-{
-  key: 'tags',
-  title: 'tags',
-  render: r => r.tag({
-    formatter: record => [`${record.name}`],
-  }),
-},
-{
-  key: 'actions',
-  title: 'xx',
-  width: 200,
-  render: r => r.dropdown({
-    content: 'asd',
-    options: [
-      {
-        content: 'preview',
-        confirm: true,
-        visiable: record => record.age === '99',
-        onClick: () => {
-          table.value.preview({ key: 1, mode: 'drawer' })
+const columns = defineColumns<t>([
+  {
+    key: 'serial',
+    title: '序号',
+    render: r => r.serial(),
+  }, {
+    key: 'age',
+    title: '年龄',
+    width: 200,
+    fixed: 'left',
+    sortable: 'desc',
+  }, {
+    key: 'price',
+    title: 'price',
+    index: 'price.value',
+    render: r => r.currency({
+      inputUnit: '分',
+      outputUnit: '元',
+      precision: 2,
+    }),
+  }, {
+    key: 'phone',
+    title: 'phone',
+    index: 'phone',
+    width: 200,
+    render: r => r.phone({
+      safe: true,
+      allowCopy: true,
+      allowDial: true,
+      allowPreview: true,
+    }),
+  }, {
+    key: 'progress',
+    title: 'progress',
+    index: 'progress',
+    width: 200,
+    render: r => r.progress(),
+  }, {
+    key: 'image',
+    title: 'image',
+    // visiable: () => a1.value === '2',
+    render: r => r.image({
+      preview: true,
+      size: 100,
+    }),
+  }, { key: 'a', title: 'a' }, { key: 'b', title: 'b' }, { key: 'c', title: 'c' }, { key: 'd', title: 'd' }, { key: 'e', title: 'e' }, {
+    key: 'name',
+    title: '名称',
+    width: 200,
+    form: true,
+    sortable: 'asc',
+    formatter: record => `${record.name}x`,
+  }, {
+    key: 'text',
+    title: 'text',
+    render: r => r.dict({
+      dict: new Map([[3, 'xxx']]),
+      tag: 'success',
+    }),
+  },
+  {
+    key: 'render',
+    title: 'render',
+    render: r => r.render(() => <div>123</div>),
+  },
+  {
+    key: 'tags',
+    title: 'tags',
+    render: r => r.tag({
+      formatter: record => [`${record.name}`],
+    }),
+  },
+  {
+    key: 'actions',
+    title: 'xx',
+    width: 200,
+    render: r => r.dropdown({
+      content: 'asd',
+      options: [
+        {
+          content: 'preview',
+          confirm: true,
+          visiable: record => record.age === '99',
+          onClick: () => {
+            table.value.preview({ key: 1, mode: 'drawer' })
+          },
         },
-      },
-      {
-        content: 'edit',
-        visiable: record => record.age === '99',
-        onClick: (record) => {},
-      },
-    ],
-  }),
-},
+        {
+          content: 'edit',
+          visiable: record => record.age === '99',
+          onClick: (record) => {},
+        },
+      ],
+    }),
+  },
 // {
 //   key: 'actions',
 //   width: 200,

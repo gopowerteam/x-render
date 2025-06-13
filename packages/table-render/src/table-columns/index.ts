@@ -9,6 +9,7 @@ import { renderRenderColumn } from './render'
 import { renderTagColumn } from './tag'
 import { renderTextColumn } from './text'
 import { renderProgressColumn } from './progress'
+import { renderSerialColumn } from './serial'
 
 export function TableColumnRenders<T>() {
   return {
@@ -23,5 +24,6 @@ export function TableColumnRenders<T>() {
     date: renderDateColumn<T>,
     button: renderButtonColumn<T>,
     progress: renderProgressColumn<T>,
+    serial: renderSerialColumn<T>,
   }
 }
