@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.159
+
+### Patch Changes
+
+- update phone column
+
 ## 0.0.158
 
 ### Patch Changes

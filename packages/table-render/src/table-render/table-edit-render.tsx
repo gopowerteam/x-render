@@ -29,8 +29,6 @@ export default defineComponent({
       modal.close(record)
     }
 
-    console.log(props.value)
-
     return () => (
       <div class="edit-form-container">
         <FormRender

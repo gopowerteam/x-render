@@ -13,7 +13,6 @@ export function setupTableGrabbable(element: HTMLElement) {
   let x: number | undefined
 
   tableScrollContainer.addEventListener('mousedown', () => {
-    console.log('mousedown')
     timeout = setTimeout(() => {
       if (timeout) {
         tableScrollContainer.style.cursor = 'grab'

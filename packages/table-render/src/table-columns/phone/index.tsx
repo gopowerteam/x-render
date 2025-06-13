@@ -45,9 +45,13 @@ export function renderPhoneColumn<T = DataRecord>(
 ) {
   const clipboard = useClipboard()
   const render = (record: T, column: TableColumnOptions<T>) => {
-    const id = Math.random().toString(36).slice(2)
+    const id = `phone_${Math.random().toString(36).slice(2)}`
     const className = '__table__column_phone__'
     const phone = getColumnValue(record, column)
+
+    const iconSize = 16
+    const iconStyle = `cursor:pointer;width:${iconSize}px;height:${iconSize}px;`
+
     const encryptValue = formatText(
       encryptText(phone),
       options?.separator,
@@ -67,37 +71,78 @@ export function renderPhoneColumn<T = DataRecord>(
       })
     }
 
-    function onPreviewPhone() {
-      const element = document.getElementById(id)
-
-      const elemnets = document.querySelectorAll(`.${className}`)
+    function clearOtherOriginValue() {
+      const elemnets = document.querySelectorAll(`.${className}.content`)
 
       if (elemnets.length > 0) {
         elemnets.forEach((item) => {
           const element = item as HTMLElement
-          element.innerHTML = element.dataset.encrypt!
+
+          if (element.innerText.includes('****')) {
+            return
+          }
+
+          // 更新内容
+          element.innerText = element.dataset.encrypt!
+
+          const node = element.nextSibling as HTMLElement
+
+          if (!node || !node.classList.contains('preview-icon')) {
+            return
+          }
+
+          node.innerHTML = `<svg width="${iconSize}" height="${iconSize}" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 36C35.0457 36 44 24 44 24C44 24 35.0457 12 24 12C12.9543 12 4 24 4 24C4 24 12.9543 36 24 36Z" fill="none" stroke="#333" stroke-width="2" stroke-linejoin="round"/><path d="M24 29C26.7614 29 29 26.7614 29 24C29 21.2386 26.7614 19 24 19C21.2386 19 19 21.2386 19 24C19 26.7614 21.2386 29 24 29Z" fill="none" stroke="#333" stroke-width="4" stroke-linejoin="round"/></svg>`
         })
       }
+    }
 
-      if (element) {
-        element.innerHTML = originValue
+    function updatePreivewIcon(isEncrypt: boolean) {
+      const previewIcon = document.querySelector(`#${id}>.preview-icon`)
+
+      if (!previewIcon) {
+        return
       }
+
+      if (isEncrypt) {
+        previewIcon.innerHTML = `<svg width="${iconSize}" height="${iconSize}" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 36C35.0457 36 44 24 44 24C44 24 35.0457 12 24 12C12.9543 12 4 24 4 24C4 24 12.9543 36 24 36Z" fill="none" stroke="#333" stroke-width="2" stroke-linejoin="round"/><path d="M24 29C26.7614 29 29 26.7614 29 24C29 21.2386 26.7614 19 24 19C21.2386 19 19 21.2386 19 24C19 26.7614 21.2386 29 24 29Z" fill="none" stroke="#333" stroke-width="4" stroke-linejoin="round"/></svg>`
+      }
+      else {
+        previewIcon.innerHTML = `<svg width="${iconSize}" height="${iconSize}" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 16C6.63472 17.2193 7.59646 18.3504 8.82276 19.3554C12.261 22.1733 17.779 24 24 24C30.221 24 35.739 22.1733 39.1772 19.3554C40.4035 18.3504 41.3653 17.2193 42 16" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M28.9775 24L31.048 31.7274" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M37.3535 21.3536L43.0103 27.0104" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.00004 27.0103L10.6569 21.3534" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.9278 31.7276L18.9983 24.0001" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+      }
+    }
+
+    function updatePreviewState() {
+      const element = document.querySelector(`#${id}>.content`)
+      const isEncrypt = !!element?.innerHTML.includes('****')
+
+      if (isEncrypt) {
+        clearOtherOriginValue()
+
+        if (element) {
+          element.innerHTML = originValue
+        }
+      }
+      else {
+        // 非加密状态
+        if (element) {
+          element.innerHTML = encryptValue
+        }
+      }
+
+      updatePreivewIcon(!isEncrypt)
     }
 
     function onCallOutPhone() {
       window.open(`tel:${phone}`, '_blank')
     }
 
-    const iconSize = 16
-    const iconStyle = `cursor:pointer;width:${iconSize}px;height:${iconSize}px;`
-
     return (
-      <div style="display:flex;align-items:center;gap:4px;">
-         <div data-encrypt={encryptValue} class={className} id={id} style="use-select:none;font-family: monospace;cursor:pointer;font-variant-numeric: tabular-nums;padding-right: 2px;">
+      <div id={id} style="display:flex;align-items:center;gap:4px;">
+         <div data-encrypt={encryptValue} class={`${className} content`} style="use-select:none;font-family: monospace;cursor:pointer;font-variant-numeric: tabular-nums;padding-right: 2px;">
            {options?.safe ? encryptValue : originValue}
          </div>
          {
-          options?.safe && options?.allowPreview && <i title="显示完整号码" style={iconStyle} onClick={onPreviewPhone}>
+          options?.safe && options?.allowPreview && <i class="preview-icon" title="显示完整号码" style={iconStyle} onClick={updatePreviewState}>
             <svg width={iconSize} height={iconSize} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 36C35.0457 36 44 24 44 24C44 24 35.0457 12 24 12C12.9543 12 4 24 4 24C4 24 12.9543 36 24 36Z" fill="none" stroke="#333" stroke-width="2" stroke-linejoin="round"/><path d="M24 29C26.7614 29 29 26.7614 29 24C29 21.2386 26.7614 19 24 19C21.2386 19 19 21.2386 19 24C19 26.7614 21.2386 29 24 29Z" fill="none" stroke="#333" stroke-width="4" stroke-linejoin="round"/></svg>
          </i>
          }
