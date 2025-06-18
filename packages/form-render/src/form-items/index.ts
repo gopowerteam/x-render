@@ -8,6 +8,7 @@ import { renderTreeSelectItem } from './tree-select'
 import { renderCascaderItem } from './cascader'
 import { renderRenderItem } from './render'
 import { renderCurrencyItem } from './currency'
+import { renderRadioItem } from './radio'
 
 export function FormItemRenders<T>() {
   return {
@@ -21,5 +22,6 @@ export function FormItemRenders<T>() {
     render: renderRenderItem<T>,
     cascader: renderCascaderItem<T>,
     currency: renderCurrencyItem<T>,
+    radio: renderRadioItem<T>,
   }
 }

@@ -1,7 +1,6 @@
 import type { CSSProperties } from 'vue'
 import { createColumnRender, getColumnValue, isPromise } from '../../utils'
 import type { DataRecord, TableColumnOptions } from '../../interfaces'
-import type { EventEmits } from '../..'
 
 export interface ImageColumnOptions<T> {
   width?: string
@@ -53,13 +52,18 @@ export function renderImageColumn<T = DataRecord>(
     element?.remove()
   }
 
+  function onPreviewImage() {
+
+  }
+
   const render = (
     record: T,
     column: TableColumnOptions<T>,
-    ctx?: {
-      previewing?: boolean
-      emits?: EventEmits
-    },
+    // ctx?: {
+    //   previewing?: boolean
+    //   emits?: EventEmits
+    //   rowIndex?: number
+    // },
   ) => {
     const value = getColumnValue(record, column)
     const id = Math.random().toString(32).slice(2).toUpperCase()
@@ -70,7 +74,7 @@ export function renderImageColumn<T = DataRecord>(
       borderRadius: options?.radius,
       objectFit: 'contain',
       transform: `rotate(${options?.rotate || 0}deg)`,
-      cursor: options?.preview ? 'pointer' : 'unset',
+      cursor: options?.preview ? 'zoom-in' : 'unset',
     }
 
     const parsedKey = `${column.index || column.key as string}_parsed`
@@ -95,8 +99,7 @@ export function renderImageColumn<T = DataRecord>(
       return url
         ? (<div
           id={id}
-          onMouseenter={() => options?.preview && !ctx?.previewing && showPreview(id, url)}
-          onMouseleave={() => options?.preview && !ctx?.previewing && closePreview(id)}
+          onClick={onPreviewImage}
           style={{
             display: 'flex',
             justifyContent: 'center',

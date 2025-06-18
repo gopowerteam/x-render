@@ -1,5 +1,13 @@
 # @gopowerteam/table-render
 
+## 0.0.161
+
+### Patch Changes
+
+- add radio form item
+- Updated dependencies
+  - @gopowerteam/form-render@0.0.88
+
 ## 0.0.160
 
 ### Patch Changes
