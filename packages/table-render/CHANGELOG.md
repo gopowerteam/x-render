@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.162
+
+### Patch Changes
+
+- table add buttons slot
+
 ## 0.0.161
 
 ### Patch Changes

@@ -18,7 +18,11 @@ export function tableFormRender(
           searchable
           onSubmit={() => tableEvents('reload', { reset: true })}
           {...props.formOptions}
-        ></FormRender>
+        >
+           {{
+             actions: ctx.slots.buttons ? () => ctx.slots.buttons!() : undefined,
+           }}
+        </FormRender>
       </div>
     )
   }

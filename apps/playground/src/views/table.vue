@@ -45,6 +45,11 @@
           clear selected
         </AButton>
       </template>
+      <template #buttons>
+        <AButton @click="console.log(123)">
+          button1
+        </AButton>
+      </template>
     </TableRender>
     radio:{{ radioKey }}
     checkbox:{{ checkboxKeys }}
