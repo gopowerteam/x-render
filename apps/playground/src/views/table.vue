@@ -45,7 +45,7 @@
           clear selected
         </AButton>
       </template>
-      <template #buttons>
+      <template #form-actions>
         <AButton @click="console.log(123)">
           button1
         </AButton>

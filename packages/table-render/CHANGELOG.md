@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.163
+
+### Patch Changes
+
+- table buttons slot to form-actions
+
 ## 0.0.162
 
 ### Patch Changes

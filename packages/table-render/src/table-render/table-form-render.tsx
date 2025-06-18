@@ -20,7 +20,7 @@ export function tableFormRender(
           {...props.formOptions}
         >
            {{
-             actions: ctx.slots.buttons ? () => ctx.slots.buttons!() : undefined,
+             actions: ctx.slots['form-actions'] ? () => ctx.slots['form-actions']!() : undefined,
            }}
         </FormRender>
       </div>
