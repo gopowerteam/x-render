@@ -74,6 +74,16 @@ export const FormRender = defineComponent({
       required: false,
       default: false,
     },
+    rowGap: {
+      type: Number,
+      required: false,
+      default: 6,
+    },
+    colGap: {
+      type: Number,
+      required: false,
+      default: 12,
+    },
   },
   emits: [
     'submit',
@@ -392,7 +402,7 @@ export const FormRender = defineComponent({
                 auto-label-width
                 ref={(instance: unknown) => this.formInstance = instance as any}
                 model={this.formSource}>
-                <Grid cols={this.formColumns} col-gap={24} rol-gap={10}>
+                <Grid cols={this.formColumns} col-gap={this.$props.colGap} row-gap={this.$props.rowGap}>
                   {
                     this.formItems.filter(() => this.formColumns !== 0).map(item => (
                       <GridItem span={item.span}>
