@@ -47,7 +47,7 @@ export function renderDateItem<T = DataRecord>(options?: RenderDateItemOptions):
           return (<span>{dayjs(value).format('YYYY年')}</span>)
         case 'date':
         default:
-          return (<span>{dayjs(value).format('YYYY年MM月DD日')}</span>)
+          return (<span>{dayjs(value).format(options?.showTime ? 'YYYY年MM月DD日 HH:mm:ss' : 'YYYY年MM月DD日')}</span>)
       }
     }
 
@@ -95,6 +95,7 @@ export function renderDateItem<T = DataRecord>(options?: RenderDateItemOptions):
               disabled-date={disabledMethod}
               format={options?.labelFormat}
               value-format={options?.valueFormat}
+              show-time={options?.showTime}
               {...{ shortcuts: options?.shortcuts }}></DatePicker>
           )
       }
@@ -119,4 +120,5 @@ export interface RenderDateItemOptions {
   valueFormat?: string
   labelFormat?: string
   shortcuts?: ShortcutType[]
+  showTime?: boolean
 }
