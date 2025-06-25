@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.165
+
+### Patch Changes
+
+- update columns widthg
+
 ## 0.0.164
 
 ### Patch Changes

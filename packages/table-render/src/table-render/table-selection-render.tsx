@@ -52,12 +52,14 @@ export function tableSecletionRender(
       case 'radio':{
         return {
           title: '选择',
-          ...selection,
+          width: 80,
           selectedRowKeys: selectedRowKeys.value,
+          ...selection,
         }
       }
       case 'checkbox':{
         return {
+          width: 80,
           showCheckedAll: true,
           selectedRowKeys: selectedRowKeys.value,
           ...selection,
