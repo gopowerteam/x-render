@@ -169,6 +169,11 @@ export const TableRender = defineComponent({
       default: false,
       required: false,
     },
+    virtualList: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   expose: [
     'preview',
@@ -455,6 +460,11 @@ export const TableRender = defineComponent({
       pagination: (props.pageable === undefined || props.pageable === 'client'),
       selectedKeys: selectedRowKeys.value,
       expandable: props.expandable,
+      virtualListProps: props.virtualList
+        ? {
+            height: props.height,
+          }
+        : undefined,
     }))
 
     function reloadColumns() {
