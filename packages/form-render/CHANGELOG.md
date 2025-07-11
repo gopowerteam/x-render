@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.91
+
+### Patch Changes
+
+- update date-range props
+
 ## 0.0.90
 
 ### Patch Changes

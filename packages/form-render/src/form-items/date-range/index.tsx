@@ -70,6 +70,7 @@ export function renderDateRangeItem<T=DataRecord>(options?: RenderDateRangeItemO
             onSelect={onSelect}
             onChange={onChange}
             mode={options?.type}
+            placeholder={options?.placeholder}
             shortcuts={options?.shortcuts}
             allowClear={options?.clearable}
             disabled-date={disabledMethod}
@@ -91,7 +92,7 @@ export function renderDateRangeItem<T=DataRecord>(options?: RenderDateRangeItemO
 }
 
 export interface RenderDateRangeItemOptions {
-  placeholder?: string
+  placeholder?: string[]
   clearable?: boolean
   multiple?: boolean
   type?: 'date' | 'year' | 'quarter' | 'month' | 'week'
