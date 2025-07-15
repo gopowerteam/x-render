@@ -16,6 +16,8 @@ export interface PhoneColumnOptions {
   allowCopy?: boolean
   // 设置显示分隔符
   separator?: string
+  // 拨出回调
+  onDial?: (phone: string) => void
 }
 
 /**
@@ -133,7 +135,12 @@ export function renderPhoneColumn<T = DataRecord>(
     }
 
     function onCallOutPhone() {
-      window.open(`tel:${phone}`, '_blank')
+      if (options?.onDial) {
+        options.onDial(phone)
+      }
+      else {
+        window.open(`tel:${phone}`, '_blank')
+      }
     }
 
     return (
