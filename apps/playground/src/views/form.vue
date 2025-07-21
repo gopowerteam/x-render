@@ -21,8 +21,17 @@
 </style>
 
 <script setup lang="tsx">
-import dayjs from 'dayjs'
 import { FormRender, defineForm } from '@gopowerteam/form-render'
+import { ref } from 'vue'
+
+const aaaa = ref<Map<string, string>>(new Map())
+
+setTimeout(() => {
+  aaaa.value = new Map([
+    ['a', 'aaa'],
+    ['b', 'bbb'],
+  ])
+}, 5000)
 
 const form = defineForm([
   {
@@ -34,10 +43,7 @@ const form = defineForm([
     render: r => r.radio({
       type: 'button',
       size: 'large',
-      options: new Map([
-        ['a', 'aaa'],
-        ['b', 'bbb'],
-      ]),
+      options: aaaa,
     }),
   },
   {
@@ -88,50 +94,13 @@ const form = defineForm([
     }),
   }, {
     key: 'xxx1',
-    title: 'xx',
-    render: r => r.dateRange({
-      shortcuts: [{
-        label: 'next 2 days',
-        value: () => [dayjs(), dayjs().add(2, 'day')].map(x => x.toDate()),
-      },
-      {
-        label: 'next 7 days',
-        value: () => [dayjs().toDate(), dayjs().add(1, 'month').toDate()],
-      },
-      {
-        label: 'next 30 days',
-        value: () => [dayjs(), dayjs().add(1, 'month')].map(x => x.toDate()),
-      },
-      {
-        label: 'next 6 months',
-        value: () => [dayjs(), dayjs().add(6, 'month')].map(x => x.toDate()),
-      },
-      {
-        label: 'next 12 months',
-        value: () => [dayjs(), dayjs().add(1, 'year')].map(x => x.toDate()),
-      },
-      {
-        label: 'next 10 years',
-        value: () => [dayjs(), dayjs().add(10, 'year')].map(x => x.toDate()),
-      }],
-    }),
+    title: 'xx-date',
+    render: r => r.dateRange(),
   }, {
     key: 'xxx2',
     title: 'xx',
     render: r => r.date({
-      type: 'year',
-      shortcuts: [{
-        label: '今天',
-        value: () => dayjs().toDate(),
-      },
-      {
-        label: '昨天',
-        value: () => dayjs().subtract(1, 'day').toDate(),
-      },
-      {
-        label: 'next 30 days',
-        value: () => dayjs().toDate(),
-      }],
+      type: 'date',
     }),
 
   }, {

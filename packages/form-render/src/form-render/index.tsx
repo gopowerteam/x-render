@@ -49,6 +49,11 @@ export const FormRender = defineComponent({
       required: false,
       default: 'append',
     },
+    collapsedDialogColumns: {
+      type: Number,
+      required: false,
+      default: 2,
+    },
     showFormResult: {
       type: Boolean,
       required: false,
@@ -196,6 +201,7 @@ export const FormRender = defineComponent({
       modalInstance.value.open(FormCollapsedDialog, {
         form: props.form,
         value: formSource.value,
+        columns: props.collapsedDialogColumns,
       }, {
         title: '高级搜索',
         footer: false,

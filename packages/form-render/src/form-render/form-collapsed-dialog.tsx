@@ -12,6 +12,10 @@ export default defineComponent({
     value: {
       type: Object,
     },
+    columns: {
+      type: Number,
+      default: 2,
+    },
   },
   setup(props) {
     const modal = useModal()
@@ -70,7 +74,7 @@ export default defineComponent({
     const defaultGroup = this.groupForms.find(x => x.group === this.activeTab)
     if (!this.groups.length) {
       return <>
-        <FormRender form={this.formItems} value={this.value} ref={(instance: any) => defaultGroup!.instance = instance}></FormRender>
+        <FormRender columns={this.columns} form={this.formItems} value={this.value} ref={(instance: any) => defaultGroup!.instance = instance}></FormRender>
         <Divider></Divider>
         <div class="flex items-center justify-between space-x-2">
           <Button type="secondary" size="large" onClick={this.onReset}>重置</Button>
@@ -82,7 +86,7 @@ export default defineComponent({
       return <Tabs v-model:active-key={this.activeTab}>
         { this.groupForms.map(item => (
            <TabPane title={item.group} key={item.group}>
-            <FormRender form={item.form} value={this.value} ref={(instance: any) => item.instance = instance}></FormRender>
+            <FormRender columns={this.columns} form={item.form} value={this.value} ref={(instance: any) => item.instance = instance}></FormRender>
             <Divider></Divider>
             <div class="flex items-center justify-between space-x-2">
               <Button type="secondary" size="large" onClick={this.onReset}>重置</Button>

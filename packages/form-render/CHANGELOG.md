@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.92
+
+### Patch Changes
+
+- update form-render
+
 ## 0.0.91
 
 ### Patch Changes

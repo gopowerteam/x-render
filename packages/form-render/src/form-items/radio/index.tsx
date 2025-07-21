@@ -119,7 +119,7 @@ export function renderRadioItem<T=DataRecord>(options: RenderRadioItemOptions): 
       const value = data[form.key as keyof T]
 
       return (
-        <span>{radioOptions.value.get(value as string)}</span>
+        <span>{radioOptions.value?.get(value as string)}</span>
       )
     }
 

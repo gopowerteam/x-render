@@ -1,6 +1,8 @@
 import type { ShortcutType } from '@arco-design/web-vue'
 import { RangePicker } from '@arco-design/web-vue'
 import dayjs from 'dayjs'
+import updateLocale from 'dayjs/plugin/updateLocale'
+
 import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
 
 /**
@@ -9,6 +11,86 @@ import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../in
  * @returns JSX
  */
 export function renderDateRangeItem<T=DataRecord>(options?: RenderDateRangeItemOptions): FormItemRenderReturn<T> {
+  dayjs.extend(updateLocale)
+  const defaultValueFormat = 'YYYY-MM-DD HH:mm:ss'
+  const defaultDateRangeShortcuts: ShortcutType[] = [
+    {
+      label: '默认',
+      value: () => {
+        const start = dayjs().startOf('month').toDate()
+        const end = dayjs().endOf('date').toDate()
+        return [start, end]
+      },
+    },
+    {
+      label: '今天',
+      value: () => {
+        const start = dayjs().startOf('date').toDate()
+        const end = dayjs().endOf('date').toDate()
+        return [start, end]
+      },
+    },
+    {
+      label: '昨天',
+      value: () => {
+        const start = dayjs().subtract(1, 'day').startOf('date').toDate()
+        const end = dayjs().subtract(1, 'day').endOf('date').toDate()
+        console.log([start, end])
+        return [start, end]
+      },
+    },
+    {
+      label: '本周',
+      value: () => {
+        dayjs.updateLocale('zh-cn', { weekStart: 1 })
+        const start = dayjs().startOf('week').toDate()
+        const end = dayjs().endOf('week').toDate()
+        return [start, end]
+      },
+    },
+    {
+      label: '上周',
+      value: () => {
+        dayjs.updateLocale('zh-cn', { weekStart: 1 })
+        const start = dayjs().subtract(1, 'week').startOf('week').toDate()
+        const end = dayjs().subtract(1, 'week').endOf('week').toDate()
+        return [start, end]
+      },
+    },
+    {
+      label: '本月',
+      value: () => {
+        const start = dayjs().startOf('month').toDate()
+        const end = dayjs().endOf('month').toDate()
+        return [start, end]
+      },
+    },
+    {
+      label: '上月',
+      value: () => {
+        const start = dayjs().subtract(1, 'month').startOf('month').toDate()
+        const end = dayjs().subtract(1, 'month').endOf('month').toDate()
+        return [start, end]
+      },
+    },
+    {
+      label: '本年',
+      value: () => {
+        const start = dayjs().startOf('year').toDate()
+        const end = dayjs().endOf('year').toDate()
+        return [start, end]
+      },
+    },
+    {
+      label: '去年',
+      value: () => {
+        const start = dayjs().subtract(1, 'year').startOf('year').toDate()
+        const end = dayjs().subtract(1, 'year').endOf('year').toDate()
+        return [start, end]
+      },
+    },
+  ]
+
   return (data: T, form: FormItemOptions<T>) => {
     let dates: string[] = []
 
@@ -23,8 +105,8 @@ export function renderDateRangeItem<T=DataRecord>(options?: RenderDateRangeItemO
         const endDate = dayjs(endDateStr).endOf('days')
 
         data[form.key as keyof T] = [
-          startDate.format(options?.valueFormat || 'YYYY-MM-DD'),
-          endDate.format(options?.valueFormat || 'YYYY-MM-DD'),
+          startDate.format(options?.valueFormat || defaultValueFormat),
+          endDate.format(options?.valueFormat || defaultValueFormat),
         ] as any
       }
     }
@@ -60,6 +142,18 @@ export function renderDateRangeItem<T=DataRecord>(options?: RenderDateRangeItemO
       return (<span>{getDateText(startDate)} - {getDateText(endDate)}</span>)
     }
 
+    function getRangeShortcuts() {
+      switch (true) {
+        case !!options?.shortcuts:
+          return options?.shortcuts
+        case options?.type === 'date':
+        case options?.type === undefined:
+          return defaultDateRangeShortcuts
+      }
+    }
+
+    console.log(getRangeShortcuts())
+
     function renderComponent() {
       return (
         <div>
@@ -71,11 +165,11 @@ export function renderDateRangeItem<T=DataRecord>(options?: RenderDateRangeItemO
             onChange={onChange}
             mode={options?.type}
             placeholder={options?.placeholder}
-            shortcuts={options?.shortcuts}
+            shortcuts={getRangeShortcuts()}
             allowClear={options?.clearable}
             disabled-date={disabledMethod}
             format={options?.labelFormat}
-            value-format={options?.valueFormat}></RangePicker>
+            value-format={options?.valueFormat ?? defaultValueFormat}></RangePicker>
         </div>
       )
     }
