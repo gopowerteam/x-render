@@ -40,6 +40,7 @@ export function tablePaginationRender(
             hide-on-single-page={!props.alwayShowPagination}
             show-total
             show-page-size
+            size="small"
             simple={breakpoints.smaller('desktop').value}
             onChange={index => onPageChange(index)}
             onPageSizeChange={size => onPageSizeChange(size)}

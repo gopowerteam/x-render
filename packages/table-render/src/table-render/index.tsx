@@ -113,6 +113,11 @@ export const TableRender = defineComponent({
       required: false,
       default: 'right',
     },
+    pagePosition: {
+      type: String as PropType<'top' | 'bottom' | 'all'>,
+      required: false,
+      default: 'all',
+    },
     pageable: {
       type: [Object, Boolean, String] as PropType<(RequestPlugin & PageableOptions) | { index: number; size: number } | boolean | 'client' | 'server'>,
       required: false,
@@ -556,8 +561,9 @@ export const TableRender = defineComponent({
             {this.renders.renderTableForm()}
             {this.renders.renderTableActions()}
             {this.$slots.header && this.$slots.header()}
+            {['all', 'top'].includes(this.$props.pagePosition) && this.renders.renderTablePagination()}
             {renderTable()}
-            {this.renders.renderTablePagination()}
+            {['all', 'bottom'].includes(this.$props.pagePosition) && this.renders.renderTablePagination()}
           </div>
         </ModalProvider>
       </div>

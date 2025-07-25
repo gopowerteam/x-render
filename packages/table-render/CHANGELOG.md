@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 0.0.171
+
+### Patch Changes
+
+- add page position
+
 ## 0.0.170
 
 ### Patch Changes
