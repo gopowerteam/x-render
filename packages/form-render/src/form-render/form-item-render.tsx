@@ -37,6 +37,7 @@ export function renderFormItem(source: DataRecord, options: FormItemOptions) {
       return h(
         FormItem,
         {
+          key: options.key,
           field: options.key,
           label: options.title,
           hideLabel: options.hideLabel,

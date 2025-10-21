@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.93
+
+### Patch Changes
+
+- fixed form-item key field
+
 ## 0.0.92
 
 ### Patch Changes

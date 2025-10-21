@@ -249,8 +249,10 @@ export const FormRender = defineComponent({
       updateFormField(key, value)
     }
 
-    function resetForm() {
-      formInstance.value?.resetFields()
+    function resetFormFields() {
+      if (formInstance.value) {
+        formInstance.value.resetFields()
+      }
     }
 
     function validateForm() {
@@ -270,8 +272,9 @@ export const FormRender = defineComponent({
       toggleFormCollapsed,
       updateFormField,
       resetFormField,
+      resetFormFields,
       updateFormSource,
-      reset: resetForm,
+      reset: resetFormFields,
       validate: validateForm,
       onSubmitSuccess,
       openCollapsedDialog,
@@ -353,7 +356,7 @@ export const FormRender = defineComponent({
         buttons.push(<Button type="primary" htmlType='submit'>搜索</Button>)
 
         if (this.resetable) {
-          buttons.push(<Button type="secondary" onClick={() => this.formInstance?.resetFields()}>重置</Button>)
+          buttons.push(<Button type="secondary" onClick={() => this.resetFormFields()}>重置</Button>)
         }
       }
 
@@ -411,7 +414,7 @@ export const FormRender = defineComponent({
                 <Grid cols={this.formColumns} col-gap={this.$props.colGap} row-gap={this.$props.rowGap}>
                   {
                     this.formItems.filter(() => this.formColumns !== 0).map(item => (
-                      <GridItem span={item.span}>
+                      <GridItem span={item.span} key={item.key as string}>
                         {renderFormItem(this.formSource, item)}
                       </GridItem>
                     ))
