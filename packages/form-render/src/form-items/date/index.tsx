@@ -12,6 +12,7 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
 import weekOfYear from 'dayjs/plugin/weekOfYear'
 import quarterOfYear from 'dayjs/plugin/quarterOfYear'
+import type { ComponentPublicInstance } from 'vue'
 import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
 
 dayjs.extend(weekOfYear)
@@ -24,12 +25,35 @@ dayjs.locale('zh-cn', { weekStart: 1 })
  * @returns JSX
  */
 export function renderDateItem<T = DataRecord>(options?: RenderDateItemOptions): FormItemRenderReturn<T> {
+  let pickerInstance: ComponentPublicInstance
+
   function disabledMethod(value: string, date: Date) {
     if (!options?.disabledDate) {
       return false
     }
 
     return options.disabledDate(value, date)
+  }
+
+  function onChange(value: string | number | Date | undefined) {
+    if (options?.onChange) {
+      options?.onChange(value)
+    }
+
+    if (!options?.autoSubmit || !pickerInstance) {
+      return
+    }
+
+    let parent: ComponentPublicInstance | null = pickerInstance
+
+    while (parent && (parent.$el as HTMLElement).tagName !== 'FORM') {
+      parent = parent.$parent
+    }
+
+    if (parent && parent.$el) {
+      const form = parent.$el as HTMLFormElement
+      form.dispatchEvent(new Event('submit'))
+    }
   }
 
   return (data: T, form: FormItemOptions<T>) => {
@@ -56,46 +80,60 @@ export function renderDateItem<T = DataRecord>(options?: RenderDateItemOptions):
         case 'week':
           return (
             <WeekPicker
+              ref={(instance: unknown) => pickerInstance = (instance as ComponentPublicInstance)}
               day-start-of-week={1}
               v-model={data[form.key as keyof T]}
               disabled-date={disabledMethod}
               format={options?.labelFormat}
-              value-format={options?.valueFormat}></WeekPicker>
+              value-format={options?.valueFormat}
+              {...{ onChange }}>
+              </WeekPicker>
           )
         case 'month':
           return (
             <MonthPicker
+              ref={(instance: unknown) => pickerInstance = (instance as ComponentPublicInstance)}
               v-model={data[form.key as keyof T]}
               disabled-date={disabledMethod}
               format={options?.labelFormat}
-              value-format={options?.valueFormat}></MonthPicker>
+              value-format={options?.valueFormat}
+              {...{ onChange }}>
+            </MonthPicker>
           )
         case 'quarter':
           return (
             <QuarterPicker
+              ref={(instance: unknown) => pickerInstance = (instance as ComponentPublicInstance)}
               v-model={data[form.key as keyof T]}
               disabled-date={disabledMethod}
               format={options?.labelFormat}
-              value-format={options?.valueFormat}></QuarterPicker>
+              value-format={options?.valueFormat}
+              {...{ onChange }}>
+            </QuarterPicker>
           )
         case 'year':
           return (
             <YearPicker
+              ref={(instance: unknown) => pickerInstance = (instance as ComponentPublicInstance)}
               v-model={data[form.key as keyof T]}
               disabled-date={disabledMethod}
               format={options?.labelFormat}
-              value-format={options?.valueFormat}></YearPicker>
+              value-format={options?.valueFormat}
+              {...{ onChange }}>
+            </YearPicker>
           )
         case 'date':
         default:
           return (
             <DatePicker
+              ref={(instance: unknown) => pickerInstance = (instance as ComponentPublicInstance)}
               disabled-input
               v-model={data[form.key as keyof T]}
               disabled-date={disabledMethod}
               format={options?.labelFormat}
               value-format={options?.valueFormat}
               show-time={options?.showTime}
+              {...{ onChange }}
               {...{ shortcuts: options?.shortcuts }}></DatePicker>
           )
       }
@@ -121,4 +159,6 @@ export interface RenderDateItemOptions {
   labelFormat?: string
   shortcuts?: ShortcutType[]
   showTime?: boolean
+  onChange?: (value: string | number | Date | undefined) => void
+  autoSubmit?: boolean
 }

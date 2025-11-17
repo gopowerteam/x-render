@@ -1,5 +1,11 @@
 # @gopowerteam/form-render
 
+## 0.0.94
+
+### Patch Changes
+
+- date & date-range add auto-submit
+
 ## 0.0.93
 
 ### Patch Changes

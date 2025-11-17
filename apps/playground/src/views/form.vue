@@ -103,6 +103,7 @@ const form = defineForm([
     title: 'xx',
     render: r => r.date({
       type: 'date',
+      autoSubmit: true,
     }),
 
   }, {
