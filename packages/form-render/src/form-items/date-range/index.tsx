@@ -3,6 +3,7 @@ import { RangePicker } from '@arco-design/web-vue'
 import dayjs from 'dayjs'
 import updateLocale from 'dayjs/plugin/updateLocale'
 
+import type { ComponentPublicInstance } from 'vue'
 import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
 
 /**
@@ -12,6 +13,7 @@ import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../in
  */
 export function renderDateRangeItem<T=DataRecord>(options?: RenderDateRangeItemOptions): FormItemRenderReturn<T> {
   dayjs.extend(updateLocale)
+  let dateRangeInstance: ComponentPublicInstance
   const defaultValueFormat = 'YYYY-MM-DD HH:mm:ss'
   const defaultDateRangeShortcuts: ShortcutType[] = [
     {
@@ -35,7 +37,6 @@ export function renderDateRangeItem<T=DataRecord>(options?: RenderDateRangeItemO
       value: () => {
         const start = dayjs().subtract(1, 'day').startOf('date').toDate()
         const end = dayjs().subtract(1, 'day').endOf('date').toDate()
-        console.log([start, end])
         return [start, end]
       },
     },
@@ -91,6 +92,27 @@ export function renderDateRangeItem<T=DataRecord>(options?: RenderDateRangeItemO
     },
   ]
 
+  const onDatePickerChange = (value?: string[]) => {
+    if (options?.onChange) {
+      options?.onChange(value)
+    }
+
+    if (!options?.autoSubmit || !dateRangeInstance) {
+      return
+    }
+
+    let parent: ComponentPublicInstance | null = dateRangeInstance
+
+    while (parent && (parent.$el as HTMLElement).tagName !== 'FORM') {
+      parent = parent.$parent
+    }
+
+    if (parent && parent.$el) {
+      const form = parent.$el as HTMLFormElement
+      form.dispatchEvent(new Event('submit'))
+    }
+  }
+
   return (data: T, form: FormItemOptions<T>) => {
     let dates: string[] = []
 
@@ -104,10 +126,18 @@ export function renderDateRangeItem<T=DataRecord>(options?: RenderDateRangeItemO
         const startDate = dayjs(startDateStr).startOf('days')
         const endDate = dayjs(endDateStr).endOf('days')
 
-        data[form.key as keyof T] = [
+        const value = [
           startDate.format(options?.valueFormat || defaultValueFormat),
           endDate.format(options?.valueFormat || defaultValueFormat),
         ] as any
+
+        data[form.key as keyof T] = value
+
+        onDatePickerChange(value)
+      }
+
+      if (values === undefined) {
+        onDatePickerChange()
       }
     }
 
@@ -152,12 +182,11 @@ export function renderDateRangeItem<T=DataRecord>(options?: RenderDateRangeItemO
       }
     }
 
-    console.log(getRangeShortcuts())
-
     function renderComponent() {
       return (
         <div>
           <RangePicker
+            ref={(instance: unknown) => dateRangeInstance = (instance as ComponentPublicInstance)}
             disabled-input
             style={{ width: '300px' }}
             v-model={data[form.key as keyof T]}
@@ -194,4 +223,6 @@ export interface RenderDateRangeItemOptions {
   labelFormat?: string
   disabledDate?: (value: string[], date: Date) => boolean
   shortcuts?: ShortcutType[]
+  onChange?: (value: string[] | undefined) => void
+  autoSubmit?: boolean
 }

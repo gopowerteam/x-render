@@ -95,7 +95,9 @@ const form = defineForm([
   }, {
     key: 'xxx1',
     title: 'xx-date',
-    render: r => r.dateRange(),
+    render: r => r.dateRange({
+      autoSubmit: true,
+    }),
   }, {
     key: 'xxx2',
     title: 'xx',
