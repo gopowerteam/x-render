@@ -75,6 +75,7 @@ export function renderImageColumn<T = DataRecord>(
             alignItems: 'center',
             height: `${options?.size}px`,
             width: `${options?.size}px`,
+            margin: 'auto',
           }}
         >
             <Image preview={options?.preview} width="100%" height="100%" fit="contain" src={url} alt="image" style={style}></Image>
