@@ -1,23 +1,26 @@
 import { resolve } from 'node:path'
-import { defineConfig } from 'vite'
+import { fileURLToPath, URL } from 'node:url'
+import { vitePluginForArco as arco } from '@arco-plugins/vite-vue'
 import vue from '@vitejs/plugin-vue'
 import jsx from '@vitejs/plugin-vue-jsx'
-import dts from 'vite-plugin-dts'
-import { vitePluginForArco as arco } from '@arco-plugins/vite-vue'
-import unocss from 'unocss/vite'
 import { presetUno } from 'unocss'
+import unocss from 'unocss/vite'
+import { defineConfig } from 'vite'
+import dts from 'vite-plugin-dts'
 
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
-    target: 'modules',
+    target: 'esnext',
     lib: {
       entry: [
         resolve(__dirname, 'src/index.ts'),
         resolve(__dirname, 'src/resolver.ts'),
       ],
       name: 'bundle',
-      fileName: (format, name) => `${format}/${name}.${format === 'es' ? 'mjs' : 'cjs'}`,
+      fileName: (format, name) =>
+        `${format}/${name}.${format === 'es' ? 'mjs' : 'cjs'}`,
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
@@ -44,9 +47,7 @@ export default defineConfig({
       style: 'css',
     }) as any,
     unocss({
-      presets: [
-        presetUno(),
-      ],
+      presets: [presetUno()],
       safelist: ['justify-end'],
     }),
   ],
