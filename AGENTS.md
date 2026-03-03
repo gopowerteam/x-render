@@ -57,14 +57,9 @@ No test framework is currently configured in this project. If adding tests, crea
 
 ## Code Style
 
-### Formatting (Prettier)
+### Formatting (ESLint)
 
-```js
-{
-  semi: false,        // No semicolons
-  singleQuote: true,  // Use single quotes
-}
-```
+项目使用 `@antfu/eslint-config` + `eslint-plugin-format` 进行代码格式化，无需 Prettier。
 
 ### EditorConfig
 
@@ -100,18 +95,18 @@ Extends `@gopowerteam/eslint-config`. Console statements are allowed.
 
 ```typescript
 // 1. External dependencies (Node built-ins first)
-import { resolve } from 'node:path'
+import { resolve } from "node:path";
 
 // 2. Third-party packages
-import { defineComponent, ref } from 'vue'
-import { Table } from '@arco-design/web-vue'
+import { defineComponent, ref } from "vue";
+import { Table } from "@arco-design/web-vue";
 
 // 3. Internal packages (using workspace protocol)
-import { ModalProvider } from '@gopowerteam/modal-render'
+import { ModalProvider } from "@gopowerteam/modal-render";
 
 // 4. Relative imports
-import { createTableSource } from '../utils/create-table-source'
-import type { TableColumnOptions } from '../../interfaces'
+import { createTableSource } from "../utils/create-table-source";
+import type { TableColumnOptions } from "../../interfaces";
 ```
 
 ### Vue Components
@@ -120,17 +115,17 @@ Use `<script setup>` with TypeScript:
 
 ```vue
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed } from "vue";
 
 const props = withDefaults(
   defineProps<{
-    title?: string
-    content: string
+    title?: string;
+    content: string;
   }>(),
   {
-    title: 'Default Title',
+    title: "Default Title",
   },
-)
+);
 </script>
 
 <template>
@@ -147,21 +142,21 @@ const props = withDefaults(
 Use `defineComponent` with render function:
 
 ```tsx
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref } from "vue";
 
 export const MyComponent = defineComponent({
   props: {
     value: { type: String, required: false },
   },
   setup(props, ctx) {
-    const data = ref<string>()
+    const data = ref<string>();
 
-    return { data }
+    return { data };
   },
   render() {
-    return <div>{this.data}</div>
+    return <div>{this.data}</div>;
   },
-})
+});
 ```
 
 ### Exports
@@ -169,10 +164,10 @@ export const MyComponent = defineComponent({
 Barrel exports from `index.ts`:
 
 ```typescript
-export * from './interfaces'
-export * from './hooks'
-export * from './defines'
-export { default } from './install'
+export * from "./interfaces";
+export * from "./hooks";
+export * from "./defines";
+export { default } from "./install";
 ```
 
 ### Type Definitions
@@ -182,8 +177,8 @@ export { default } from './install'
 - Export instance types for components:
 
 ```typescript
-export type MyComponentInstance = InstanceType<typeof MyComponent>
-export type MyComponentProps = MyComponentInstance['$props']
+export type MyComponentInstance = InstanceType<typeof MyComponent>;
+export type MyComponentProps = MyComponentInstance["$props"];
 ```
 
 ### Naming Conventions
@@ -200,7 +195,7 @@ Throw descriptive errors (Chinese comments in codebase):
 
 ```typescript
 if (!record) {
-  throw new Error('未找到需要编辑的数据')
+  throw new Error("未找到需要编辑的数据");
 }
 ```
 
@@ -208,7 +203,7 @@ Return rejected promises for async failures:
 
 ```typescript
 if (!props.dataLoad) {
-  return Promise.reject()
+  return Promise.reject();
 }
 ```
 

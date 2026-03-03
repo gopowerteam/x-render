@@ -4,8 +4,9 @@ import { h } from 'vue'
 import { FormItemRenders as renders } from '../form-items'
 /**
  * 生成Render模板
- * @param render
- * @returns
+ * @param source 数据源
+ * @param options 表单项配置
+ * @returns 渲染模板对象
  */
 function toRenderTemplate(source: DataRecord, options: FormItemOptions) {
   if (!options.render) {
@@ -25,8 +26,9 @@ function toRenderTemplate(source: DataRecord, options: FormItemOptions) {
 
 /**
  * 创建表格列
- * @param options
- * @returns
+ * @param source 数据源
+ * @param options 表单项配置
+ * @returns 表单项VNode
  */
 export function renderFormItem(source: DataRecord, options: FormItemOptions) {
   switch (options.mode) {

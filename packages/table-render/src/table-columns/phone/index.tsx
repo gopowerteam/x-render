@@ -22,8 +22,8 @@ export interface PhoneColumnOptions {
 
 /**
  * 加密文本
- * @param value
- * @returns
+ * @param value 手机号
+ * @returns 脱敏后的手机号
  */
 function encryptText(value: string) {
   return value?.replace(/(\d{3})\d*(\d{4})/g, '$1****$2')
@@ -31,9 +31,9 @@ function encryptText(value: string) {
 
 /**
  * 获取格式化值
- * @param value
- * @param separator
- * @returns
+ * @param value 手机号
+ * @param separator 分隔符
+ * @returns 格式化后的手机号
  */
 function formatText(value: string, separator?: string) {
   return value

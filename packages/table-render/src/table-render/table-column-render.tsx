@@ -1,14 +1,22 @@
 import type { TableColumnData, TableData } from '@arco-design/web-vue'
 import type { Ref } from 'vue'
 import type { EventEmits } from '../hooks'
-import type { ColumnsGroup, TableColumnOptions, TableColumnSharedOptions, TableColumnsOptions } from '../interfaces'
+import type {
+  ColumnsGroup,
+  TableColumnOptions,
+  TableColumnSharedOptions,
+  TableColumnsOptions,
+} from '../interfaces'
 import { TableColumnRenders } from '../table-columns'
 import { RenderColumnType } from '../utils'
 
 /**
  * 生成Render模板
- * @param render
- * @returns
+ * @param options 列配置选项
+ * @param context 渲染上下文
+ * @param context.previewing 是否预览模式
+ * @param context.emits 事件处理器
+ * @returns 渲染配置对象
  */
 export function toRenderColumn<T>(
   options?: TableColumnOptions<T>,
@@ -29,10 +37,11 @@ export function toRenderColumn<T>(
 
   // 获取deault slot
   return {
-    render: ({ record, rowIndex }: { record: TableData, rowIndex?: number }) => templateRender(record as T, options, {
-      ...(context || {}),
-      rowIndex,
-    }),
+    render: ({ record, rowIndex }: { record: TableData, rowIndex?: number }) =>
+      templateRender(record as T, options, {
+        ...(context || {}),
+        rowIndex,
+      }),
     [RenderColumnType]: templateRender.$type,
     disableColumnMode: templateRender.$disableColumnMode,
     disableViewMode: templateRender.$disableViewMode,
@@ -58,10 +67,12 @@ export function renderTableColumns({
 }) {
   const data = columns
     .map(column => ({
-      ...columnsOptions || {},
+      ...(columnsOptions || {}),
       ...column,
     }))
-    .map(column => renderTableColumn(column, pageMode, collapsedColumns, events))
+    .map(column =>
+      renderTableColumn(column, pageMode, collapsedColumns, events),
+    )
     .filter(Boolean) as TableColumnData[]
 
   return transformColumnsGroups(data, columnsGroups)
@@ -69,14 +80,16 @@ export function renderTableColumns({
 
 function generateColumnsGroup(group: ColumnsGroup, columns: TableColumnData[]) {
   const includes: TableColumnData[] = []
-  const generate = (node: ColumnsGroup | ColumnsGroup['children'][number]): any => {
+  const generate = (
+    node: ColumnsGroup | ColumnsGroup['children'][number],
+  ): any => {
     if ('children' in node) {
       node.children = node.children.map(generate)
     }
 
     if ('key' in node) {
-      const column = columns.find(x =>
-        Object.getOwnPropertyDescriptor(x, 'key')?.value === node.key,
+      const column = columns.find(
+        x => Object.getOwnPropertyDescriptor(x, 'key')?.value === node.key,
       )
 
       if (column) {
@@ -102,7 +115,10 @@ function generateColumnsGroup(group: ColumnsGroup, columns: TableColumnData[]) {
   }
 }
 
-function transformColumnsGroups(columns: TableColumnData[], columnsGroups: ColumnsGroup[] = []): TableColumnData[] {
+function transformColumnsGroups(
+  columns: TableColumnData[],
+  columnsGroups: ColumnsGroup[] = [],
+): TableColumnData[] {
   columnsGroups.forEach((group) => {
     generateColumnsGroup(group, columns)
   })
@@ -112,14 +128,23 @@ function transformColumnsGroups(columns: TableColumnData[], columnsGroups: Colum
 
 /**
  * 创建表格列
- * @param options
- * @returns
+ * @param options 列配置选项
+ * @param pageMode 分页模式
+ * @param collapsedColumns 折叠列配置
+ * @param events 事件处理器
+ * @returns 表格列数据
  */
-export function renderTableColumn<T>(options: TableColumnOptions<T>, pageMode: 'client' | 'server', collapsedColumns: Ref<{ key: string, title: string, collapsed: boolean }[]>, events: EventEmits): TableColumnData | undefined {
-  const { render, disableColumnMode } = toRenderColumn(options, {
-    previewing: false,
-    emits: events,
-  }) || {}
+export function renderTableColumn<T>(
+  options: TableColumnOptions<T>,
+  pageMode: 'client' | 'server',
+  collapsedColumns: Ref<{ key: string, title: string, collapsed: boolean }[]>,
+  events: EventEmits,
+): TableColumnData | undefined {
+  const { render, disableColumnMode }
+    = toRenderColumn(options, {
+      previewing: false,
+      emits: events,
+    }) || {}
 
   if (disableColumnMode || options.visiable === false) {
     return
@@ -129,12 +154,16 @@ export function renderTableColumn<T>(options: TableColumnOptions<T>, pageMode: '
     return
   }
 
-  if (collapsedColumns.value.find(item => item.key === options.key && item.collapsed === true)) {
+  if (
+    collapsedColumns.value.find(
+      item => item.key === options.key && item.collapsed === true,
+    )
+  ) {
     return
   }
 
   return {
-    dataIndex: options.index || options.key as string,
+    dataIndex: options.index || (options.key as string),
     title: options.title,
     width: options.width === 'auto' ? undefined : options.width,
     align: options.align ?? 'center',

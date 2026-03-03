@@ -1,12 +1,6 @@
 import type { ComponentPublicInstance, Ref } from 'vue'
 import type { TableRender } from '../table-render'
-import {
-
-  getCurrentInstance,
-  onMounted,
-  onUpdated,
-  ref,
-} from 'vue'
+import { getCurrentInstance, onMounted, onUpdated, ref } from 'vue'
 
 type TableRenderInstance = InstanceType<typeof TableRender>
 
@@ -19,8 +13,8 @@ type TableRenderExpose = {
 
 /**
  * 获取TableRender实例
- * @param key
- * @returns
+ * @param key ref标识
+ * @returns TableRender实例的只读响应式引用
  */
 export function useTable(key: string): Readonly<Ref<TableRenderExpose>> {
   const instance = getCurrentInstance()

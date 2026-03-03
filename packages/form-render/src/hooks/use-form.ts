@@ -1,12 +1,6 @@
 import type { ComponentPublicInstance, Ref } from 'vue'
 import type { FormRenderInstance } from '../form-render'
-import {
-
-  getCurrentInstance,
-  onMounted,
-  onUpdated,
-  ref,
-} from 'vue'
+import { getCurrentInstance, onMounted, onUpdated, ref } from 'vue'
 
 type FormRenderExpose = {
   -readonly [K in keyof Omit<
@@ -17,8 +11,8 @@ type FormRenderExpose = {
 
 /**
  * 获取TableRender实例
- * @param key
- * @returns
+ * @param key ref标识
+ * @returns FormRender实例的只读响应式引用
  */
 export function useForm(key: string): Readonly<Ref<FormRenderExpose>> {
   const instance = getCurrentInstance()
