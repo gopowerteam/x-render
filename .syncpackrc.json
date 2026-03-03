@@ -1,0 +1,10 @@
+{
+  "semverGroups": [
+    {
+      "label": "devDependencies must use exact versions",
+      "dependencyTypes": ["dev"],
+      "packages": ["**"],
+      "range": ""
+    }
+  ]
+}
