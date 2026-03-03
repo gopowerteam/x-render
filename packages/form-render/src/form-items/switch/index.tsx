@@ -1,8 +1,8 @@
-import { Switch } from '@arco-design/web-vue'
 import type { ComponentPublicInstance } from 'vue'
 import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
+import { Switch } from '@arco-design/web-vue'
 
-export function renderSwitchItem<T=DataRecord>(options?: RenderSwitchItemOptions): FormItemRenderReturn<T> {
+export function renderSwitchItem<T = DataRecord>(options?: RenderSwitchItemOptions): FormItemRenderReturn<T> {
   // const events = useEvents(inject<string>('id'))
   let switchInstance: ComponentPublicInstance
 
@@ -46,7 +46,9 @@ export function renderSwitchItem<T=DataRecord>(options?: RenderSwitchItemOptions
           uncheckedText={options?.closeLabel ?? '否'}
           checkedValue={options?.openValue ?? true}
           uncheckedValue={options?.closeValue ?? false}
-          onChange={onChange}></Switch>
+          onChange={onChange}
+        >
+        </Switch>
       )
     }
 

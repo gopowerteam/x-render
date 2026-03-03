@@ -33,7 +33,7 @@ export interface FormItemTypeKeyOptions<T = Record<string, any>> extends FormIte
  */
 export type FormItemsOptions<T = Record<string, any>> = Array<FormItemOptions<T>>
 
-export type FormItemsTypeKeyOptions<T= Record<string, any>> = FormItemTypeKeyOptions<T>[]
+export type FormItemsTypeKeyOptions<T = Record<string, any>> = FormItemTypeKeyOptions<T>[]
 export type FormItemsStringKeyOptions<T = Record<string, any>> = FormItemStringKeyOptions<T>[]
 
 /**

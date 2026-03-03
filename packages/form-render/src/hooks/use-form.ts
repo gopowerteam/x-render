@@ -1,12 +1,12 @@
+import type { ComponentPublicInstance, Ref } from 'vue'
+import type { FormRenderInstance } from '../form-render'
 import {
-  type ComponentPublicInstance,
-  type Ref,
+
   getCurrentInstance,
   onMounted,
   onUpdated,
   ref,
 } from 'vue'
-import type { FormRenderInstance } from '../form-render'
 
 type FormRenderExpose = {
   -readonly [K in keyof Omit<

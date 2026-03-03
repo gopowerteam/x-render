@@ -1,3 +1,11 @@
+<script setup lang="ts">
+withDefaults(defineProps<{
+  text?: string
+}>(), {
+  text: '加载中',
+})
+</script>
+
 <template>
   <section class="flex-center">
     <div class="modal-loading">
@@ -15,7 +23,7 @@
 </template>
 
 <style scoped lang="less">
-.modal-loading{
+.modal-loading {
   .lds-ring {
     display: inline-flex;
     justify-content: center;
@@ -54,16 +62,8 @@
     }
   }
 }
-.modal-loading-text{
+.modal-loading-text {
   color: #fff;
   font-weight: bold;
 }
 </style>
-
-<script setup lang="ts">
-withDefaults(defineProps<{
-  text?: string
-}>(), {
-  text: '加载中',
-})
-</script>

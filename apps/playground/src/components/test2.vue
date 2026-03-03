@@ -1,22 +1,3 @@
-<template>
-  <div style="height:355px;overflow: auto;">
-    <AForm :model="formModel" @submit-success="onSubmit">
-      <AFormItem>
-        <TableRender :columns="columns" :data-load="onDataLoad" />
-      </AFormItem>
-      <AFormItem>
-        <button type="submit">
-          submit
-        </button>
-      </AFormItem>
-    </AForm>
-  </div>
-</template>
-
-<style scoped>
-
-</style>
-
 <script setup lang="ts">
 import { defineColumns, defineTableLoad } from '@gopowerteam/table-render'
 import { reactive } from 'vue'
@@ -55,3 +36,22 @@ function onSubmit() {
 // // function onSubmitSuccess() {
 // }
 </script>
+
+<template>
+  <div style="height:355px;overflow: auto;">
+    <AForm :model="formModel" @submit-success="onSubmit">
+      <AFormItem>
+        <TableRender :columns="columns" :data-load="onDataLoad" />
+      </AFormItem>
+      <AFormItem>
+        <button type="submit">
+          submit
+        </button>
+      </AFormItem>
+    </AForm>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

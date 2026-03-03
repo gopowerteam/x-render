@@ -50,6 +50,7 @@
   "scripts": {
     "dev": "vite build --watch",
     "build": "vite build",
+    "lint": "eslint src",
     "npm:publish": "npm run build && npm publish --access publish"
   },
   "peerDependencies": {

@@ -1,7 +1,7 @@
-import { Textarea } from '@arco-design/web-vue'
 import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
+import { Textarea } from '@arco-design/web-vue'
 
-export function renderTextareaItem<T=DataRecord>(options?: RenderTextareaItemOptions): FormItemRenderReturn<T> {
+export function renderTextareaItem<T = DataRecord>(options?: RenderTextareaItemOptions): FormItemRenderReturn<T> {
   return (data: T, form: FormItemOptions<T>) => {
     function renderText() {
       return (
@@ -15,7 +15,9 @@ export function renderTextareaItem<T=DataRecord>(options?: RenderTextareaItemOpt
           v-model={data[form.key as keyof T]}
           placeholder={options?.placeholder}
           autoSize={options?.autosize}
-          maxLength={options?.maxLength}></Textarea>
+          maxLength={options?.maxLength}
+        >
+        </Textarea>
       )
     }
 

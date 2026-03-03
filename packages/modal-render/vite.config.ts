@@ -1,10 +1,8 @@
 import { resolve } from 'node:path'
 import { fileURLToPath, URL } from 'node:url'
-import presetIcons from '@unocss/preset-icons'
 
 import vue from '@vitejs/plugin-vue'
 import jsx from '@vitejs/plugin-vue-jsx'
-import { presetUno } from 'unocss'
 import unocss from 'unocss/vite'
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
@@ -41,16 +39,6 @@ export default defineConfig({
       copyDtsFiles: false,
       tsconfigPath: './tsconfig.json',
     }),
-    unocss({
-      presets: [
-        presetUno(),
-        presetIcons({
-          collections: {
-            'icon-park-outline': () =>
-              import('@iconify-json/icon-park-outline').then(i => i.icons),
-          },
-        }),
-      ],
-    }),
+    unocss(),
   ],
 })

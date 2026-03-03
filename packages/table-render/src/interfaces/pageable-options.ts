@@ -31,5 +31,5 @@ export interface PageableOptions {
   /**
    * 重置分页数据
    */
-  reset(): void
+  reset: () => void
 }

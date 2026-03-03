@@ -1,6 +1,7 @@
-import { Button, Dropdown, type TriggerEvent } from '@arco-design/web-vue'
-import { useModal } from '@gopowerteam/modal-render'
+import type { TriggerEvent } from '@arco-design/web-vue'
 import type { DataRecord, TableColumnOptions } from '../../interfaces'
+import { Button, Dropdown } from '@arco-design/web-vue'
+import { useModal } from '@gopowerteam/modal-render'
 import { createColumnRender } from '../../utils'
 
 export interface DropdownOptionItemOptions<T> {
@@ -22,9 +23,12 @@ export function renderDropdownColumn<T = DataRecord>(
 ) {
   const modal = useModal()
 
-  async function onExecConfirm(options: DropdownOptionItemOptions<T>, record: T) {
+  async function onExecConfirm(
+    options: DropdownOptionItemOptions<T>,
+    record: T,
+  ) {
     if (options.confirm) {
-      const result = await new Promise<boolean>((resolve, reject) => {
+      const result = await new Promise<boolean>((resolve) => {
         modal.open('confirm', {
           title: '确认',
           content: options.confirmText || '是否确认执行该操作?',
@@ -41,28 +45,32 @@ export function renderDropdownColumn<T = DataRecord>(
     options.onClick(record)
   }
   const render = (record: T, _column: TableColumnOptions<T>) => {
-    const dropdownOptions = options.options
-      .filter(
-        option => typeof option.visiable === 'function' ? option.visiable(record) : option.visiable !== false,
-      )
+    const dropdownOptions = options.options.filter(option =>
+      typeof option.visiable === 'function'
+        ? option.visiable(record)
+        : option.visiable !== false,
+    )
 
     return (
-        <Dropdown trigger={options?.trigger || 'click'}>
+      <Dropdown trigger={options?.trigger || 'click'}>
         {{
-          default: () => <Button disabled={dropdownOptions.length === 0} type='text'>{options?.content || '操作'}</Button>,
-          content: () => dropdownOptions.map((option) => {
-            return (
-              <Dropdown.Option onClick={() => onExecConfirm(option, record)}>
-              {
-                typeof option.content === 'function'
-                  ? option.content(record)
-                  : option.content
-              }
-              </Dropdown.Option>
-            )
-          }),
+          default: () => (
+            <Button disabled={dropdownOptions.length === 0} type="text">
+              {options?.content || '操作'}
+            </Button>
+          ),
+          content: () =>
+            dropdownOptions.map((option) => {
+              return (
+                <Dropdown.Option onClick={() => onExecConfirm(option, record)}>
+                  {typeof option.content === 'function'
+                    ? option.content(record)
+                    : option.content}
+                </Dropdown.Option>
+              )
+            }),
         }}
-        </Dropdown>
+      </Dropdown>
     )
   }
 

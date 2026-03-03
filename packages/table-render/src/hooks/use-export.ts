@@ -1,13 +1,13 @@
-import * as ExcelJS from 'exceljs'
-import { h, render } from 'vue'
-import dayjs from 'dayjs'
-import { getColumnValue } from '../utils'
 import type {
   DataRecord,
   ExportColumnOptions,
   TableColumnsOptions,
 } from '../interfaces'
+import dayjs from 'dayjs'
+import * as ExcelJS from 'exceljs'
+import { h, render } from 'vue'
 import { toRenderColumn } from '../table-render/table-column-render'
+import { getColumnValue } from '../utils'
 
 function createWorkBook() {
   return new ExcelJS.Workbook()
@@ -21,7 +21,10 @@ function createWorkSheet(workbook: ExcelJS.Workbook, name = 'Sheet1') {
   return sheet
 }
 
-function setWorkSheetColumns(worksheet: ExcelJS.Worksheet, columns: ExcelJS.Column[]) {
+function setWorkSheetColumns(
+  worksheet: ExcelJS.Worksheet,
+  columns: ExcelJS.Column[],
+) {
   worksheet.columns = columns
 }
 
@@ -84,11 +87,9 @@ export function getTableRowValue(
           return column.content && column.content(record)
         case !!renderTemplate: {
           const container = document.createElement('div')
-          const node = h(
-            () => renderTemplate && renderTemplate({ record }),
-          )
+          const node = h(() => renderTemplate && renderTemplate({ record }))
           render(node, container)
-          return node.el?.innerText
+          return node.el?.textContent
         }
         default:
           return getColumnValue(record, column.options)
@@ -107,7 +108,7 @@ function transformWidth(width: string | number | undefined) {
     case typeof width === 'number':
       return (width as number) / ratio
     case typeof width === 'string' && width.endsWith('px'):
-      return parseInt((width as string).replace('px', '')) / ratio
+      return Number.parseInt((width as string).replace('px', '')) / ratio
     default:
       return 30
   }
@@ -122,8 +123,11 @@ function exportExcel(
     .filter(column => column.exportable !== false)
     .map(column => ({
       key: column.key,
-      header: (column.exportable as ExportColumnOptions)?.header || column.title,
-      width: (column.exportable as ExportColumnOptions)?.width || transformWidth(column.width),
+      header:
+        (column.exportable as ExportColumnOptions)?.header || column.title,
+      width:
+        (column.exportable as ExportColumnOptions)?.width
+        || transformWidth(column.width),
     }))
 
   const exportRows = source.map((record) => {

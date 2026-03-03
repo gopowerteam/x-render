@@ -1,27 +1,5 @@
-<template>
-  <FormRender
-    id="xxxx"
-    collapsed-mode="dialog"
-    :form="form"
-    layout="horizontal"
-    resetable
-    searchable
-    @submit="aaa"
-  >
-    <template #actions>
-      <AButton type="primary">
-        123123
-      </AButton>
-    </template>
-  </FormRender>
-</template>
-
-<style scoped>
-
-</style>
-
 <script setup lang="tsx">
-import { FormRender, defineForm } from '@gopowerteam/form-render'
+import { defineForm, FormRender } from '@gopowerteam/form-render'
 import { ref } from 'vue'
 
 const aaaa = ref<Map<string, string>>(new Map())
@@ -55,12 +33,14 @@ const form = defineForm([
       clearable: true,
     }),
 
-  }, {
+  },
+  {
     key: 'switch',
     title: 'switch',
     default: false,
     render: r => r.switch(),
-  }, {
+  },
+  {
     key: 'select',
     title: 'select',
     render: r => r.select({
@@ -70,7 +50,8 @@ const form = defineForm([
         ['b', 'bbb'],
       ]),
     }),
-  }, {
+  },
+  {
     key: 'yyy',
     title: 'yyy',
     render: r => r.treeSelect({
@@ -92,13 +73,15 @@ const form = defineForm([
         'tree-slot-title': () => (<div>123</div>),
       },
     }),
-  }, {
+  },
+  {
     key: 'xxx1',
     title: 'xx-date',
     render: r => r.dateRange({
       autoSubmit: true,
     }),
-  }, {
+  },
+  {
     key: 'xxx2',
     title: 'xx',
     render: r => r.date({
@@ -106,7 +89,8 @@ const form = defineForm([
       autoSubmit: true,
     }),
 
-  }, {
+  },
+  {
     key: 'amount',
     title: 'amount',
     render: r => r.currency({
@@ -114,7 +98,8 @@ const form = defineForm([
       outputUnit: '分',
     }),
 
-  }, {
+  },
+  {
     key: 'cascader',
     title: 'cascader',
     render: r => r.cascader({
@@ -122,7 +107,8 @@ const form = defineForm([
       multiple: true,
       options: getCascaderOptions,
     }),
-  }])
+  },
+])
 
 function aaa(...a: any) {
   console.log(a, 'on-submit')
@@ -200,3 +186,25 @@ function getCascaderOptions() {
 //   })
 // }
 </script>
+
+<template>
+  <FormRender
+    id="xxxx"
+    collapsed-mode="dialog"
+    :form="form"
+    layout="horizontal"
+    resetable
+    searchable
+    @submit="aaa"
+  >
+    <template #actions>
+      <AButton type="primary">
+        123123
+      </AButton>
+    </template>
+  </FormRender>
+</template>
+
+<style scoped>
+
+</style>

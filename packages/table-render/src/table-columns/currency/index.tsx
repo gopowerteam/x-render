@@ -40,8 +40,10 @@ export function renderCurrencyColumn<T = DataRecord>(
     }
 
     const scale = unitMaps[options!.inputUnit!] / unitMaps[options!.outputUnit!]
-    const data = parseFloat((value * scale).toFixed(10))
-    return options?.precision === undefined ? data : data.toFixed(options?.precision)
+    const data = Number.parseFloat((value * scale).toFixed(10))
+    return options?.precision === undefined
+      ? data
+      : data.toFixed(options?.precision)
   }
 
   const toThousands = (value?: string | number) => {
@@ -60,7 +62,7 @@ export function renderCurrencyColumn<T = DataRecord>(
       return options?.zeroString
     }
 
-    if (options?.nullString !== undefined && isNaN(Number(value))) {
+    if (options?.nullString !== undefined && Number.isNaN(Number(value))) {
       return options?.nullString
     }
 
@@ -73,23 +75,25 @@ export function renderCurrencyColumn<T = DataRecord>(
 
     return (
       <div>
-        {
-        typeof options?.prefix === 'string'
-          ? (<span>{options.prefix}</span>)
+        {typeof options?.prefix === 'string'
+          ? (
+              <span>{options.prefix}</span>
+            )
           : typeof options?.prefix === 'function'
-            ? (<span>{options.prefix()}</span>)
-            : undefined
-        }
-        <span class="currency_value">
-          {formatter(value)}
-        </span>
-        {
-        typeof options?.suffix === 'string'
-          ? (<span>{options.suffix}</span>)
+            ? (
+                <span>{options.prefix()}</span>
+              )
+            : undefined}
+        <span class="currency_value">{formatter(value)}</span>
+        {typeof options?.suffix === 'string'
+          ? (
+              <span>{options.suffix}</span>
+            )
           : typeof options?.suffix === 'function'
-            ? (<span>{options.suffix()}</span>)
-            : undefined
-        }
+            ? (
+                <span>{options.suffix()}</span>
+              )
+            : undefined}
       </div>
     )
   }

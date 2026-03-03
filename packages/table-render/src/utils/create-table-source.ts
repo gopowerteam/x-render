@@ -1,5 +1,6 @@
-import { type Ref, ref } from 'vue'
+import type { Ref } from 'vue'
 import type { DataRecord, TableColumnsOptions } from '../interfaces'
+import { ref } from 'vue'
 import { setColumnValue } from './set-column-value'
 
 export function createTableSource(

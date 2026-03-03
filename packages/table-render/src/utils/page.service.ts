@@ -1,6 +1,6 @@
 import type { AdapterResponse, RequestPlugin, RequestSendOptions } from '@gopowerteam/request'
-import { reactive } from 'vue'
 import type { PageableOptions } from '../interfaces/pageable-options'
+import { reactive } from 'vue'
 
 export class PageService implements RequestPlugin, PageableOptions {
   data = reactive({

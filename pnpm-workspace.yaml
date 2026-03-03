@@ -6,3 +6,6 @@ onlyBuiltDependencies:
   - '@parcel/watcher'
   - esbuild
   - less
+
+autoInstallPeers: true
+nodeLinker: hoisted

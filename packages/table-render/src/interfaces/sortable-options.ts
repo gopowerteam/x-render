@@ -2,8 +2,8 @@ export interface SortableOptions {
   /**
    * 重置分页数据
    */
-  reset(): void
+  reset: () => void
 
-  update(key: string, diretion: 'asc' | 'desc'): void
-  remove(key: string): void
+  update: (key: string, diretion: 'asc' | 'desc') => void
+  remove: (key: string) => void
 }

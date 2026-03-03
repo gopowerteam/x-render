@@ -1,7 +1,7 @@
-import { Input, InputNumber } from '@arco-design/web-vue'
 import type { ComponentPublicInstance } from 'vue'
-import { useDebounceFn } from '@vueuse/core'
 import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
+import { Input, InputNumber } from '@arco-design/web-vue'
+import { useDebounceFn } from '@vueuse/core'
 
 const dispatchEvent = useDebounceFn((form: HTMLFormElement) => {
   if (form) {
@@ -9,7 +9,7 @@ const dispatchEvent = useDebounceFn((form: HTMLFormElement) => {
   }
 }, 1000)
 
-export function renderInputItem<T=DataRecord>(options?: RenderInputItemOptions): FormItemRenderReturn<T> {
+export function renderInputItem<T = DataRecord>(options?: RenderInputItemOptions): FormItemRenderReturn<T> {
   let inputElement: ComponentPublicInstance
 
   return (data: T, form: FormItemOptions<T>) => {
@@ -48,7 +48,9 @@ export function renderInputItem<T=DataRecord>(options?: RenderInputItemOptions):
               placeholder={options?.placeholder}
               onInput={onInputChange}
               onClear={() => onInputChange()}
-              allowClear={options?.clearable}></InputNumber>
+              allowClear={options?.clearable}
+            >
+            </InputNumber>
           )
         case 'string':
         default:
@@ -60,7 +62,9 @@ export function renderInputItem<T=DataRecord>(options?: RenderInputItemOptions):
               readonly={options?.readonly}
               onInput={onInputChange}
               onClear={() => onInputChange()}
-              allowClear={options?.clearable}></Input>
+              allowClear={options?.clearable}
+            >
+            </Input>
           )
       }
     }

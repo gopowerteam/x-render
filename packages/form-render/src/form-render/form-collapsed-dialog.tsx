@@ -1,7 +1,9 @@
-import { type PropType, defineComponent, ref } from 'vue'
+import type { PropType } from 'vue'
+import type { FormItemsOptions } from '..'
 import { Button, Divider, TabPane, Tabs } from '@arco-design/web-vue'
 import { useModal } from '@gopowerteam/modal-render'
-import { type FormItemsOptions, FormRender } from '..'
+import { defineComponent, ref } from 'vue'
+import { FormRender } from '..'
 
 export default defineComponent({
   props: {
@@ -21,7 +23,7 @@ export default defineComponent({
     const modal = useModal()
     const formItems = props.form.map(item => ({ ...item, collapsed: false }))
     const groups = Array.from(new Set(formItems.map(x => x.group).flat().filter(Boolean))) as string[]
-    const groupForms = formItems.reduce<{ group: string;instance?: any;form: FormItemsOptions }[]>((result, item) => {
+    const groupForms = formItems.reduce<{ group: string, instance?: any, form: FormItemsOptions }[]>((result, item) => {
       (item.group ? [item.group].flat() : ['默认']).forEach((key) => {
         let current = result.find(x => x.group === key)
         if (!current) {
@@ -73,29 +75,33 @@ export default defineComponent({
   render() {
     const defaultGroup = this.groupForms.find(x => x.group === this.activeTab)
     if (!this.groups.length) {
-      return <>
-        <FormRender columns={this.columns} form={this.formItems} value={this.value} ref={(instance: any) => defaultGroup!.instance = instance}></FormRender>
-        <Divider></Divider>
-        <div class="flex items-center justify-between space-x-2">
-          <Button type="secondary" size="large" onClick={this.onReset}>重置</Button>
-          <Button class="w-100px" type="primary" size="large" onClick={this.onSubmit}>搜索</Button>
-        </div>
-      </>
+      return (
+        <>
+          <FormRender columns={this.columns} form={this.formItems} value={this.value} ref={(instance: any) => defaultGroup!.instance = instance}></FormRender>
+          <Divider></Divider>
+          <div class="flex items-center justify-between space-x-2">
+            <Button type="secondary" size="large" onClick={this.onReset}>重置</Button>
+            <Button class="w-100px" type="primary" size="large" onClick={this.onSubmit}>搜索</Button>
+          </div>
+        </>
+      )
     }
     else {
-      return <Tabs v-model:active-key={this.activeTab}>
-        { this.groupForms.map(item => (
-           <TabPane title={item.group} key={item.group}>
-            <FormRender columns={this.columns} form={item.form} value={this.value} ref={(instance: any) => item.instance = instance}></FormRender>
-            <Divider></Divider>
-            <div class="flex items-center justify-between space-x-2">
-              <Button type="secondary" size="large" onClick={this.onReset}>重置</Button>
-              <Button class="w-100px" type="primary" size="large" onClick={this.onSubmit}>搜索</Button>
-            </div>
-           </TabPane>
-        ))}
+      return (
+        <Tabs v-model:active-key={this.activeTab}>
+          { this.groupForms.map(item => (
+            <TabPane title={item.group} key={item.group}>
+              <FormRender columns={this.columns} form={item.form} value={this.value} ref={(instance: any) => item.instance = instance}></FormRender>
+              <Divider></Divider>
+              <div class="flex items-center justify-between space-x-2">
+                <Button type="secondary" size="large" onClick={this.onReset}>重置</Button>
+                <Button class="w-100px" type="primary" size="large" onClick={this.onSubmit}>搜索</Button>
+              </div>
+            </TabPane>
+          ))}
 
-      </Tabs>
+        </Tabs>
+      )
     }
   },
 })

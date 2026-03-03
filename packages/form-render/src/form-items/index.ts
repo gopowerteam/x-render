@@ -1,14 +1,14 @@
+import { renderCascaderItem } from './cascader'
+import { renderCurrencyItem } from './currency'
 import { renderDateItem } from './date'
+import { renderDateRangeItem } from './date-range'
 import { renderInputItem } from './input'
+import { renderRadioItem } from './radio'
+import { renderRenderItem } from './render'
 import { renderSelectItem } from './select'
 import { renderSwitchItem } from './switch'
-import { renderDateRangeItem } from './date-range'
 import { renderTextareaItem } from './textarea'
 import { renderTreeSelectItem } from './tree-select'
-import { renderCascaderItem } from './cascader'
-import { renderRenderItem } from './render'
-import { renderCurrencyItem } from './currency'
-import { renderRadioItem } from './radio'
 
 export function FormItemRenders<T>() {
   return {

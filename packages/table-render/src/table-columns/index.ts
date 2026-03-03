@@ -5,11 +5,11 @@ import { renderDictColumn } from './dict'
 import { renderDropdownColumn } from './dropdown'
 import { renderImageColumn } from './image'
 import { renderPhoneColumn } from './phone'
+import { renderProgressColumn } from './progress'
 import { renderRenderColumn } from './render'
+import { renderSerialColumn } from './serial'
 import { renderTagColumn } from './tag'
 import { renderTextColumn } from './text'
-import { renderProgressColumn } from './progress'
-import { renderSerialColumn } from './serial'
 
 export function TableColumnRenders<T>() {
   return {

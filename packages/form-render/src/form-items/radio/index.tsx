@@ -1,7 +1,8 @@
-import { RadioGroup } from '@arco-design/web-vue'
-import { type ComponentPublicInstance, type Ref, isRef, ref } from 'vue'
-import { watchOnce } from '@vueuse/core'
+import type { ComponentPublicInstance, Ref } from 'vue'
 import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
+import { RadioGroup } from '@arco-design/web-vue'
+import { watchOnce } from '@vueuse/core'
+import { isRef, ref } from 'vue'
 
 const cache = new WeakMap()
 
@@ -12,7 +13,7 @@ function useRadioOptions(): [Ref<RadioOptions>, (value: RadioOptions) => void] {
   return [radioOptions, updateRadioOptions]
 }
 
-export function renderRadioItem<T=DataRecord>(options: RenderRadioItemOptions): FormItemRenderReturn<T> {
+export function renderRadioItem<T = DataRecord>(options: RenderRadioItemOptions): FormItemRenderReturn<T> {
   let radioInstance: ComponentPublicInstance
   let mounted = false
 
@@ -86,7 +87,7 @@ export function renderRadioItem<T=DataRecord>(options: RenderRadioItemOptions): 
   }
 
   switch (true) {
-    case options.options instanceof Function:{
+    case typeof options.options === 'function':{
       if (options.cache !== false) {
         updateRadioOptionsFromCache()
       }
@@ -131,7 +132,8 @@ export function renderRadioItem<T=DataRecord>(options: RenderRadioItemOptions): 
           ref={(instance: unknown) => radioInstance = (instance as ComponentPublicInstance)}
           v-model={data[form.key as keyof T]}
           onChange={onRadioChange}
-          options={Array.from(radioOptions.value.entries()).map(([value, label]) => ({ label, value }))}>
+          options={Array.from(radioOptions.value.entries()).map(([value, label]) => ({ label, value }))}
+        >
         </RadioGroup>
       )
     }
@@ -151,10 +153,10 @@ export type RadioOptions = Map<string | number, string>
 
 export interface RenderRadioItemOptions {
   options:
-  | RadioOptions
-  | (() => RadioOptions)
-  | (() => Promise<RadioOptions>)
-  | Ref<RadioOptions>
+    | RadioOptions
+    | (() => RadioOptions)
+    | (() => Promise<RadioOptions>)
+    | Ref<RadioOptions>
   // 模式
   type?: 'radio' | 'button'
   size?: 'mini' | 'small' | 'medium' | 'large'

@@ -1,12 +1,12 @@
+import type { ComponentPublicInstance, Ref } from 'vue'
+import type { TableRender } from '../table-render'
 import {
-  type ComponentPublicInstance,
-  type Ref,
+
   getCurrentInstance,
   onMounted,
   onUpdated,
   ref,
 } from 'vue'
-import type { TableRender } from '../table-render'
 
 type TableRenderInstance = InstanceType<typeof TableRender>
 

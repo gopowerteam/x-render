@@ -44,8 +44,9 @@ export function renderTagColumn<T = DataRecord>(
                 borderRadius: `${options?.radius || 0}px`,
                 color: textColor,
                 backgroundColor: bgColor,
-              }}>
-            {v}
+              }}
+            >
+              {v}
             </span>
           )
         })}

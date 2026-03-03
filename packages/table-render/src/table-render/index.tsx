@@ -1,27 +1,53 @@
-import { Table, type TableChangeExtra, type TableColumnData, type TableData, type TableExpandable, type TableInstance } from '@arco-design/web-vue'
+import type {
+  TableChangeExtra,
+  TableColumnData,
+  TableData,
+  TableExpandable,
+  TableInstance,
+} from '@arco-design/web-vue'
 
-import { type PropType, type Ref, computed, defineComponent, onMounted, readonly, ref } from 'vue'
-import { ModalProvider } from '@gopowerteam/modal-render'
-import { type DataRecord, type FormItemsOptions, type FormRenderInstance } from '@gopowerteam/form-render'
+import type {
+  DataRecord,
+  FormItemsOptions,
+  FormRenderInstance,
+} from '@gopowerteam/form-render'
 import type { RequestPlugin } from '@gopowerteam/request'
-import type { ColumnsGroup, SortableOptions, TableColumnSharedOptions, TableColumnsOptions, TableFormSharedOptions, TableLoadParams } from '../interfaces'
-import { createTableSource } from '../utils/create-table-source'
-import { createTableForm } from '../utils/create-table-form'
-import { type EventEmits, type TableEditEventOptions, type TableExportEventOptions, type TablePreviewEventOptions, type TableReloadEventOptions, useEvents } from '../hooks'
-import { PageService } from '../utils/page.service'
-import { useExport } from '../hooks/use-export'
+import type { PropType, Ref } from 'vue'
+import type {
+  EventEmits,
+  TableEditEventOptions,
+  TableExportEventOptions,
+  TablePreviewEventOptions,
+  TableReloadEventOptions,
+} from '../hooks'
+import type {
+  ColumnsGroup,
+  SortableOptions,
+  TableColumnSharedOptions,
+  TableColumnsOptions,
+  TableFormSharedOptions,
+  TableLoadParams,
+} from '../interfaces'
 import type { PageableOptions } from '../interfaces/pageable-options'
-import { SortService } from '../utils/sort.service'
-import { isPromise } from '../utils'
+import { Table } from '@arco-design/web-vue'
+import { ModalProvider } from '@gopowerteam/modal-render'
+import { computed, defineComponent, onMounted, readonly, ref } from 'vue'
+import { useEvents } from '../hooks'
+import { useExport } from '../hooks/use-export'
 import { setupTableGrabbable } from '../plugins/table-grabbable'
-import { renderTableColumns } from './table-column-render'
-import TableViewRender from './table-view-render'
+import { isPromise } from '../utils'
+import { createTableForm } from '../utils/create-table-form'
+import { createTableSource } from '../utils/create-table-source'
+import { PageService } from '../utils/page.service'
+import { SortService } from '../utils/sort.service'
 import { tableActionsRender } from './table-actions-render'
-import { tableFormRender } from './table-form-render'
-import { tableSecletionRender } from './table-selection-render'
-import { tablePaginationRender } from './table-pagination-render'
 import { TableCollapsedRender } from './table-collapsed-render'
+import { renderTableColumns } from './table-column-render'
 import tableEditRender from './table-edit-render'
+import { tableFormRender } from './table-form-render'
+import { tablePaginationRender } from './table-pagination-render'
+import { tableSecletionRender } from './table-selection-render'
+import TableViewRender from './table-view-render'
 
 export const TableRender = defineComponent({
   props: {
@@ -48,7 +74,9 @@ export const TableRender = defineComponent({
       default: true,
     },
     dataLoad: {
-      type: Function as PropType<(params: TableLoadParams) => (void | Promise<any>)>,
+      type: Function as PropType<
+        (params: TableLoadParams) => void | Promise<any>
+      >,
       required: false,
     },
     height: {
@@ -119,7 +147,13 @@ export const TableRender = defineComponent({
       default: 'all',
     },
     pageable: {
-      type: [Object, Boolean, String] as PropType<(RequestPlugin & PageableOptions) | { index: number; size: number } | boolean | 'client' | 'server'>,
+      type: [Object, Boolean, String] as PropType<
+        | (RequestPlugin & PageableOptions)
+        | { index: number, size: number }
+        | boolean
+        | 'client'
+        | 'server'
+      >,
       required: false,
       default: undefined,
     },
@@ -205,17 +239,21 @@ export const TableRender = defineComponent({
     const tableRenderElement = ref<HTMLElement>()
     const [tableSource, updateTableSource] = createTableSource(props.columns)
     const tableLoading = ref(false)
-    const tableForm: FormItemsOptions = props.form ?? createTableForm(props.columns)
-    const pageService: (RequestPlugin & PageableOptions) | undefined = createPageService()
-    const sortService: (RequestPlugin & SortableOptions) | undefined = createSortService()
+    const tableForm: FormItemsOptions
+      = props.form ?? createTableForm(props.columns)
+    const pageService: (RequestPlugin & PageableOptions) | undefined
+      = createPageService()
+    const sortService: (RequestPlugin & SortableOptions) | undefined
+      = createSortService()
 
-    const collapsedColumns = ref<{ key: string;title: string;collapsed: boolean }[]>(
-      props.columns.map(item => (
-        {
-          key: item.key as string,
-          title: item.title,
-          collapsed: !!item.collapsed,
-        })),
+    const collapsedColumns = ref<
+      { key: string, title: string, collapsed: boolean }[]
+    >(
+      props.columns.map(item => ({
+        key: item.key as string,
+        title: item.title,
+        collapsed: !!item.collapsed,
+      })),
     )
 
     function createPageService() {
@@ -224,10 +262,16 @@ export const TableRender = defineComponent({
           return new PageService()
         case typeof props.pageable === 'boolean' && props.pageable === true:
           return new PageService()
-        case typeof props.pageable === 'object' && !!(props.pageable as PageableOptions).reset:
-          return props.pageable as (RequestPlugin & PageableOptions)
-        case typeof props.pageable === 'object' && (!!(props.pageable as { index?: number; size?: number }).index || !!(props.pageable as { index?: number; size?: number }).size):
-          return new PageService((props.pageable as { index?: number; size?: number }).index, (props.pageable as { index?: number; size?: number }).size)
+        case typeof props.pageable === 'object'
+          && !!(props.pageable as PageableOptions).reset:
+          return props.pageable as RequestPlugin & PageableOptions
+        case typeof props.pageable === 'object'
+          && (!!(props.pageable as { index?: number, size?: number }).index
+            || !!(props.pageable as { index?: number, size?: number }).size):
+          return new PageService(
+            (props.pageable as { index?: number, size?: number }).index,
+            (props.pageable as { index?: number, size?: number }).size,
+          )
       }
     }
 
@@ -247,8 +291,8 @@ export const TableRender = defineComponent({
 
       if (column || props.sortable) {
         return new SortService({
-          ...props.sortable || {},
-          ...(column ? ({ [column.key]: column.sortable! }) : {}),
+          ...(props.sortable || {}),
+          ...(column ? { [column.key]: column.sortable! } : {}),
         })
       }
     }
@@ -259,7 +303,10 @@ export const TableRender = defineComponent({
       exportExcel(
         options?.columns || props.columns,
         options?.source || tableSource.value,
-        options?.filename || (typeof props.exportable === 'object' ? props.exportable.filename : undefined),
+        options?.filename
+        || (typeof props.exportable === 'object'
+          ? props.exportable.filename
+          : undefined),
       )
     }
 
@@ -268,7 +315,9 @@ export const TableRender = defineComponent({
 
       switch (true) {
         case !!options?.key:
-          record = tableSource.value.find(x => x[props.rowKey] === options?.key)
+          record = tableSource.value.find(
+            x => x[props.rowKey] === options?.key,
+          )
           break
         case !!options?.record:
           record = options?.record
@@ -279,21 +328,29 @@ export const TableRender = defineComponent({
         throw new Error('未找到需要预览的数据')
       }
 
-      return modalInstance.value.open(TableViewRender, {
-        record,
-        columns: props.columns,
-      }, {
-        title: options?.title || '详情',
-        mode: options?.mode || 'dialog',
-      })
+      return modalInstance.value.open(
+        TableViewRender,
+        {
+          record,
+          columns: props.columns,
+        },
+        {
+          title: options?.title || '详情',
+          mode: options?.mode || 'dialog',
+        },
+      )
     }
 
-    function onTableEdit <T = DataRecord>(options: TableEditEventOptions<T>): Promise<DataRecord> {
+    function onTableEdit<T = DataRecord>(
+      options: TableEditEventOptions<T>,
+    ): Promise<DataRecord> {
       let record: T | undefined
 
       switch (true) {
         case !!options?.key:
-          record = tableSource.value.find(x => x[props.rowKey] === options?.key) as T
+          record = tableSource.value.find(
+            x => x[props.rowKey] === options?.key,
+          ) as T
           break
         case !!options?.record:
           record = options?.record
@@ -304,16 +361,20 @@ export const TableRender = defineComponent({
         throw new Error('未找到需要编辑的数据')
       }
 
-      return modalInstance.value.open(tableEditRender, {
-        value: record,
-        form: options?.form,
-        onSubmit: options.onSubmit,
-      }, {
-        title: options?.title || '编辑',
-        mode: options?.mode || 'dialog',
-        footer: true,
-        form: 'form',
-      })
+      return modalInstance.value.open(
+        tableEditRender,
+        {
+          value: record,
+          form: options?.form,
+          onSubmit: options.onSubmit,
+        },
+        {
+          title: options?.title || '编辑',
+          mode: options?.mode || 'dialog',
+          footer: true,
+          form: 'form',
+        },
+      )
     }
 
     /**
@@ -321,7 +382,7 @@ export const TableRender = defineComponent({
      */
     function onTableReload(options?: TableReloadEventOptions) {
       if (!props.dataLoad) {
-        return Promise.reject()
+        return Promise.reject(new Error('dataLoad is required'))
       }
 
       if (options?.reset) {
@@ -331,7 +392,7 @@ export const TableRender = defineComponent({
         tableInstance.value?.resetSorters()
       }
 
-      const formSource = { ...formInstance.value?.formSource || {} }
+      const formSource = { ...(formInstance.value?.formSource || {}) }
 
       // 清空空数据项
       Object.keys(formSource).forEach((key) => {
@@ -362,31 +423,37 @@ export const TableRender = defineComponent({
     }
 
     function onTableCollaspe() {
-      modalInstance.value.open(TableCollapsedRender, {
-        collapsedColumns: collapsedColumns.value,
-      }, {
-        title: '显示列',
-        size: 'small',
-        footer: true,
-      }).then((data: { key: string;title: string;collapsed: boolean }[]) => {
-        collapsedColumns.value = data
-      })
+      modalInstance.value
+        .open(
+          TableCollapsedRender,
+          {
+            collapsedColumns: collapsedColumns.value,
+          },
+          {
+            title: '显示列',
+            size: 'small',
+            footer: true,
+          },
+        )
+        .then((data: { key: string, title: string, collapsed: boolean }[]) => {
+          collapsedColumns.value = data
+        })
     }
 
     const onTableChange = (data: TableData[], { type }: TableChangeExtra) => {
       switch (type) {
-        case 'drag':{
+        case 'drag': {
           updateTableSource(data)
           ctx.emit('change', data)
           break
         }
-        case 'pagination':{
+        case 'pagination': {
           break
         }
-        case 'sorter':{
+        case 'sorter': {
           break
         }
-        case 'filter':{
+        case 'filter': {
           break
         }
       }
@@ -415,14 +482,16 @@ export const TableRender = defineComponent({
       tableEvents('reload')
     }
 
-    const tableColumns = ref<TableColumnData[]>(renderTableColumns({
-      columns: props.columns,
-      columnsOptions: props.columnsOptions,
-      columnsGroups: props.columnsGroups,
-      pageMode,
-      collapsedColumns,
-      events: tableEvents,
-    }))
+    const tableColumns = ref<TableColumnData[]>(
+      renderTableColumns({
+        columns: props.columns,
+        columnsOptions: props.columnsOptions,
+        columnsGroups: props.columnsGroups,
+        pageMode,
+        collapsedColumns,
+        events: tableEvents,
+      }),
+    )
 
     const renderOptions: TableRenderOptions = {
       tableEvents,
@@ -435,7 +504,11 @@ export const TableRender = defineComponent({
 
     const renderTableForm = tableFormRender(props, ctx, renderOptions)
     const renderTableActions = tableActionsRender(props, ctx, renderOptions)
-    const renderTablePagination = tablePaginationRender(props, ctx, renderOptions)
+    const renderTablePagination = tablePaginationRender(
+      props,
+      ctx,
+      renderOptions,
+    )
     const {
       selectedRowKeys,
       rowSelection,
@@ -455,14 +528,21 @@ export const TableRender = defineComponent({
       hoverable: props.hoverable,
       stripe: props.stripe,
       scroll: {
-        x: props.columns.reduce((r, item) =>
-          r += (typeof item.width !== 'number' ? Math.max(item.title.length * 16, 80) : item.width),
-        0),
+        x: props.columns.reduce(
+          (r, item) =>
+            (r
+              += typeof item.width !== 'number'
+                ? Math.max(item.title.length * 16, 80)
+                : item.width),
+          0,
+        ),
         y: props.height ?? '100%',
       },
       rowSelection,
-      draggable: props.draggable ? { type: 'handle' as const, width: 40 } : undefined,
-      pagination: (props.pageable === undefined || props.pageable === 'client'),
+      draggable: props.draggable
+        ? { type: 'handle' as const, width: 40 }
+        : undefined,
+      pagination: props.pageable === undefined || props.pageable === 'client',
       selectedKeys: selectedRowKeys.value,
       expandable: props.expandable,
       virtualListProps: props.virtualList
@@ -541,29 +621,38 @@ export const TableRender = defineComponent({
             loading={this.tableLoading}
             data={this.tableSource}
             columns={this.tableColumns}
-            ref={((table: any) => this.tableInstance = table) as any }
+            ref={((table: any) => (this.tableInstance = table)) as any}
             onSelect={this.tableSelection.onSelect}
             onSelectAll={this.tableSelection.onSelectAll}
             onChange={this.onTableChange}
             rowClass={this.rowClass}
             onSorterChange={this.onSorterChange}
             v-model:selectedKeys={this.tableSelection.selectedRowKeys.value}
-            {...this.tableOptions}>
+            {...this.tableOptions}
+          >
           </Table>
         </div>
       </div>
     )
 
     return (
-      <div class={{ 'table-render': true, 'auto-fill': this.autoFill }} ref={((element: HTMLDivElement) => this.tableRenderElement = element) as any }>
-        <ModalProvider ref={modal => this.modalInstance = modal as any}>
+      <div
+        class={{ 'table-render': true, 'auto-fill': this.autoFill }}
+        ref={
+          ((element: HTMLDivElement) =>
+            (this.tableRenderElement = element)) as any
+        }
+      >
+        <ModalProvider ref={modal => (this.modalInstance = modal as any)}>
           <div class="table-render-content">
             {this.renders.renderTableForm()}
             {this.renders.renderTableActions()}
             {this.$slots.header && this.$slots.header()}
-            {['all', 'top'].includes(this.$props.pagePosition) && this.renders.renderTablePagination()}
+            {['all', 'top'].includes(this.$props.pagePosition)
+              && this.renders.renderTablePagination()}
             {renderTable()}
-            {['all', 'bottom'].includes(this.$props.pagePosition) && this.renders.renderTablePagination()}
+            {['all', 'bottom'].includes(this.$props.pagePosition)
+              && this.renders.renderTablePagination()}
           </div>
         </ModalProvider>
       </div>

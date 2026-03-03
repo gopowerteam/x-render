@@ -1,18 +1,3 @@
-<template>
-  <div>123123123</div>
-  <button @click="onClick">
-    12312
-  </button>
-
-  <button @click="onShowLoading">
-    showLoading
-  </button>
-</template>
-
-<style scoped>
-
-</style>
-
 <script setup lang="tsx">
 import { useModal } from '@gopowerteam/modal-render'
 import Test1 from '../components/test1.vue'
@@ -54,3 +39,18 @@ function onShowLoading() {
   }, 3000)
 }
 </script>
+
+<template>
+  <div>123123123</div>
+  <button @click="onClick">
+    12312
+  </button>
+
+  <button @click="onShowLoading">
+    showLoading
+  </button>
+</template>
+
+<style scoped>
+
+</style>

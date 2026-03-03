@@ -1,7 +1,7 @@
-import type { FormItemOptions } from '@gopowerteam/form-render'
 import type { TableColumnData } from '@arco-design/web-vue'
-import type { TableColumnRender } from './table-column-render'
+import type { FormItemOptions } from '@gopowerteam/form-render'
 import type { DataRecord } from '.'
+import type { TableColumnRender } from './table-column-render'
 
 export interface TableColumnPreviewOptions {
   span?: number

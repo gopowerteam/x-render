@@ -1,6 +1,6 @@
 import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
 
-export function renderRenderItem<T=DataRecord>(renderer: RenderInputItemOptions<T>): FormItemRenderReturn<T> {
+export function renderRenderItem<T = DataRecord>(renderer: RenderInputItemOptions<T>): FormItemRenderReturn<T> {
   return (data: T, form: FormItemOptions<T>) => {
     return renderer(data, form)
   }

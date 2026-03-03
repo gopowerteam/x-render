@@ -1,7 +1,7 @@
-import dayjs from 'dayjs'
 import type { DataRecord, TableColumnOptions } from '../../interfaces'
-import 'dayjs/locale/zh-cn'
+import dayjs from 'dayjs'
 import { createColumnRender, getColumnValue } from '../../utils'
+import 'dayjs/locale/zh-cn'
 
 dayjs.locale('zh-cn')
 

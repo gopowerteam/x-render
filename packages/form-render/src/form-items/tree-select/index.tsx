@@ -1,8 +1,10 @@
-import { type TreeFieldNames, type TreeNodeData, TreeSelect } from '@arco-design/web-vue'
-import { type ComponentPublicInstance, type Ref, isRef, ref } from 'vue'
-import { watchOnce } from '@vueuse/core'
+import type { TreeFieldNames, TreeNodeData } from '@arco-design/web-vue'
 import type { TreeProps } from '@arco-design/web-vue/es/tree/interface'
+import type { ComponentPublicInstance, Ref } from 'vue'
 import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
+import { TreeSelect } from '@arco-design/web-vue'
+import { watchOnce } from '@vueuse/core'
+import { isRef, ref } from 'vue'
 import { findTreePathByKey } from '../../utils/tree'
 
 const cache = new WeakMap()
@@ -13,7 +15,7 @@ function useSelectOptions(): [Ref<SelectOptions>, (value: SelectOptions) => void
 
   return [selectOptions, updateSelectOptions]
 }
-export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItemOptions): FormItemRenderReturn<T> {
+export function renderTreeSelectItem<T = DataRecord>(options: RenderTreeSelectItemOptions): FormItemRenderReturn<T> {
   let selectInstance: ComponentPublicInstance
   let mounted = false
 
@@ -86,7 +88,7 @@ export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItem
   }
 
   switch (true) {
-    case options.options instanceof Function:{
+    case typeof options.options === 'function':{
       if (options.cache !== false) {
         updateSelectOptionsFromCache()
       }
@@ -172,8 +174,8 @@ export function renderTreeSelectItem<T=DataRecord>(options: RenderTreeSelectItem
           treeProps={options.treeProps}
           treeCheckStrictly={options.treeCheckStrictly}
           treeCheckedStrategy={options.treeCheckedStrategy}
-          >
-            {{ ...options.slots }}
+        >
+          {{ ...options.slots }}
         </TreeSelect>
       )
     }
@@ -201,10 +203,10 @@ export interface RenderTreeSelectItemOptions {
   fieldNames?: TreeFieldNames
   // select options列表
   options:
-  | SelectOptions
-  | (() => SelectOptions)
-  | (() => Promise<SelectOptions>)
-  | Ref<SelectOptions>
+    | SelectOptions
+    | (() => SelectOptions)
+    | (() => Promise<SelectOptions>)
+    | Ref<SelectOptions>
   // 多选支持
   multiple?: boolean
   // 最大标签数量

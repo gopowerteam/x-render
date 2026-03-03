@@ -1,7 +1,8 @@
-import { type PropType, defineComponent, getCurrentInstance, onMounted, ref } from 'vue'
-import { Descriptions, DescriptionsItem } from '@arco-design/web-vue'
+import type { PropType } from 'vue'
 import type { DataRecord, TableColumnsOptions } from '..'
 import type { RenderSingleButtonColumnOptions } from '../table-columns/button'
+import { Descriptions, DescriptionsItem } from '@arco-design/web-vue'
+import { defineComponent, getCurrentInstance, onMounted, ref } from 'vue'
 import { getColumnValue } from '../utils'
 import { toRenderColumn } from './table-column-render'
 

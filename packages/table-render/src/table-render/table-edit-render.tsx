@@ -1,7 +1,9 @@
-import { type PropType, defineComponent } from 'vue'
-import { type FormItemsOptions, FormRender } from '@gopowerteam/form-render'
-import { useModal } from '@gopowerteam/modal-render'
+import type { FormItemsOptions } from '@gopowerteam/form-render'
+import type { PropType } from 'vue'
 import type { DataRecord } from '..'
+import { FormRender } from '@gopowerteam/form-render'
+import { useModal } from '@gopowerteam/modal-render'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   props: {
@@ -32,11 +34,12 @@ export default defineComponent({
     return () => (
       <div class="edit-form-container">
         <FormRender
-            name="form"
-            value={props.value}
-            form={props.form}
-            onSubmit={onSubmit}
-          ></FormRender>
+          name="form"
+          value={props.value}
+          form={props.form}
+          onSubmit={onSubmit}
+        >
+        </FormRender>
       </div>
     )
   },

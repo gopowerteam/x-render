@@ -1,12 +1,22 @@
-import { type PropType, type RendererNode, type VNode, computed, defineComponent, onMounted, provide, ref } from 'vue'
-import { Button, type FieldRule, Form, type FormInstance, FormItem, Grid, GridItem, Space, Tag } from '@arco-design/web-vue'
+import type { FieldRule, FormInstance } from '@arco-design/web-vue'
+import type { PropType, RendererNode, VNode } from 'vue'
+import type { DataRecord, FormItemsOptions } from '../interfaces'
+import {
+  Button,
+  Form,
+  FormItem,
+  Grid,
+  GridItem,
+  Space,
+  Tag,
+} from '@arco-design/web-vue'
 import { IconDown, IconSearch, IconUp } from '@arco-design/web-vue/es/icon'
 import { ModalProvider } from '@gopowerteam/modal-render'
-import type { DataRecord, FormItemsOptions } from '../interfaces'
+import { computed, defineComponent, onMounted, provide, ref } from 'vue'
 import { provides } from '../config/provide.config'
 import { createFormSource } from '../utils/create-form-source'
-import { renderFormItem } from './form-item-render'
 import FormCollapsedDialog from './form-collapsed-dialog'
+import { renderFormItem } from './form-item-render'
 
 export const FormRender = defineComponent({
   props: {
@@ -57,7 +67,8 @@ export const FormRender = defineComponent({
     showFormResult: {
       type: Boolean,
       required: false,
-      default: (props: { collapsedMode: 'append' | 'dialog' }) => props.collapsedMode === 'dialog',
+      default: (props: { collapsedMode: 'append' | 'dialog' }) =>
+        props.collapsedMode === 'dialog',
     },
     submitable: {
       type: Boolean,
@@ -90,11 +101,7 @@ export const FormRender = defineComponent({
       default: 12,
     },
   },
-  emits: [
-    'submit',
-    'cancel',
-    'update:model-value',
-  ],
+  emits: ['submit', 'cancel', 'update:model-value'],
   expose: [
     'formSource',
     'updateFormField',
@@ -104,11 +111,15 @@ export const FormRender = defineComponent({
   ],
   setup(props, { emit }) {
     const formInstance = ref<FormInstance>()
-    const [formSource, _updateFormSource] = createFormSource(props.form, props.modelValue || props.value)
+    const [formSource, _updateFormSource] = createFormSource(
+      props.form,
+      props.modelValue || props.value,
+    )
     const formColumns = ref(props.columns || 0)
     const formCollspased = ref<boolean>(true)
     const modalInstance = ref<any>()
-    const toggleFormCollapsed = () => formCollspased.value = !formCollspased.value
+    const toggleFormCollapsed = () =>
+      (formCollspased.value = !formCollspased.value)
     const formId = ref<string>('')
     const formName = ref<string>('')
     provide(provides.id, formId)
@@ -121,13 +132,15 @@ export const FormRender = defineComponent({
 
     const formItems = computed(() => {
       return props.form
-        .filter(item => formCollspased.value ? !item.collapsed : true)
+        .filter(item => (formCollspased.value ? !item.collapsed : true))
         .filter((item) => {
           switch (true) {
             case typeof item.visiable === 'boolean':
               return item.visiable
             case typeof item.visiable === 'function':
-              return (item.visiable as Function)(formSource.value)
+              return (item.visiable as (record: any) => boolean)(
+                formSource.value,
+              )
             default:
               return true
           }
@@ -143,7 +156,7 @@ export const FormRender = defineComponent({
         return result + (item?.span || 1)
       }, 0)
 
-      return formColumns.value - itemSpans % formColumns.value
+      return formColumns.value - (itemSpans % formColumns.value)
     })
 
     const proxyFormItemRule = (rule: FieldRule<any>) => {
@@ -164,17 +177,20 @@ export const FormRender = defineComponent({
     }
 
     const formRules = computed(() => {
-      return props.form.reduce<Record<string, FieldRule | FieldRule[]>>((rules, item) => {
-        if (item.rule) {
-          if (Array.isArray(item.rule)) {
-            rules[item.key as string] = item.rule.map(proxyFormItemRule)
+      return props.form.reduce<Record<string, FieldRule | FieldRule[]>>(
+        (rules, item) => {
+          if (item.rule) {
+            if (Array.isArray(item.rule)) {
+              rules[item.key as string] = item.rule.map(proxyFormItemRule)
+            }
+            else {
+              rules[item.key as string] = proxyFormItemRule(item.rule)
+            }
           }
-          else {
-            rules[item.key as string] = proxyFormItemRule(item.rule)
-          }
-        }
-        return rules
-      }, {})
+          return rules
+        },
+        {},
+      )
     })
 
     function updateFormColumnValue() {
@@ -185,7 +201,10 @@ export const FormRender = defineComponent({
       const form = formInstance.value?.$el as HTMLFormElement
 
       if (form) {
-        formColumns.value = Math.max(Math.floor(form.offsetWidth / props.minWidth), 1)
+        formColumns.value = Math.max(
+          Math.floor(form.offsetWidth / props.minWidth),
+          1,
+        )
       }
     }
 
@@ -198,20 +217,26 @@ export const FormRender = defineComponent({
     }
 
     function openCollapsedDialog() {
-      modalInstance.value.open(FormCollapsedDialog, {
-        form: props.form,
-        value: formSource.value,
-        columns: props.collapsedDialogColumns,
-      }, {
-        title: '高级搜索',
-        footer: false,
-        submitText: '搜索',
-      }).then((data: DataRecord) => {
-        if (data) {
-          updateFormSource(data)
-          onSubmitSuccess()
-        }
-      })
+      modalInstance.value
+        .open(
+          FormCollapsedDialog,
+          {
+            form: props.form,
+            value: formSource.value,
+            columns: props.collapsedDialogColumns,
+          },
+          {
+            title: '高级搜索',
+            footer: false,
+            submitText: '搜索',
+          },
+        )
+        .then((data: DataRecord) => {
+          if (data) {
+            updateFormSource(data)
+            onSubmitSuccess()
+          }
+        })
     }
 
     onMounted(() => {
@@ -244,7 +269,10 @@ export const FormRender = defineComponent({
 
     function resetFormField(key: string) {
       const formItem = props.form.find(item => item.key === key)!
-      const value = (typeof formItem.default === 'function' ? formItem.default() : formItem.default) || null
+      const value
+        = (typeof formItem.default === 'function'
+          ? formItem.default()
+          : formItem.default) || null
 
       updateFormField(key, value)
     }
@@ -259,7 +287,7 @@ export const FormRender = defineComponent({
       return formInstance.value?.validate()
     }
 
-    return ({
+    return {
       formId,
       formName,
       formSource,
@@ -279,7 +307,7 @@ export const FormRender = defineComponent({
       onSubmitSuccess,
       openCollapsedDialog,
       modalInstance,
-    })
+    }
   },
   render() {
     const renderFormResult = () => {
@@ -311,16 +339,23 @@ export const FormRender = defineComponent({
 
       return (
         <GridItem span={this.formColumns}>
-          <FormItem label='搜索条件' class="mb-0!">
-            <div class="w-full mt-5px text-left">
-                <Space wrap={true} align="center">
-                  {
-                    items.length > 0
-                      ? items.map((item) => {
+          <FormItem label="搜索条件" class="mb-0!">
+            <div class="mt-5px w-full text-left">
+              <Space wrap={true} align="center">
+                {items.length > 0
+                  ? (
+                      items.map((item) => {
                         return (
-                          <Tag key={item.key} closable onClose={() => resetField(item.key as string)}>
+                          <Tag
+                            key={item.key}
+                            closable
+                            onClose={() => resetField(item.key as string)}
+                          >
                             <div class="flex space-x-2">
-                              <div class="text-#999">{item.title}:</div>
+                              <div class="text-#999">
+                                {item.title}
+                                :
+                              </div>
                               <div class="text-#333">
                                 {renderFormItem(this.formSource, {
                                   ...item,
@@ -332,12 +367,14 @@ export const FormRender = defineComponent({
                           </Tag>
                         )
                       })
-                      : (<div class="text-#999">暂无搜索条件</div>)
-                  }
+                    )
+                  : (
+                      <div class="text-#999">暂无搜索条件</div>
+                    )}
               </Space>
-          </div>
-        </FormItem>
-      </GridItem>
+            </div>
+          </FormItem>
+        </GridItem>
       )
     }
 
@@ -353,82 +390,121 @@ export const FormRender = defineComponent({
           }
 
       if (this.searchable) {
-        buttons.push(<Button type="primary" htmlType='submit'>搜索</Button>)
+        buttons.push(
+          <Button type="primary" htmlType="submit">
+            搜索
+          </Button>,
+        )
 
         if (this.resetable) {
-          buttons.push(<Button type="secondary" onClick={() => this.resetFormFields()}>重置</Button>)
+          buttons.push(
+            <Button type="secondary" onClick={() => this.resetFormFields()}>
+              重置
+            </Button>,
+          )
         }
       }
 
       if (this.submitable) {
-        buttons.push(<Button type="primary" htmlType='submit'>提交</Button>)
-        buttons.push(<Button type="secondary" onClick={() => this.$emit('cancel')}>取消</Button>)
+        buttons.push(
+          <Button type="primary" htmlType="submit">
+            提交
+          </Button>,
+        )
+        buttons.push(
+          <Button type="secondary" onClick={() => this.$emit('cancel')}>
+            取消
+          </Button>,
+        )
       }
 
       if (this.form.some(item => !!item.collapsed)) {
         if (this.collapsedMode === 'append') {
-          buttons.push(<Button onClick={this.toggleFormCollapsed}>{{
-            default: () => this.formCollspased ? '展开' : '收起',
-            icon: () => this.formCollspased ? (<IconDown></IconDown>) : (<IconUp></IconUp>),
-          }}</Button>)
+          buttons.push(
+            <Button onClick={this.toggleFormCollapsed}>
+              {{
+                default: () => (this.formCollspased ? '展开' : '收起'),
+                icon: () =>
+                  this.formCollspased
+                    ? (
+                        <IconDown></IconDown>
+                      )
+                    : (
+                        <IconUp></IconUp>
+                      ),
+              }}
+            </Button>,
+          )
         }
 
         if (this.collapsedMode === 'dialog') {
-          buttons.push(<Button onClick={this.openCollapsedDialog}>{{
-            default: () => '高级搜索',
-            icon: () => <IconSearch></IconSearch>,
-          }}</Button>)
+          buttons.push(
+            <Button onClick={this.openCollapsedDialog}>
+              {{
+                default: () => '高级搜索',
+                icon: () => <IconSearch></IconSearch>,
+              }}
+            </Button>,
+          )
         }
       }
 
       if (this.$slots.actions) {
-        buttons.push(
-          ...this.$slots.actions(),
-        )
+        buttons.push(...this.$slots.actions())
       }
 
       if (buttons.length) {
         return (
-        <GridItem {...gridOptions}>
-          <FormItem hideLabel={this.formItems.every(x => !!x.hideLabel)} contentClass={this.footer ? 'form-footer' : ''}>
-            <Space>
-              {buttons}
-            </Space>
-          </FormItem>
-        </GridItem>
+          <GridItem {...gridOptions}>
+            <FormItem
+              hideLabel={this.formItems.every(x => !!x.hideLabel)}
+              contentClass={this.footer ? 'form-footer' : ''}
+            >
+              <Space>{buttons}</Space>
+            </FormItem>
+          </GridItem>
         )
       }
     }
 
     return (
-     <div class={{ 'form-render': true, 'no-rules': Object.keys(this.formRules).length === 0 }}>
-       <ModalProvider ref={ (modal: any) => this.modalInstance = modal as any}>
-          <Form {...({ name: this.formName })}
-                labelAlign='right'
-                layout={this.$props.layout}
-                rules={this.formRules}
-                onSubmitSuccess={this.onSubmitSuccess}
-                auto-label-width
-                ref={(instance: unknown) => this.formInstance = instance as any}
-                model={this.formSource}>
-                <Grid cols={this.formColumns} col-gap={this.$props.colGap} row-gap={this.$props.rowGap}>
-                  {
-                    this.formItems.filter(() => this.formColumns !== 0).map(item => (
-                      <GridItem span={item.span} key={item.key as string}>
-                        {renderFormItem(this.formSource, item)}
-                      </GridItem>
-                    ))
-                  }
-                  {
-                    renderFormActions()
-                  }
-                  {
-                    renderFormResult()
-                  }
-                </Grid>
+      <div
+        class={{
+          'form-render': true,
+          'no-rules': Object.keys(this.formRules).length === 0,
+        }}
+      >
+        <ModalProvider
+          ref={(modal: any) => (this.modalInstance = modal as any)}
+        >
+          <Form
+            {...{ name: this.formName }}
+            labelAlign="right"
+            layout={this.$props.layout}
+            rules={this.formRules}
+            onSubmitSuccess={this.onSubmitSuccess}
+            auto-label-width
+            ref={(instance: unknown) => (this.formInstance = instance as any)}
+            model={this.formSource}
+          >
+            <Grid
+              cols={this.formColumns}
+              col-gap={this.$props.colGap}
+              row-gap={this.$props.rowGap}
+            >
+              {this.formItems
+                .filter(() => this.formColumns !== 0)
+                .map(item => (
+                  <GridItem span={item.span} key={item.key as string}>
+                    {renderFormItem(this.formSource, item)}
+                  </GridItem>
+                ))}
+              {renderFormActions()}
+              {renderFormResult()}
+            </Grid>
           </Form>
-      </ModalProvider>
-     </div>
+        </ModalProvider>
+      </div>
     )
   },
 })

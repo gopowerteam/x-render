@@ -1,5 +1,5 @@
-import { FormRender } from '@gopowerteam/form-render'
 import type { TableRenderContext, TableRenderOptions, TableRenderProps } from '.'
+import { FormRender } from '@gopowerteam/form-render'
 
 export function tableFormRender(
   props: TableRenderProps,
@@ -8,7 +8,8 @@ export function tableFormRender(
     tableForm,
     tableEvents,
     formInstance,
-  }: TableRenderOptions) {
+  }: TableRenderOptions,
+) {
   if (tableForm?.length) {
     return () => (
       <div class="table-form">
@@ -19,9 +20,9 @@ export function tableFormRender(
           onSubmit={() => tableEvents('reload', { reset: true })}
           {...props.formOptions}
         >
-           {{
-             actions: ctx.slots['form-actions'] ? () => ctx.slots['form-actions']!() : undefined,
-           }}
+          {{
+            actions: ctx.slots['form-actions'] ? () => ctx.slots['form-actions']!() : undefined,
+          }}
         </FormRender>
       </div>
     )

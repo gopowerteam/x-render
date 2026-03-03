@@ -1,6 +1,7 @@
-import { type PropType, defineComponent, ref } from 'vue'
+import type { PropType } from 'vue'
 import { Transfer } from '@arco-design/web-vue'
 import { onSubmit, useModal } from '@gopowerteam/modal-render'
+import { defineComponent, ref } from 'vue'
 
 export const TableCollapsedRender = defineComponent({
   props: {
@@ -32,10 +33,12 @@ export const TableCollapsedRender = defineComponent({
       modal.close(data)
     })
 
-    return () => <div class="table-collapsed-render">
-      <Transfer data={columns.value} default-value={selected.value} onChange={value => selected.value = [...value]} title={['显示列', '隐藏列']} style={{ justifyContent: 'center' }}>
-       <template v-slot:source></template>
-     </Transfer>
-    </div>
+    return () => (
+      <div class="table-collapsed-render">
+        <Transfer data={columns.value} default-value={selected.value} onChange={value => selected.value = [...value]} title={['显示列', '隐藏列']} style={{ justifyContent: 'center' }}>
+          <template v-slot:source></template>
+        </Transfer>
+      </div>
+    )
   },
 })

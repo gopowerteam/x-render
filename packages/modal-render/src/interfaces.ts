@@ -1,4 +1,4 @@
-import type { CSSProperties, Component } from 'vue'
+import type { Component, CSSProperties } from 'vue'
 import type { useModal } from './hooks/use-modal'
 
 export interface SizeOptions {

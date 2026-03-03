@@ -1,6 +1,6 @@
+import type { TableRenderContext, TableRenderOptions, TableRenderProps } from '.'
 import { Pagination } from '@arco-design/web-vue'
 import { useBreakpoints } from '@vueuse/core'
-import type { TableRenderContext, TableRenderOptions, TableRenderProps } from '.'
 
 export function tablePaginationRender(
   props: TableRenderProps,
@@ -8,7 +8,8 @@ export function tablePaginationRender(
   {
     pageService,
     tableEvents,
-  }: TableRenderOptions): ()=>(JSX.Element | undefined) {
+  }: TableRenderOptions,
+): () => (JSX.Element | undefined) {
   function onPageChange(index: number) {
     if (pageService) {
       pageService.pageIndex = index
@@ -31,24 +32,25 @@ export function tablePaginationRender(
 
   if (pageService) {
     return () => (
-        <div class="table-pagination" style={{ padding: '10px 0' }}>
-          <Pagination
-            v-model:current={pageService.pageIndex}
-            v-model:page-size={pageService.pageSize}
-            total={pageService.total}
-            page-size-options={pageService.pageSizeOpts}
-            hide-on-single-page={!props.alwayShowPagination}
-            show-total
-            show-page-size
-            size="small"
-            simple={breakpoints.smaller('desktop').value}
-            onChange={index => onPageChange(index)}
-            onPageSizeChange={size => onPageSizeChange(size)}
-            style={{
-              justifyContent: 'flex-end',
-            }}
-            ></Pagination>
-        </div>
+      <div class="table-pagination" style={{ padding: '10px 0' }}>
+        <Pagination
+          v-model:current={pageService.pageIndex}
+          v-model:page-size={pageService.pageSize}
+          total={pageService.total}
+          page-size-options={pageService.pageSizeOpts}
+          hide-on-single-page={!props.alwayShowPagination}
+          show-total
+          show-page-size
+          size="small"
+          simple={breakpoints.smaller('desktop').value}
+          onChange={index => onPageChange(index)}
+          onPageSizeChange={size => onPageSizeChange(size)}
+          style={{
+            justifyContent: 'flex-end',
+          }}
+        >
+        </Pagination>
+      </div>
     )
   }
 

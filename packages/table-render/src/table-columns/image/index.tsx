@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'vue'
+import type { DataRecord, TableColumnOptions } from '../../interfaces'
 import { Image } from '@arco-design/web-vue'
 import { createColumnRender, getColumnValue, isPromise } from '../../utils'
-import type { DataRecord, TableColumnOptions } from '../../interfaces'
 
 export interface ImageColumnOptions<T> {
   width?: string
@@ -67,19 +67,19 @@ export function renderImageColumn<T = DataRecord>(
       const url = (record as Record<string, string>)[parsedKey] || value
       return url
         ? (
-        <div
-          id={id}
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: `${options?.size}px`,
-            width: `${options?.size}px`,
-            margin: 'auto',
-          }}
-        >
-            <Image preview={options?.preview} width="100%" height="100%" fit="contain" src={url} alt="image" style={style}></Image>
-        </div>
+            <div
+              id={id}
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: `${options?.size}px`,
+                width: `${options?.size}px`,
+                margin: 'auto',
+              }}
+            >
+              <Image preview={options?.preview} width="100%" height="100%" fit="contain" src={url} alt="image" style={style}></Image>
+            </div>
           )
         : <></>
     }

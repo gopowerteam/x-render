@@ -1,7 +1,8 @@
-import { Option, Select } from '@arco-design/web-vue'
-import { type ComponentPublicInstance, type Ref, isRef, ref } from 'vue'
-import { watchOnce } from '@vueuse/core'
+import type { ComponentPublicInstance, Ref } from 'vue'
 import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
+import { Option, Select } from '@arco-design/web-vue'
+import { watchOnce } from '@vueuse/core'
+import { isRef, ref } from 'vue'
 
 const cache = new WeakMap()
 
@@ -12,7 +13,7 @@ function useSelectOptions(): [Ref<SelectOptions>, (value: SelectOptions) => void
   return [selectOptions, updateSelectOptions]
 }
 
-export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions): FormItemRenderReturn<T> {
+export function renderSelectItem<T = DataRecord>(options: RenderSelectItemOptions): FormItemRenderReturn<T> {
   let selectInstance: ComponentPublicInstance
   let mounted = false
 
@@ -89,7 +90,7 @@ export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions)
   }
 
   switch (true) {
-    case options.options instanceof Function:{
+    case typeof options.options === 'function':{
       if (options.cache !== false) {
         updateSelectOptionsFromCache()
       }
@@ -123,12 +124,12 @@ export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions)
 
       if (options.multiple) {
         return (
-        <span>{(value as string[]).map(item => selectOptions.value.get(item)).join(' ,')}</span>
+          <span>{(value as string[]).map(item => selectOptions.value.get(item)).join(' ,')}</span>
         )
       }
       else {
         return (
-        <span>{selectOptions.value.get(value as string)}</span>
+          <span>{selectOptions.value.get(value as string)}</span>
         )
       }
     }
@@ -144,12 +145,15 @@ export function renderSelectItem<T=DataRecord>(options: RenderSelectItemOptions)
           allowSearch={options.searchable}
           allow-create={options.createable}
           maxTagCount={options.maxTagCount ?? 2}
-          onChange={onSelectChange}>
+          onChange={onSelectChange}
+        >
           {Array.from(selectOptions.value.entries()).map(([value, label], index) => (
             <Option
               key={index}
               value={value}
-              label={label}></Option>
+              label={label}
+            >
+            </Option>
           ))}
         </Select>
       )
@@ -179,10 +183,10 @@ export interface RenderSelectItemOptions {
   createable?: boolean
   // select options列表
   options:
-  | SelectOptions
-  | (() => SelectOptions)
-  | (() => Promise<SelectOptions>)
-  | Ref<SelectOptions>
+    | SelectOptions
+    | (() => SelectOptions)
+    | (() => Promise<SelectOptions>)
+    | Ref<SelectOptions>
   // 多选支持
   multiple?: boolean
   // 最大标签数量

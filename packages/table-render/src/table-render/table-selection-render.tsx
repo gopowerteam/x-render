@@ -1,20 +1,22 @@
-import { type Ref, nextTick, ref } from 'vue'
 import type { TableData, TableRowSelection } from '@arco-design/web-vue'
+import type { Ref } from 'vue'
 import type { TableRenderContext, TableRenderOptions, TableRenderProps } from '.'
+import { nextTick, ref } from 'vue'
 
 export function tableSecletionRender(
   props: TableRenderProps,
   ctx: TableRenderContext,
   {
     tableSource,
-  }: TableRenderOptions): {
-    selectedRowKeys: Ref<(string | number)[]>
-    rowSelection?: TableRowSelection
-    onSelect: (rowKeys: (string | number)[], rowKey: string | number, record: TableData) => void
-    onSelectAll: (value: boolean) => void
-    reloadSelection(): void
-    resetSelection(): void
-  } {
+  }: TableRenderOptions,
+): {
+  selectedRowKeys: Ref<(string | number)[]>
+  rowSelection?: TableRowSelection
+  onSelect: (rowKeys: (string | number)[], rowKey: string | number, record: TableData) => void
+  onSelectAll: (value: boolean) => void
+  reloadSelection: () => void
+  resetSelection: () => void
+} {
   const selectedRowKeys = ref<(string | number)[]>([])
 
   function resetSelection() {

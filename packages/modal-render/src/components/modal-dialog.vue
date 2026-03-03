@@ -1,3 +1,57 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useModal } from '..'
+
+const props = withDefaults(
+  defineProps<{
+    type: 'confirm' | 'success' | 'error' | 'warning' | 'info'
+    title?: string
+    content: string
+    okText?: string
+    cancelText?: string
+    onOk?: () => Promise<void> | void
+    onCancel?: () => Promise<void> | void
+    footer?: () => JSX.Element
+  }>(),
+  {
+    okText: '确定',
+    cancelText: '取消',
+  },
+)
+
+const modal = useModal()
+
+const headerTitle = computed(() => {
+  if (props.title) {
+    return props.title
+  }
+
+  return {
+    confirm: '提示',
+    info: '提示',
+    warning: '警告',
+    error: '错误',
+    success: '成功',
+  }[props.type]
+})
+
+async function onClickOk() {
+  if (props.onOk) {
+    await props.onOk()
+  }
+
+  modal.close()
+}
+
+async function onClickCancel() {
+  if (props.onCancel) {
+    await props.onCancel()
+  }
+
+  modal.close()
+}
+</script>
+
 <template>
   <section class="modal-dialog">
     <div class="dialog-body">
@@ -34,18 +88,18 @@
 </template>
 
 <style scoped lang="less">
-.dialog-body{
+.dialog-body {
   padding: 20px 10px 10px 10px;
 }
-.dialog-title{
+.dialog-title {
   padding: 5px;
   font-weight: bold;
   font-size: 16px;
 }
-.dialog-content{
+.dialog-content {
   padding: 5px;
 }
-.dialog-footer{
+.dialog-footer {
   box-sizing: border-box;
   height: 50px;
   border-top: solid 1px var(--color-border-1, rgb(232, 232, 232));
@@ -54,7 +108,7 @@
   align-items: center;
   padding: 0 10px;
 
-  button{
+  button {
     height: 32px;
     line-height: 28px;
     min-width: 80px;
@@ -65,77 +119,25 @@
     padding: 0;
     box-sizing: border-box;
 
-    &.submit-button{
+    &.submit-button {
       color: #fff;
       background-color: rgb(var(--primary-6, 45, 106, 251));
 
-      &:hover{
+      &:hover {
         background-color: rgb(var(--primary-5, 28, 76, 207));
       }
-      &:active{
-        background-color: rgb(var(--primary-7, 14,66,210));
+      &:active {
+        background-color: rgb(var(--primary-7, 14, 66, 210));
       }
     }
-    &.cancel-button{
+    &.cancel-button {
       color: rgb(var(--color-text-2, 78, 89, 105));
       background-color: var(--color-fill-1, #f5f5f5);
 
-      &:hover{
+      &:hover {
         background-color: var(--color-fill-4, #c9cdd4);
       }
     }
   }
 }
 </style>
-
-<script setup lang="ts">
-import { computed } from 'vue'
-import { useModal } from '..'
-
-const props = withDefaults(
-  defineProps<{
-    type: 'confirm' | 'success' | 'error' | 'warning' | 'info'
-    title?: string
-    content: string
-    okText?: string
-    cancelText?: string
-    onOk?: () => Promise<void> | void
-    onCancel?: () => Promise<void> | void
-    footer?: () => JSX.Element
-  }>(), {
-    okText: '确定',
-    cancelText: '取消',
-  })
-
-const modal = useModal()
-
-const headerTitle = computed(() => {
-  if (props.title) {
-    return props.title
-  }
-
-  return {
-    confirm: '提示',
-    info: '提示',
-    warning: '警告',
-    error: '错误',
-    success: '成功',
-  }[props.type]
-})
-
-async function onClickOk() {
-  if (props.onOk) {
-    await props.onOk()
-  }
-
-  modal.close()
-}
-
-async function onClickCancel() {
-  if (props.onCancel) {
-    await props.onCancel()
-  }
-
-  modal.close()
-}
-</script>

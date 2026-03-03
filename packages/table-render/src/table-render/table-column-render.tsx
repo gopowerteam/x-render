@@ -1,9 +1,9 @@
-import { type TableColumnData, type TableData } from '@arco-design/web-vue'
+import type { TableColumnData, TableData } from '@arco-design/web-vue'
 import type { Ref } from 'vue'
+import type { EventEmits } from '../hooks'
 import type { ColumnsGroup, TableColumnOptions, TableColumnSharedOptions, TableColumnsOptions } from '../interfaces'
 import { TableColumnRenders } from '../table-columns'
 import { RenderColumnType } from '../utils'
-import type { EventEmits } from '../hooks'
 
 /**
  * 生成Render模板
@@ -29,7 +29,7 @@ export function toRenderColumn<T>(
 
   // 获取deault slot
   return {
-    render: ({ record, rowIndex }: { record: TableData; rowIndex?: number }) => templateRender(record as T, options, {
+    render: ({ record, rowIndex }: { record: TableData, rowIndex?: number }) => templateRender(record as T, options, {
       ...(context || {}),
       rowIndex,
     }),
@@ -53,7 +53,7 @@ export function renderTableColumns({
   columnsOptions: TableColumnSharedOptions | undefined
   columnsGroups: ColumnsGroup[]
   pageMode: 'client' | 'server'
-  collapsedColumns: Ref<{ key: string;title: string;collapsed: boolean }[]>
+  collapsedColumns: Ref<{ key: string, title: string, collapsed: boolean }[]>
   events: EventEmits
 }) {
   const data = columns
@@ -115,7 +115,7 @@ function transformColumnsGroups(columns: TableColumnData[], columnsGroups: Colum
  * @param options
  * @returns
  */
-export function renderTableColumn<T>(options: TableColumnOptions<T>, pageMode: 'client' | 'server', collapsedColumns: Ref<{ key: string;title: string;collapsed: boolean }[]>, events: EventEmits): TableColumnData | undefined {
+export function renderTableColumn<T>(options: TableColumnOptions<T>, pageMode: 'client' | 'server', collapsedColumns: Ref<{ key: string, title: string, collapsed: boolean }[]>, events: EventEmits): TableColumnData | undefined {
   const { render, disableColumnMode } = toRenderColumn(options, {
     previewing: false,
     emits: events,

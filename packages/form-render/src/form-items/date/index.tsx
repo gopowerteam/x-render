@@ -1,6 +1,8 @@
 import type {
   ShortcutType,
 } from '@arco-design/web-vue'
+import type { ComponentPublicInstance } from 'vue'
+import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
 import {
   DatePicker,
   MonthPicker,
@@ -9,11 +11,9 @@ import {
   YearPicker,
 } from '@arco-design/web-vue'
 import dayjs from 'dayjs'
-import 'dayjs/locale/zh-cn'
-import weekOfYear from 'dayjs/plugin/weekOfYear'
 import quarterOfYear from 'dayjs/plugin/quarterOfYear'
-import type { ComponentPublicInstance } from 'vue'
-import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
+import weekOfYear from 'dayjs/plugin/weekOfYear'
+import 'dayjs/locale/zh-cn'
 
 dayjs.extend(weekOfYear)
 dayjs.extend(quarterOfYear)
@@ -86,8 +86,9 @@ export function renderDateItem<T = DataRecord>(options?: RenderDateItemOptions):
               disabled-date={disabledMethod}
               format={options?.labelFormat}
               value-format={options?.valueFormat}
-              {...{ onChange }}>
-              </WeekPicker>
+              {...{ onChange }}
+            >
+            </WeekPicker>
           )
         case 'month':
           return (
@@ -97,7 +98,8 @@ export function renderDateItem<T = DataRecord>(options?: RenderDateItemOptions):
               disabled-date={disabledMethod}
               format={options?.labelFormat}
               value-format={options?.valueFormat}
-              {...{ onChange }}>
+              {...{ onChange }}
+            >
             </MonthPicker>
           )
         case 'quarter':
@@ -108,7 +110,8 @@ export function renderDateItem<T = DataRecord>(options?: RenderDateItemOptions):
               disabled-date={disabledMethod}
               format={options?.labelFormat}
               value-format={options?.valueFormat}
-              {...{ onChange }}>
+              {...{ onChange }}
+            >
             </QuarterPicker>
           )
         case 'year':
@@ -119,7 +122,8 @@ export function renderDateItem<T = DataRecord>(options?: RenderDateItemOptions):
               disabled-date={disabledMethod}
               format={options?.labelFormat}
               value-format={options?.valueFormat}
-              {...{ onChange }}>
+              {...{ onChange }}
+            >
             </YearPicker>
           )
         case 'date':
@@ -134,7 +138,9 @@ export function renderDateItem<T = DataRecord>(options?: RenderDateItemOptions):
               value-format={options?.valueFormat}
               show-time={options?.showTime}
               {...{ onChange }}
-              {...{ shortcuts: options?.shortcuts }}></DatePicker>
+              {...{ shortcuts: options?.shortcuts }}
+            >
+            </DatePicker>
           )
       }
     }

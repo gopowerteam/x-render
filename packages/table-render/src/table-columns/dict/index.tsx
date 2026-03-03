@@ -1,5 +1,5 @@
-import { Tag } from '@arco-design/web-vue'
 import type { DataRecord, TableColumnOptions } from '../../interfaces'
+import { Tag } from '@arco-design/web-vue'
 import { createColumnRender, getColumnValue } from '../../utils'
 
 type Dict = Map<string | number | boolean, string | number | boolean>
@@ -10,7 +10,7 @@ const TagType = {
   error: 'red',
 }
 
-export type DictColumnOptions = Dict | { dict: Dict; tag: boolean | keyof typeof TagType }
+export type DictColumnOptions = Dict | { dict: Dict, tag: boolean | keyof typeof TagType }
 
 function getDict(options: DictColumnOptions) {
   return options instanceof Map ? options : options.dict

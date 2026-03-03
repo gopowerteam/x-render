@@ -21,11 +21,10 @@ body {
   min-height: 100vh;
 }
 
-
 #app {
   margin: 0 auto;
   padding: 2rem;
-  width:100%;
+  width: 100%;
 }
 
 @media (prefers-color-scheme: light) {
@@ -34,7 +33,6 @@ body {
     background-color: #ffffff;
   }
 }
-
 
 html::-webkit-scrollbar {
   width: 10px;

@@ -1,9 +1,9 @@
 import './style.less'
 import 'vue/jsx'
 
-export * from './table-render'
-export * from './interfaces'
-export * from './hooks'
 export * from './defines'
-export * from './resolver'
+export * from './hooks'
 export { default } from './install'
+export * from './interfaces'
+export * from './resolver'
+export * from './table-render'

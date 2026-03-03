@@ -1,7 +1,9 @@
-import { Cascader, type CascaderOption, type TriggerProps } from '@arco-design/web-vue'
-import { type ComponentPublicInstance, type Ref, isRef, ref } from 'vue'
-import { watchOnce } from '@vueuse/core'
+import type { CascaderOption, TriggerProps } from '@arco-design/web-vue'
+import type { ComponentPublicInstance, Ref } from 'vue'
 import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
+import { Cascader } from '@arco-design/web-vue'
+import { watchOnce } from '@vueuse/core'
+import { isRef, ref } from 'vue'
 import { findTreePathByKey, findTreePathByKeyPath } from '../../utils/tree'
 
 const cache = new WeakMap()
@@ -13,7 +15,7 @@ function useSelectOptions(): [Ref<SelectOptions>, (value: SelectOptions) => void
   return [selectOptions, updateSelectOptions]
 }
 
-export function renderCascaderItem<T=DataRecord>(options: RenderCascaderItemOptions): FormItemRenderReturn<T> {
+export function renderCascaderItem<T = DataRecord>(options: RenderCascaderItemOptions): FormItemRenderReturn<T> {
   let selectInstance: ComponentPublicInstance
   let mounted = false
 
@@ -86,7 +88,7 @@ export function renderCascaderItem<T=DataRecord>(options: RenderCascaderItemOpti
   }
 
   switch (true) {
-    case options.options instanceof Function:{
+    case typeof options.options === 'function':{
       if (options.cache !== false) {
         updateSelectOptionsFromCache()
       }
@@ -182,7 +184,8 @@ export function renderCascaderItem<T=DataRecord>(options: RenderCascaderItemOpti
           onChange={onSelectChange}
           checkStrictly={options.checkStrictly}
           triggerProps={options.triggerProps}
-          options={selectOptions.value}>
+          options={selectOptions.value}
+        >
         </Cascader>
       )
     }
@@ -211,10 +214,10 @@ export interface RenderCascaderItemOptions {
   pathMode?: boolean
   // select options列表
   options:
-  | SelectOptions
-  | (() => SelectOptions)
-  | (() => Promise<SelectOptions>)
-  | Ref<SelectOptions>
+    | SelectOptions
+    | (() => SelectOptions)
+    | (() => Promise<SelectOptions>)
+    | Ref<SelectOptions>
   // 多选支持
   multiple?: boolean
   // 最大标签数量

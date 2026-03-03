@@ -1,6 +1,6 @@
-import { ref, watch } from 'vue'
-import { InputNumber } from '@arco-design/web-vue'
 import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
+import { InputNumber } from '@arco-design/web-vue'
+import { ref, watch } from 'vue'
 
 const defaultOptions: Partial<RenderCurrencyOptions> = {
   thousands: true,
@@ -14,7 +14,7 @@ const unitMaps = {
   万: 10 ** 4,
 }
 
-export function renderCurrencyItem<T=DataRecord>(options?: RenderCurrencyOptions): FormItemRenderReturn<T> {
+export function renderCurrencyItem<T = DataRecord>(options?: RenderCurrencyOptions): FormItemRenderReturn<T> {
   options = { ...defaultOptions, ...(options || {}) }
 
   const transformToInputUnit = (value?: number) => {
@@ -27,7 +27,7 @@ export function renderCurrencyItem<T=DataRecord>(options?: RenderCurrencyOptions
     }
 
     const scale = unitMaps[options!.outputUnit!] / unitMaps[options!.inputUnit!]
-    return parseFloat((value * scale).toFixed(10))
+    return Number.parseFloat((value * scale).toFixed(10))
   }
 
   const transformToOutputUnit = (value?: number) => {
@@ -40,7 +40,7 @@ export function renderCurrencyItem<T=DataRecord>(options?: RenderCurrencyOptions
     }
 
     const scale = unitMaps[options!.inputUnit!] / unitMaps[options!.outputUnit!]
-    return parseFloat((value * scale).toFixed(10))
+    return Number.parseFloat((value * scale).toFixed(10))
   }
 
   const toThousands = (value: string) => {
@@ -79,26 +79,30 @@ export function renderCurrencyItem<T=DataRecord>(options?: RenderCurrencyOptions
 
     function renderText() {
       return (
-        <span>{formatter(currentValue.value!.toString())}{suffix()}</span>
+        <span>
+          {formatter(currentValue.value!.toString())}
+          {suffix()}
+        </span>
       )
     }
 
     function renderComponent() {
       return (
-          <InputNumber
-            v-model={currentValue.value}
-            formatter={formatter}
-            parser={parser}
-            precision={options?.precision}
-            hideButton
-            read-only={options?.readonly}
-            placeholder={options?.placeholder}
-            allowClear={options?.clearable}>
+        <InputNumber
+          v-model={currentValue.value}
+          formatter={formatter}
+          parser={parser}
+          precision={options?.precision}
+          hideButton
+          read-only={options?.readonly}
+          placeholder={options?.placeholder}
+          allowClear={options?.clearable}
+        >
           {{
             prefix,
             suffix,
           }}
-         </InputNumber>
+        </InputNumber>
       )
     }
 

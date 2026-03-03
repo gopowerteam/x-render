@@ -1,13 +1,13 @@
-import { Button } from '@arco-design/web-vue'
-
-import { useModal } from '@gopowerteam/modal-render'
-import { createColumnRender, isPromise } from '../../utils'
 import type { EventEmits, TableColumnOptions } from '../..'
 
-export type RenderButtonColumnOptions<T> =
-  | RenderSingleButtonColumnOptions<T>
-  | RenderSingleButtonColumnOptions<T>[]
-  | RenderMultipleButtonColumnOptions<T>
+import { Button } from '@arco-design/web-vue'
+import { useModal } from '@gopowerteam/modal-render'
+import { createColumnRender, isPromise } from '../../utils'
+
+export type RenderButtonColumnOptions<T>
+  = | RenderSingleButtonColumnOptions<T>
+    | RenderSingleButtonColumnOptions<T>[]
+    | RenderMultipleButtonColumnOptions<T>
 
 export interface RenderSingleButtonColumnOptions<T> {
   content?: string | ((record: T) => string | number | undefined)
@@ -21,8 +21,8 @@ export interface RenderSingleButtonColumnOptions<T> {
   icon?: (record: T) => JSX.Element
   confirmText?: string
   confirmAppend?: string | HTMLElement
-  confirmOffset?: { left: number; top: number }
-  confirmPosition?: { left: number; top: number }
+  confirmOffset?: { left: number, top: number }
+  confirmPosition?: { left: number, top: number }
 }
 
 export interface RenderMultipleButtonColumnOptions<T> {
@@ -36,7 +36,8 @@ export function renderButtonColumn<T>(options: RenderButtonColumnOptions<T>) {
     ctx?: {
       previewing?: boolean
       emits?: EventEmits
-    }) => {
+    },
+  ) => {
     const modal = useModal()
     const buttons = (
       Array.isArray(options)
@@ -98,13 +99,13 @@ export function renderButtonColumn<T>(options: RenderButtonColumnOptions<T>) {
       // 获取执行状态
       const executable = await (button.confirm === true
         ? new Promise<boolean>((resolve) => {
-          modal.confirm({
-            title: '提示信息',
-            content: button.confirmText ?? '您确定要执行该操作？',
-            onOk: () => resolve(true),
-            onCancel: () => resolve(false),
+            modal.confirm({
+              title: '提示信息',
+              content: button.confirmText ?? '您确定要执行该操作？',
+              onOk: () => resolve(true),
+              onCancel: () => resolve(false),
+            })
           })
-        })
         : Promise.resolve(true))
 
       if (executable && button?.onClick) {
@@ -132,7 +133,8 @@ export function renderButtonColumn<T>(options: RenderButtonColumnOptions<T>) {
               type={button.type || 'text'}
               shape={button.shape}
               size="mini"
-              disabled={toBooleanValue(button.disabled, false)}>
+              disabled={toBooleanValue(button.disabled, false)}
+            >
               {{
                 icon: button.icon ? () => button.icon!(record) : undefined,
                 default: () => (typeof button.content === 'function'

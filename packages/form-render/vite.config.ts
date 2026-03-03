@@ -3,7 +3,6 @@ import { fileURLToPath, URL } from 'node:url'
 import { vitePluginForArco as arco } from '@arco-plugins/vite-vue'
 import vue from '@vitejs/plugin-vue'
 import jsx from '@vitejs/plugin-vue-jsx'
-import { presetUno } from 'unocss'
 import unocss from 'unocss/vite'
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
@@ -46,9 +45,6 @@ export default defineConfig({
     arco({
       style: 'css',
     }) as any,
-    unocss({
-      presets: [presetUno()],
-      safelist: ['justify-end'],
-    }),
+    unocss(),
   ],
 })

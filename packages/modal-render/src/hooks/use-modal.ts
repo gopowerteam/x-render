@@ -1,8 +1,8 @@
 import type { Component } from 'vue'
-import { getCurrentInstance, inject } from 'vue'
-import { findContainer } from '../utils/find-container'
-import { ModalKey } from '../constants'
 import type { OpenModalOptions, ShowLoadingOptions } from '../interfaces'
+import { getCurrentInstance, inject } from 'vue'
+import { ModalKey } from '../constants'
+import { findContainer } from '../utils/find-container'
 
 export function useModal() {
   const modal = inject(ModalKey)
@@ -16,14 +16,14 @@ export function useModal() {
       onOk?: () => Promise<void> | void
       onCancel?: () => Promise<void> | void
       footer?: () => JSX.Element
-    }
+    },
   ): Promise<any> & { close: () => void }
   function open(
     component: 'info' | 'warning' | 'error' | 'success',
     props: {
       title?: string
       content: string
-    }
+    },
   ): Promise<any> & { close: () => void }
   function open(
     component: Component,

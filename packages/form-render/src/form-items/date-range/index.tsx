@@ -1,17 +1,17 @@
 import type { ShortcutType } from '@arco-design/web-vue'
-import { RangePicker } from '@arco-design/web-vue'
-import dayjs from 'dayjs'
-import updateLocale from 'dayjs/plugin/updateLocale'
-
 import type { ComponentPublicInstance } from 'vue'
 import type { DataRecord, FormItemOptions, FormItemRenderReturn } from '../../interfaces'
+import { RangePicker } from '@arco-design/web-vue'
+
+import dayjs from 'dayjs'
+import updateLocale from 'dayjs/plugin/updateLocale'
 
 /**
  * 日期节点表单渲染
  * @param options 日期节点配置选项
  * @returns JSX
  */
-export function renderDateRangeItem<T=DataRecord>(options?: RenderDateRangeItemOptions): FormItemRenderReturn<T> {
+export function renderDateRangeItem<T = DataRecord>(options?: RenderDateRangeItemOptions): FormItemRenderReturn<T> {
   dayjs.extend(updateLocale)
   let dateRangeInstance: ComponentPublicInstance
   const defaultValueFormat = 'YYYY-MM-DD HH:mm:ss'
@@ -169,7 +169,15 @@ export function renderDateRangeItem<T=DataRecord>(options?: RenderDateRangeItemO
         }
       }
 
-      return (<span>{getDateText(startDate)} - {getDateText(endDate)}</span>)
+      return (
+        <span>
+          {getDateText(startDate)}
+          {' '}
+          -
+          {' '}
+          {getDateText(endDate)}
+        </span>
+      )
     }
 
     function getRangeShortcuts() {
@@ -198,7 +206,9 @@ export function renderDateRangeItem<T=DataRecord>(options?: RenderDateRangeItemO
             allowClear={options?.clearable}
             disabled-date={disabledMethod}
             format={options?.labelFormat}
-            value-format={options?.valueFormat ?? defaultValueFormat}></RangePicker>
+            value-format={options?.valueFormat ?? defaultValueFormat}
+          >
+          </RangePicker>
         </div>
       )
     }

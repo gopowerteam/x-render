@@ -1,59 +1,12 @@
-<template>
-  <slot />
-
-  <div v-if="clientMounted" class="modal-teleport">
-    <teleport :disabled="!appendToBody" :to="typeof appendToBody === 'string' ? appendToBody : 'body'">
-      <transition-group name="modal-fade">
-        <ModalContainer
-          v-for="(modal) in elements"
-          :id="modal.id"
-          :key="modal.id"
-          :ref="`modal-container_${modal.id}`"
-          :component="modal.component"
-          :component-props="modal.props"
-          :max-height="maxHeight"
-          :max-width="maxWidth"
-          :offset="offset"
-          :sizes="sizes"
-          v-bind="modal.options"
-          @submit="() => onEvent(modal.id, 'submit')"
-        />
-      </transition-group>
-    </teleport>
-  </div>
-</template>
-
-<style lang="scss" scoped>
-.modal-fade-enter-active,
-  .modal-fade-leave-active{
-    transition: opacity 0.5s ease;
-
-    &:deep(.modal-content.drawer-mode){
-      transition: transform 0.5s ease;
-    }
-  }
-
-  .modal-fade-enter-from,
-  .modal-fade-leave-to{
-    opacity: 0;
-
-    &:deep(.modal-content.drawer-mode.left-position){
-      transform: translate3d(-100%,0,0);
-    }
-    &:deep(.modal-content.drawer-mode.right-position){
-      transform: translate3d(100%,0,0);
-    }
-    &:deep(.modal-content.drawer-mode.top-position){
-      transform: translate3d(0,-100%,0);
-    }
-    &:deep(.modal-content.drawer-mode.bottom-position){
-      transform: translate3d(0,100%,0);
-    }
-  }
-  </style>
-
 <script setup lang="ts">
 import type { Component } from 'vue'
+import type { useModal } from '../hooks/use-modal'
+import type {
+  ModalElement,
+  OpenModalOptions,
+  ShowLoadingOptions,
+  SizeOptions,
+} from '../interfaces'
 import {
   defineAsyncComponent,
   defineProps,
@@ -65,29 +18,30 @@ import {
   triggerRef,
 } from 'vue'
 import { ModalKey } from '../constants'
-import type { ModalElement, OpenModalOptions, ShowLoadingOptions, SizeOptions } from '../interfaces'
-import type { useModal } from '../hooks/use-modal'
 import ModalContainer from './modal-container.vue'
 import ModalDialog from './modal-dialog.vue'
 import ModalLoading from './modal-loading.vue'
 
-withDefaults(defineProps<{
-  appendToBody: boolean | string
-  sizes: SizeOptions
-  maxWidth: string | number
-  maxHeight: string | number
-  offset?: { x?: number; y?: number }
-}>(), {
-  appendToBody: false,
-  maxWidth: '90%',
-  maxHeight: '90%',
-  sizes: () => ({
-    small: '50%',
-    middle: '70%',
-    large: '90%',
-  }),
-  offset: () => ({ x: 0, y: 0 }),
-})
+withDefaults(
+  defineProps<{
+    appendToBody?: boolean | string
+    sizes?: SizeOptions
+    maxWidth?: string | number
+    maxHeight?: string | number
+    offset?: { x?: number, y?: number }
+  }>(),
+  {
+    appendToBody: false,
+    maxWidth: '90%',
+    maxHeight: '90%',
+    sizes: () => ({
+      small: '50%',
+      middle: '70%',
+      large: '90%',
+    }),
+    offset: () => ({ x: 0, y: 0 }),
+  },
+)
 
 // modal列表
 const elements = shallowRef<ModalElement[]>([])
@@ -99,7 +53,11 @@ const instance = getCurrentInstance()
  * 打开Modal
  */
 
-function openModal(component: Component | 'confirm' | 'info' | 'warning' | 'error' | 'success', props: Record<string, any> = {}, options: OpenModalOptions = {}) {
+function openModal(
+  component: Component | 'confirm' | 'info' | 'warning' | 'error' | 'success',
+  props: Record<string, any> = {},
+  options: OpenModalOptions = {},
+) {
   const instance = defineAsyncComponent(() =>
     Promise.resolve(typeof component === 'string' ? ModalDialog : component),
   )
@@ -115,9 +73,12 @@ function openModal(component: Component | 'confirm' | 'info' | 'warning' | 'erro
 
   const id = Math.random().toString(32).slice(2)
 
-  const elementOptions = Object.assign({
-    zIndex: typeof component === 'string' ? 1100 : 1000,
-  }, options)
+  const elementOptions = Object.assign(
+    {
+      zIndex: typeof component === 'string' ? 1100 : 1000,
+    },
+    options,
+  )
 
   const promise = new Promise((resolve, reject) => {
     elements.value.push({
@@ -149,8 +110,8 @@ function openModal(component: Component | 'confirm' | 'info' | 'warning' | 'erro
 }
 
 /**
-   * 关闭Modal
-   */
+ * 关闭Modal
+ */
 function closeModal(id: string, data?: any) {
   const index = elements.value.findIndex(x => x.id === id)
 
@@ -221,20 +182,23 @@ function showModalLoading(id?: string, options?: ShowLoadingOptions) {
     return container.showLoading()
   }
   else {
-    const { close } = openModal(ModalLoading, {
-      text: options?.text,
-    }, {
-      footer: false,
-      header: false,
-      closeable: false,
-      backgroundColor: 'transparent',
-    })
+    const { close } = openModal(
+      ModalLoading,
+      {
+        text: options?.text,
+      },
+      {
+        footer: false,
+        header: false,
+        closeable: false,
+        backgroundColor: 'transparent',
+      },
+    )
 
     if (options?.duration) {
       setTimeout(() => {
         close()
-      },
-      options?.duration)
+      }, options?.duration)
     }
 
     return close
@@ -253,7 +217,11 @@ function hideModalLoading(id?: string) {
   }
 }
 
-function addEventListener(id: string, event: string, callback: (actions: ReturnType<typeof useModal>) => void) {
+function addEventListener(
+  id: string,
+  event: string,
+  callback: (actions: ReturnType<typeof useModal>) => void,
+) {
   const element = elements.value.find(element => element.id === id)
 
   if (element) {
@@ -291,3 +259,60 @@ export default {
   inheritAttrs: false,
 }
 </script>
+
+<template>
+  <slot />
+
+  <div v-if="clientMounted" class="modal-teleport">
+    <teleport
+      :disabled="!appendToBody"
+      :to="typeof appendToBody === 'string' ? appendToBody : 'body'"
+    >
+      <transition-group name="modal-fade">
+        <ModalContainer
+          v-for="modal in elements"
+          :id="modal.id"
+          :key="modal.id"
+          :ref="`modal-container_${modal.id}`"
+          :component="modal.component"
+          :component-props="modal.props"
+          :max-height="maxHeight"
+          :max-width="maxWidth"
+          :offset="offset"
+          :sizes="sizes"
+          v-bind="modal.options"
+          @submit="() => onEvent(modal.id, 'submit')"
+        />
+      </transition-group>
+    </teleport>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+  transition: opacity 0.5s ease;
+
+  &:deep(.modal-content.drawer-mode) {
+    transition: transform 0.5s ease;
+  }
+}
+
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+  opacity: 0;
+
+  &:deep(.modal-content.drawer-mode.left-position) {
+    transform: translate3d(-100%, 0, 0);
+  }
+  &:deep(.modal-content.drawer-mode.right-position) {
+    transform: translate3d(100%, 0, 0);
+  }
+  &:deep(.modal-content.drawer-mode.top-position) {
+    transform: translate3d(0, -100%, 0);
+  }
+  &:deep(.modal-content.drawer-mode.bottom-position) {
+    transform: translate3d(0, 100%, 0);
+  }
+}
+</style>
