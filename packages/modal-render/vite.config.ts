@@ -27,6 +27,12 @@ export default defineConfig({
         globals: {
           vue: 'Vue',
         },
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name?.endsWith('.css')) {
+            return 'style.css'
+          }
+          return 'assets/[name]-[hash][extname]'
+        },
       },
     },
   },
