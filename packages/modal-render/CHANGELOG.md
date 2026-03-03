@@ -1,5 +1,11 @@
 # @gopowerteam/modal-render
 
+## 1.0.0
+
+### Minor Changes
+
+- 升级相关依赖
+
 ## 0.0.48
 
 ### Patch Changes

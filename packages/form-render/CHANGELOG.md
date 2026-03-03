@@ -1,5 +1,16 @@
 # @gopowerteam/form-render
 
+## 1.0.0
+
+### Minor Changes
+
+- 升级相关依赖
+
+### Patch Changes
+
+- Updated dependencies
+  - @gopowerteam/modal-render@0.1.0
+
 ## 0.0.94
 
 ### Patch Changes
