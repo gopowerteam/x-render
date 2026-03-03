@@ -18,8 +18,8 @@
   "exports": {
     ".": {
       "types": "./dist/es/index.d.ts",
-      "require": "./dist/cjs/index.cjs",
-      "import": "./dist/es/index.mjs"
+      "import": "./dist/es/index.mjs",
+      "require": "./dist/cjs/index.cjs"
     },
     "./es": {
       "types": "./dist/es/index.d.ts",
@@ -30,13 +30,13 @@
       "require": "./dist/cjs/index.cjs"
     },
     "./dist/style.css": {
-      "require": "./dist/style.css",
-      "import": "./dist/style.css"
+      "import": "./dist/style.css",
+      "require": "./dist/style.css"
     },
     "./resolver": {
       "types": "./dist/es/resolver.d.ts",
-      "require": "./dist/cjs/resolver.cjs",
-      "import": "./dist/es/resolver.mjs"
+      "import": "./dist/es/resolver.mjs",
+      "require": "./dist/cjs/resolver.cjs"
     },
     "./*": "./*"
   },
@@ -44,8 +44,8 @@
   "module": "./dist/es/index.mjs",
   "types": "./dist/es/index.d.ts",
   "files": [
-    "dist",
-    "README.md"
+    "README.md",
+    "dist"
   ],
   "scripts": {
     "dev": "vite build --watch",
@@ -56,7 +56,7 @@
   "peerDependencies": {
     "@arco-design/web-vue": "^2.56.3",
     "@gopowerteam/form-render": "^1.0.0",
-    "@gopowerteam/modal-render": "^0.1.0",
+    "@gopowerteam/modal-render": "^1.0.0",
     "exceljs": "^4.4.0",
     "vue": "^3.0.0"
   },
