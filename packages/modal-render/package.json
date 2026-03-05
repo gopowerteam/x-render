@@ -1,7 +1,7 @@
 {
   "name": "@gopowerteam/modal-render",
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "zhuchentong",
     "email": "2037630@gmail.com"
@@ -18,8 +18,8 @@
   "exports": {
     ".": {
       "types": "./dist/es/index.d.ts",
-      "require": "./dist/cjs/index.cjs",
-      "import": "./dist/es/index.mjs"
+      "import": "./dist/es/index.mjs",
+      "require": "./dist/cjs/index.cjs"
     },
     "./es": {
       "types": "./dist/es/index.d.ts",
@@ -30,8 +30,8 @@
       "require": "./dist/cjs/index.cjs"
     },
     "./dist/style.css": {
-      "require": "./dist/style.css",
-      "import": "./dist/style.css"
+      "import": "./dist/style.css",
+      "require": "./dist/style.css"
     },
     "./*": "./*"
   },
@@ -39,8 +39,8 @@
   "module": "./dist/es/index.mjs",
   "types": "./dist/es/index.d.ts",
   "files": [
-    "dist",
-    "README.md"
+    "README.md",
+    "dist"
   ],
   "scripts": {
     "dev": "vite build --watch",
