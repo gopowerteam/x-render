@@ -85,7 +85,7 @@
     "vue-tsc": "3.2.5"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org",
+    "registry": "https://registry.npmjs.com",
     "access": "public"
   }
 }
