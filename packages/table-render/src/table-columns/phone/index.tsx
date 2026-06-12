@@ -16,6 +16,8 @@ export interface PhoneColumnOptions {
   allowCopy?: boolean
   // 设置显示分隔符
   separator?: string
+  // 设置转换函数
+  parse?: (value: string) => string
   // 拨出回调
   onDial?: (phone: string) => void
 }
@@ -49,7 +51,7 @@ export function renderPhoneColumn<T = DataRecord>(
   const render = (record: T, column: TableColumnOptions<T>) => {
     const id = `phone_${Math.random().toString(36).slice(2)}`
     const className = '__table__column_phone__'
-    const phone = getColumnValue(record, column)
+    const phone = options?.parse ? options.parse(getColumnValue(record, column)) : getColumnValue(record, column)
 
     const iconSize = 16
     const iconStyle = `cursor:pointer;width:${iconSize}px;height:${iconSize}px;`

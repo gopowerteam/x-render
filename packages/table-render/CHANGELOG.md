@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 1.0.2
+
+### Patch Changes
+
+- phone column 添加 parse 选项
+
 ## 1.0.1
 
 ### Patch Changes
