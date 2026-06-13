@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 1.0.3
+
+### Patch Changes
+
+- 优化手机号列显示
+
 ## 1.0.2
 
 ### Patch Changes

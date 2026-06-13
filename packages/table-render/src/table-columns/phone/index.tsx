@@ -12,7 +12,7 @@ export interface PhoneColumnOptions {
   allowPreview?: boolean
   // 允许呼出
   allowDial?: boolean
-  // 允许复制
+  // 允许复制（默认开启），点击手机号文字即可复制
   allowCopy?: boolean
   // 设置显示分隔符
   separator?: string
@@ -44,6 +44,11 @@ function formatText(value: string, separator?: string) {
     .replace(/M/g, '*')
 }
 
+/**
+ * 创建手机号列渲染器
+ * @param options 手机号列配置选项
+ * @returns 列渲染函数
+ */
 export function renderPhoneColumn<T = DataRecord>(
   options?: PhoneColumnOptions,
 ) {
@@ -53,12 +58,21 @@ export function renderPhoneColumn<T = DataRecord>(
     const className = '__table__column_phone__'
     const phone = options?.parse ? options.parse(getColumnValue(record, column)) : getColumnValue(record, column)
 
+    // 空值时直接返回，不渲染任何内容
+    if (!phone)
+      return <span />
+
+    // 默认允许复制，显式传 false 关闭
+    const allowCopy = options?.allowCopy !== false
     const iconSize = 16
     const iconStyle = `cursor:pointer;width:${iconSize}px;height:${iconSize}px;`
 
     const encryptValue = formatText(encryptText(phone), options?.separator)
     const originValue = formatText(phone, options?.separator)
 
+    /**
+     * 复制手机号到剪贴板并提示
+     */
     function onCopyPhone() {
       window.focus()
       clipboard.copy(phone).then(() => {
@@ -69,6 +83,10 @@ export function renderPhoneColumn<T = DataRecord>(
       })
     }
 
+    /**
+     * 清除其他行已展开的完整号码，恢复脱敏显示
+     * 确保同一时间只有一行显示完整号码
+     */
     function clearOtherOriginValue() {
       const elemnets = document.querySelectorAll(`.${className}.content`)
 
@@ -96,7 +114,11 @@ export function renderPhoneColumn<T = DataRecord>(
       }
     }
 
-    function updatePreivewIcon(isEncrypt: boolean) {
+    /**
+     * 切换预览图标状态（睁眼/闭眼 SVG）
+     * @param isEncrypt 是否为加密状态
+     */
+    function updatePreviewIcon(isEncrypt: boolean) {
       const previewIcon = document.querySelector(`#${id}>.preview-icon`)
 
       if (!previewIcon) {
@@ -111,6 +133,10 @@ export function renderPhoneColumn<T = DataRecord>(
       }
     }
 
+    /**
+     * 切换脱敏/明文显示状态
+     * 点击预览图标时触发，互斥展开（仅一行显示完整号码）
+     */
     function updatePreviewState() {
       const element = document.querySelector(`#${id}>.content`)
       const isEncrypt = !!element?.innerHTML.includes('****')
@@ -129,9 +155,12 @@ export function renderPhoneColumn<T = DataRecord>(
         }
       }
 
-      updatePreivewIcon(!isEncrypt)
+      updatePreviewIcon(!isEncrypt)
     }
 
+    /**
+     * 拨出手机号，优先使用自定义回调，否则通过 tel: 协议呼出
+     */
     function onCallOutPhone() {
       if (options?.onDial) {
         options.onDial(phone)
@@ -143,13 +172,16 @@ export function renderPhoneColumn<T = DataRecord>(
 
     return (
       <div id={id} style="display:flex;align-items:center;gap:4px;">
+        {/* 手机号文字区域，allowCopy 开启时点击可复制 */}
         <div
           data-encrypt={encryptValue}
           class={`${className} content`}
           style="use-select:none;font-family: monospace;cursor:pointer;font-variant-numeric: tabular-nums;padding-right: 2px;"
+          onClick={allowCopy ? onCopyPhone : undefined}
         >
           {options?.safe ? encryptValue : originValue}
         </div>
+        {/* 安全模式下预览/隐藏完整号码 */}
         {options?.safe && options?.allowPreview && (
           <i
             class="preview-icon"
@@ -181,6 +213,7 @@ export function renderPhoneColumn<T = DataRecord>(
             </svg>
           </i>
         )}
+        {/* 拨出号码 */}
         {options?.allowDial && (
           <i style={iconStyle} title="拨出号码" onClick={onCallOutPhone}>
             <svg
@@ -214,51 +247,8 @@ export function renderPhoneColumn<T = DataRecord>(
             </svg>
           </i>
         )}
-        {options?.allowCopy && (
-          <i style={iconStyle} title="复制号码" onClick={onCopyPhone}>
-            <svg
-              width={iconSize}
-              height={iconSize}
-              viewBox="0 0 48 48"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M13 12.4316V7.8125C13 6.2592 14.2592 5 15.8125 5H40.1875C41.7408 5 43 6.2592 43 7.8125V32.1875C43 33.7408 41.7408 35 40.1875 35H35.5163"
-                stroke="#333"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M32.1875 13H7.8125C6.2592 13 5 14.2592 5 15.8125V40.1875C5 41.7408 6.2592 43 7.8125 43H32.1875C33.7408 43 35 41.7408 35 40.1875V15.8125C35 14.2592 33.7408 13 32.1875 13Z"
-                fill="none"
-                stroke="#333"
-                stroke-width="4"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </i>
-        )}
       </div>
     )
-
-    // if (options?.callable) {
-    //   return (
-    //     <a
-    //       style="text-decoration:none;font-family: monospace;cursor:pointer;font-variant-numeric: tabular-nums;"
-    //       href={`tel:${phone}`}>
-    //       {options?.safe ? encryptValue : originValue}
-    //     </a>
-    //   )
-    // }
-    // else {
-    //   return (
-    //     <a onClick={onCopyPhone} style="text-decoration:none;use-select:none;font-family: monospace;cursor:pointer;font-variant-numeric: tabular-nums;" onMouseenter={onMouseenter} onMouseleave={onMouseleave}>
-    //       {options?.safe ? encryptValue : originValue}
-    //     </a>
-    //   )
-    // }
   }
 
   return createColumnRender<T>('phone', render)
