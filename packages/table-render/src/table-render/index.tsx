@@ -31,7 +31,7 @@ import type {
 import type { PageableOptions } from '../interfaces/pageable-options'
 import { Table } from '@arco-design/web-vue'
 import { ModalProvider } from '@gopowerteam/modal-render'
-import { computed, defineComponent, onMounted, readonly, ref } from 'vue'
+import { computed, defineComponent, onMounted, readonly, ref, watch } from 'vue'
 import { useEvents } from '../hooks'
 import { useExport } from '../hooks/use-export'
 import { setupTableGrabbable } from '../plugins/table-grabbable'
@@ -563,6 +563,12 @@ export const TableRender = defineComponent({
       })
     }
 
+    watch(
+      [collapsedColumns, () => props.columns, () => props.columnsOptions, () => props.columnsGroups],
+      () => reloadColumns(),
+      { deep: true },
+    )
+
     onMounted(() => {
       if (tableRenderElement.value) {
         tableRenderElement.value.id = `table-${tableId}`
@@ -613,7 +619,6 @@ export const TableRender = defineComponent({
     }
   },
   render() {
-    this.reloadColumns()
     const renderTable = () => (
       <div class="table-body">
         <div class="table-body-wrapper">

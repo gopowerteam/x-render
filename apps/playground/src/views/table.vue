@@ -40,6 +40,18 @@ function b() {
 }
 const form = defineForm<t>([
   {
+    key: 'test1',
+    title: 'test1',
+    hideLabel: true,
+    render: r => r.input({ type: 'string', placeholder: '测试字符' }),
+    rule: [
+      {
+        required: true,
+        message: 'asdasd',
+      },
+    ],
+  },
+  {
     key: 'age',
     title: 'age',
     hideLabel: true,
@@ -215,7 +227,7 @@ const columns = defineColumns<t>([
           {
             content: 'edit',
             visiable: record => record.age === '99',
-            onClick: (_record) => {},
+            onClick: (_record) => { },
           },
         ],
       }),
@@ -324,15 +336,8 @@ onMounted(() => {
       draggle toggle
     </AButton>
     <TableRender
-      ref="table"
-      v-model:checkbox-keys="checkboxKeys"
-      v-model:radio-key="radioKey"
-      v-model:radio-row="radioRow"
-      alway-show-pagination
-      auto-fill
-      collapsable
-      :columns="columns"
-      :columns-groups="[
+      ref="table" v-model:checkbox-keys="checkboxKeys" v-model:radio-key="radioKey"
+      v-model:radio-row="radioRow" alway-show-pagination auto-fill collapsable :columns="columns" :columns-groups="[
         {
           title: 'group1',
           children: [
@@ -344,23 +349,12 @@ onMounted(() => {
             },
           ],
         },
-      ]"
-      :data-load="onTableLoad"
-      :draggable="draggable"
-      exportable
-      :form="form"
-      :form-options="{
+      ]" :data-load="onTableLoad" :draggable="draggable" exportable :form="form" :form-options="{
         minWidth: 400,
-      }"
-      pageable
-      refreshable
-      :row-class="() => 'tt'"
-      row-key="age"
-      :selection="{
+      }" pageable refreshable :row-class="() => 'tt'" row-key="age" :selection="{
         type: 'checkbox',
         width: 100,
-      }"
-      @change="onTableChange"
+      }" @change="onTableChange"
     >
       <template #actions>
         <AButton type="primary" @click="a">
