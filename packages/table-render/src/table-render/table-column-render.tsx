@@ -126,6 +126,15 @@ function transformColumnsGroups(
   return columns
 }
 
+function getDefaultAlign(type?: string): 'left' | 'right' | 'center' {
+  switch (type) {
+    case 'currency':
+      return 'right'
+    default:
+      return 'center'
+  }
+}
+
 /**
  * 创建表格列
  * @param options 列配置选项
@@ -140,7 +149,7 @@ export function renderTableColumn<T>(
   collapsedColumns: Ref<{ key: string, title: string, collapsed: boolean }[]>,
   events: EventEmits,
 ): TableColumnData | undefined {
-  const { render, disableColumnMode }
+  const { render, disableColumnMode, type }
     = toRenderColumn(options, {
       previewing: false,
       emits: events,
@@ -166,7 +175,7 @@ export function renderTableColumn<T>(
     dataIndex: options.index || (options.key as string),
     title: options.title,
     width: options.width === 'auto' ? undefined : options.width,
-    align: options.align ?? 'center',
+    align: options.align ?? getDefaultAlign(type),
     fixed: options.fixed,
     ellipsis: options.ellipsis ?? true,
     sortable: options.sortable

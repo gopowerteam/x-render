@@ -14,6 +14,7 @@ export interface CurrencyColumnOptions {
 }
 
 const defaultOptions: Partial<CurrencyColumnOptions> = {
+  precision: 2,
   thousands: true,
   inputUnit: '元',
   outputUnit: '元',
@@ -88,7 +89,7 @@ export function renderCurrencyColumn<T = DataRecord>(
                 <span>{options.prefix()}</span>
               )
             : undefined}
-        <span class="currency_value">{formatter(value)}</span>
+        <span class="currency_value" style={{ fontFamily: 'monospace', fontVariantNumeric: 'tabular-nums' }}>{formatter(value)}</span>
         {typeof options?.suffix === 'string'
           ? (
               <span>{options.suffix}</span>
@@ -102,5 +103,5 @@ export function renderCurrencyColumn<T = DataRecord>(
     )
   }
 
-  return createColumnRender<T>('dict', render)
+  return createColumnRender<T>('currency', render)
 }

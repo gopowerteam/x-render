@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 1.0.6
+
+### Patch Changes
+
+- 优化金额列显示
+
 ## 1.0.5
 
 ### Patch Changes
