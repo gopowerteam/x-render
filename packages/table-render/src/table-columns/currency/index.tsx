@@ -35,12 +35,16 @@ export function renderCurrencyColumn<T = DataRecord>(
       return
     }
 
+    let data: number
+
     if (options?.inputUnit === options?.outputUnit) {
-      return value
+      data = value
+    }
+    else {
+      const scale = unitMaps[options!.inputUnit!] / unitMaps[options!.outputUnit!]
+      data = Number.parseFloat((value * scale).toFixed(10))
     }
 
-    const scale = unitMaps[options!.inputUnit!] / unitMaps[options!.outputUnit!]
-    const data = Number.parseFloat((value * scale).toFixed(10))
     return options?.precision === undefined
       ? data
       : data.toFixed(options?.precision)

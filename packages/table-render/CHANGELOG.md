@@ -1,5 +1,11 @@
 # @gopowerteam/table-render
 
+## 1.0.5
+
+### Patch Changes
+
+- 修复金额精度问题
+
 ## 1.0.4
 
 ### Patch Changes
