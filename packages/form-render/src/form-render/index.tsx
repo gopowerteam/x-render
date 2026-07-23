@@ -12,7 +12,7 @@ import {
 } from '@arco-design/web-vue'
 import { IconDown, IconSearch, IconUp } from '@arco-design/web-vue/es/icon'
 import { ModalProvider } from '@gopowerteam/modal-render'
-import { computed, defineComponent, onMounted, provide, ref } from 'vue'
+import { computed, defineComponent, onMounted, onUnmounted, provide, ref } from 'vue'
 import { provides } from '../config/provide.config'
 import { createFormSource } from '../utils/create-form-source'
 import FormCollapsedDialog from './form-collapsed-dialog'
@@ -116,10 +116,10 @@ export const FormRender = defineComponent({
       props.modelValue || props.value,
     )
     const formColumns = ref(props.columns || 0)
-    const formCollspased = ref<boolean>(true)
+    const formCollapsed = ref<boolean>(true)
     const modalInstance = ref<any>()
     const toggleFormCollapsed = () =>
-      (formCollspased.value = !formCollspased.value)
+      (formCollapsed.value = !formCollapsed.value)
     const formId = ref<string>('')
     const formName = ref<string>('')
     provide(provides.id, formId)
@@ -132,7 +132,7 @@ export const FormRender = defineComponent({
 
     const formItems = computed(() => {
       return props.form
-        .filter(item => (formCollspased.value ? !item.collapsed : true))
+        .filter(item => (formCollapsed.value ? !item.collapsed : true))
         .filter((item) => {
           switch (true) {
             case typeof item.visiable === 'boolean':
@@ -147,7 +147,7 @@ export const FormRender = defineComponent({
         })
     })
 
-    const formActiosSpan = computed(() => {
+    const formActionsSpan = computed(() => {
       if (!formColumns.value) {
         return 1
       }
@@ -252,6 +252,10 @@ export const FormRender = defineComponent({
       }
     })
 
+    onUnmounted(() => {
+      window.removeEventListener('resize', updateFormColumnValue)
+    })
+
     function updateFormSource(value: DataRecord) {
       _updateFormSource({
         ...formSource.value,
@@ -294,8 +298,8 @@ export const FormRender = defineComponent({
       formInstance,
       formColumns,
       formRules,
-      formCollspased,
-      formActiosSpan,
+      formCollapsed,
+      formActionsSpan,
       formItems,
       toggleFormCollapsed,
       updateFormField,
@@ -386,7 +390,7 @@ export const FormRender = defineComponent({
             span: this.formColumns,
           }
         : {
-            span: this.formActiosSpan,
+            span: this.formActionsSpan,
           }
 
       if (this.searchable) {
@@ -423,9 +427,9 @@ export const FormRender = defineComponent({
           buttons.push(
             <Button onClick={this.toggleFormCollapsed}>
               {{
-                default: () => (this.formCollspased ? '展开' : '收起'),
+                default: () => (this.formCollapsed ? '展开' : '收起'),
                 icon: () =>
-                  this.formCollspased
+                  this.formCollapsed
                     ? (
                         <IconDown></IconDown>
                       )

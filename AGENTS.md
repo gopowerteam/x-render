@@ -1,277 +1,74 @@
-# AGENTS.md - AI Coding Agent Guide
+# AGENTS.md
 
-## Project Overview
+Vue 3 monorepo of UI render libraries on TypeScript + Vite + Arco Design Vue.
+Package manager is **pnpm** (enforced via `preinstall` `only-allow pnpm`); **Node >= 24**, pnpm 10.24.0.
 
-This is a Vue 3 monorepo containing UI render libraries built with TypeScript, Vite, and Arco Design Vue. The project uses pnpm as the package manager and Turborepo for build orchestration.
+## Packages
 
-### Packages
+| Package | Depends on (workspace) | Notes |
+| --- | --- | --- |
+| `@gopowerteam/modal-render` | — | Dialog/Drawer, Promise-style API. Standalone. |
+| `@gopowerteam/form-render` | `modal-render` (optional, peer) | Declarative form rendering. |
+| `@gopowerteam/table-render` | `form-render`, `modal-render` (peers) + `exceljs`, `@gopowerteam/request` | Table with paging/sort/export. |
 
-- `@gopowerteam/modal-render` - Modal/dialog component library
-- `@gopowerteam/form-render` - Form rendering library
-- `@gopowerteam/table-render` - Table rendering library (depends on form-render and modal-render)
-
-### Apps
-
-- `playground` - Development/testing environment
-
----
+Build order is handled by Turborepo (`dependsOn: ["^build"]`) — never build packages out of order manually.
+`apps/playground` is the dev harness (private, excluded from changesets).
 
 ## Commands
 
-### Package Manager
+```bash
+pnpm install                          # install (hoisted linker)
+pnpm run lint                         # lint all packages (turbo)
+pnpm run build                        # build all packages (turbo) — this is also the typecheck
+pnpm run dev                          # turbo dev = vite build --watch for every PACKAGE
+pnpm --filter playground dev          # the actual Vite dev SERVER (lives in apps/playground)
+pnpm --filter @gopowerteam/table-render build   # build/lint a single package
+```
 
-**IMPORTANT:** This project uses pnpm. Always use `pnpm` instead of `npm`, `yarn`, or `bun`.
+> **`pnpm run dev` is watch-build, not a dev server.** It runs `vite build --watch` in each package and blocks. To get the browser playground, run the `playground` filter above instead.
+
+### Verification before finishing a task
+
+There is **no test framework** and **no standalone `typecheck` script**. Type errors only surface during `vite build` (via `vite-plugin-dts` + `vue-tsc`). So:
 
 ```bash
-pnpm install          # Install dependencies
-pnpm add <package>    # Add dependency
-pnpm add -D <package> # Add dev dependency
+pnpm run lint   # and/or: pnpm --filter <pkg> lint
+pnpm run build  # catches type errors and generates dist + .d.ts
 ```
 
-### Build
+Run both on the affected packages before declaring done.
 
-```bash
-pnpm run build        # Build all packages (via turbo)
-pnpm run dev          # Start dev mode with watch
-```
+## Git hooks (husky)
 
-To build a specific package:
+- `pre-commit` → `lint-staged`: runs `eslint --cache --fix` on `*.{ts,tsx,js,jsx}` (**excludes `*.spec.*`**). See `.lintstagedrc.js`.
+- `commit-msg` → `commitlint` (`@commitlint/config-conventional`).
 
-```bash
-cd packages/table-render && pnpm run build
-```
+## Lint / format
 
-### Lint
+- ESLint config is `@antfu/eslint-config` with `formatters: true` + `unocss` + `vue` enabled (`eslint.config.mjs`). **No Prettier** — formatting goes through ESLint.
+- `markdown: false` (markdown is NOT linted). `no-console` is **off** (console statements allowed).
+- ESLint ignores `dist/`, `es/`, `lib/`, `_site/`, `bin/`, and `*.spec.*`.
+- TS strict mode; use `import type { ... }` for type-only imports.
 
-```bash
-pnpm run lint         # Lint all packages
-```
+## Conventions (non-obvious)
 
-Lint-staged runs automatically on pre-commit for `.ts`, `.tsx`, `.js`, `.jsx` files (excluding spec files).
+- **`.vue` files** use `<script setup lang="ts">`; **`.tsx` files** use `defineComponent` with a `render()`. Both styles coexist.
+- User-facing **error messages and code comments are in Chinese** (e.g. `throw new Error("未找到需要编辑的数据")`). Match this — don't translate to English.
+- File naming: `kebab-case.vue` / `kebab-case/index.tsx` / `kebab-case.service.ts` / `kebab-case.ts`.
+- Each package's public API is barrel-exported from `src/index.ts`; `install.ts` is the Vue plugin installer.
+- Generic types default to `<T = DataRecord>`.
 
-### Testing
+## Package output / build shape
 
-No test framework is currently configured in this project. If adding tests, create a test setup first.
+- All packages emit **ESM** (`dist/es/*.mjs`) + **CJS** (`dist/cjs/*.cjs`) + types (`dist/es/*.d.ts`) + a single `dist/style.css`.
+- `table-render` additionally exports a **`./resolver`** subpath (`src/resolver.ts` → `TableRenderResolver`) for `unplugin-vue-components` auto-import. (`form-render` also has a `src/resolver.ts` and builds it, but does **not** declare a `./resolver` export in its `package.json`.) The playground uses this pattern (see `apps/playground/vite.config.ts`).
+- Workspace deps use `workspace:*`; peer deps (vue, arco, etc.) are `external` in the rollup config.
 
----
+## Commits & releases
 
-## Code Style
-
-### Formatting (ESLint)
-
-项目使用 `@antfu/eslint-config` + `eslint-plugin-format` 进行代码格式化，无需 Prettier。
-
-### EditorConfig
-
-- Indent: 2 spaces
-- Charset: UTF-8
-- End of line: LF
-- Trim trailing whitespace
-- Insert final newline
-
-### TypeScript
-
-- Target: ES2022
-- Strict mode enabled
-- Use `type` for type imports: `import type { Foo } from 'bar'`
-- Generic types use `<T = DataRecord>` pattern with defaults
-
-### ESLint
-
-Extends `@gopowerteam/eslint-config`. Console statements are allowed.
-
----
-
-## Code Conventions
-
-### File Naming
-
-- **TSX components:** `kebab-case/index.tsx` (e.g., `table-columns/text/index.tsx`)
-- **Vue components:** `kebab-case.vue` (e.g., `modal-dialog.vue`)
-- **Utility files:** `kebab-case.ts` (e.g., `is-promise.ts`)
-- **Service files:** `kebab-case.service.ts` (e.g., `sort.service.ts`)
-
-### Import Order
-
-```typescript
-// 1. External dependencies (Node built-ins first)
-import { resolve } from "node:path";
-
-// 2. Third-party packages
-import { defineComponent, ref } from "vue";
-import { Table } from "@arco-design/web-vue";
-
-// 3. Internal packages (using workspace protocol)
-import { ModalProvider } from "@gopowerteam/modal-render";
-
-// 4. Relative imports
-import { createTableSource } from "../utils/create-table-source";
-import type { TableColumnOptions } from "../../interfaces";
-```
-
-### Vue Components
-
-Use `<script setup>` with TypeScript:
-
-```vue
-<script setup lang="ts">
-import { computed } from "vue";
-
-const props = withDefaults(
-  defineProps<{
-    title?: string;
-    content: string;
-  }>(),
-  {
-    title: "Default Title",
-  },
-);
-</script>
-
-<template>
-  <!-- template content -->
-</template>
-
-<style scoped lang="less">
-/* styles */
-</style>
-```
-
-### TSX Components
-
-Use `defineComponent` with render function:
-
-```tsx
-import { defineComponent, ref } from "vue";
-
-export const MyComponent = defineComponent({
-  props: {
-    value: { type: String, required: false },
-  },
-  setup(props, ctx) {
-    const data = ref<string>();
-
-    return { data };
-  },
-  render() {
-    return <div>{this.data}</div>;
-  },
-});
-```
-
-### Exports
-
-Barrel exports from `index.ts`:
-
-```typescript
-export * from "./interfaces";
-export * from "./hooks";
-export * from "./defines";
-export { default } from "./install";
-```
-
-### Type Definitions
-
-- Export types alongside implementations
-- Use `interface` for object shapes, `type` for unions/intersections
-- Export instance types for components:
-
-```typescript
-export type MyComponentInstance = InstanceType<typeof MyComponent>;
-export type MyComponentProps = MyComponentInstance["$props"];
-```
-
-### Naming Conventions
-
-- **Components:** PascalCase (`TableRender`, `ModalProvider`)
-- **Functions:** camelCase (`createTableSource`, `useTable`)
-- **Constants:** UPPER_SNAKE_CASE or camelCase (`ModalKey`)
-- **Interfaces:** PascalCase with descriptive suffix (`TableColumnOptions`, `FormItemsOptions`)
-- **Service classes:** PascalCase with suffix (`PageService`, `SortService`)
-
-### Error Handling
-
-Throw descriptive errors (Chinese comments in codebase):
-
-```typescript
-if (!record) {
-  throw new Error("未找到需要编辑的数据");
-}
-```
-
-Return rejected promises for async failures:
-
-```typescript
-if (!props.dataLoad) {
-  return Promise.reject();
-}
-```
-
----
-
-## Commit Conventions
-
-Uses Commitizen with conventional commits:
-
-| Type       | Description      |
-| ---------- | ---------------- |
-| `feat`     | New feature      |
-| `fix`      | Bug fix          |
-| `docs`     | Documentation    |
-| `refactor` | Code refactoring |
-| `perf`     | Performance      |
-| `test`     | Tests            |
-| `build`    | Build system     |
-| `revert`   | Revert changes   |
-
-Run `pnpm run commit` for interactive commit creation.
-
----
-
-## Project Structure
-
-```
-x-render/
-├── packages/
-│   ├── modal-render/
-│   │   └── src/
-│   │       ├── components/   # Vue components
-│   │       ├── hooks/        # Composables
-│   │       ├── interfaces.ts # Type definitions
-│   │       └── index.ts      # Barrel export
-│   ├── form-render/
-│   │   └── src/
-│   │       ├── form-render/  # Main component
-│   │       ├── form-items/   # Form field components
-│   │       ├── defines/      # Type factories
-│   │       └── hooks/        # Composables
-│   └── table-render/
-│       └── src/
-│           ├── table-render/ # Main component
-│           ├── table-columns/# Column renderers
-│           ├── utils/        # Utilities
-│           └── plugins/      # Table plugins
-├── apps/
-│   └── playground/           # Dev playground
-└── turbo.json                # Turbo pipeline
-```
-
----
-
-## Key Dependencies
-
-- **Vue 3.4+** with Composition API
-- **Arco Design Vue** - UI component library
-- **UnoCSS** - Atomic CSS
-- **VueUse** - Vue composables
-- **Vite** - Build tool
-- **Less** - CSS preprocessor
-
----
-
-## Notes
-
-- All packages output both ESM (`dist/es/*.mjs`) and CJS (`dist/cjs/*.cjs`) formats
-- Type definitions are generated via `vite-plugin-dts`
-- Workspace packages use `workspace:*` protocol for local deps
-- UnoCSS styles imported via `import 'virtual:uno.css'`
+- Commits are conventional-commit (commitlint). Allowed types: `feat fix docs style refactor perf test build ci chore revert improvement release`. Use `pnpm run commit` for the Commitizen (`cz-customizable`) prompt.
+- Versioning/publishing uses **Changesets**. Base branch is **`master`**, npm `access: restricted` (overridden to `public` per-package in `publishConfig`), `playground` ignored.
+  ```bash
+  pnpm run cs                # add a changeset, then bump versions
+  pnpm run publish-packages  # build + version + publish
+  ```

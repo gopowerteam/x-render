@@ -10,7 +10,7 @@ type FormRenderExpose = {
 }
 
 /**
- * 获取TableRender实例
+ * 获取FormRender实例
  * @param key ref标识
  * @returns FormRender实例的只读响应式引用
  */

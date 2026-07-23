@@ -29,7 +29,7 @@ export class SortService implements RequestPlugin, SortableOptions {
    */
   public remove(key: string) {
     // 过滤
-    const items: any[] = Object.entries(this.sort).filter(([k]) => k !== key) as any[]
+    const items = Object.entries(this.sort).filter(([k]) => k !== key)
 
     this.sort = {}
 

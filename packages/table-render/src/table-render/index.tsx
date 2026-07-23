@@ -46,7 +46,7 @@ import { renderTableColumns } from './table-column-render'
 import tableEditRender from './table-edit-render'
 import { tableFormRender } from './table-form-render'
 import { tablePaginationRender } from './table-pagination-render'
-import { tableSecletionRender } from './table-selection-render'
+import { tableSelectionRender } from './table-selection-render'
 import TableViewRender from './table-view-render'
 
 export const TableRender = defineComponent({
@@ -516,7 +516,7 @@ export const TableRender = defineComponent({
       onSelectAll,
       reloadSelection,
       resetSelection,
-    } = tableSecletionRender(props, ctx, renderOptions)
+    } = tableSelectionRender(props, ctx, renderOptions)
 
     /**
      * 创建表单配置选项
@@ -643,10 +643,10 @@ export const TableRender = defineComponent({
     return (
       <div
         class={{ 'table-render': true, 'auto-fill': this.autoFill }}
-        ref={
-          ((element: HTMLDivElement) =>
-            (this.tableRenderElement = element)) as any
-        }
+        ref={(element) => {
+          if (element instanceof HTMLDivElement)
+            this.tableRenderElement = element
+        }}
       >
         <ModalProvider ref={modal => (this.modalInstance = modal as any)}>
           <div class="table-render-content">

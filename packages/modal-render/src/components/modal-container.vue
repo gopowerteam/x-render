@@ -56,7 +56,6 @@ const props = withDefaults(
     header: true,
     closeable: true,
     footer: false,
-    keyboard: false,
     maskClosable: false,
     size: 'middle',
     esc: false,
@@ -288,15 +287,17 @@ function onCancelClick() {
 
 function onResize() {
   if (window) {
-    window.addEventListener('resize', () => {
-      triggerRef(wrapperRef)
-      triggerRef(contentRef)
+    window.addEventListener('resize', handleResize)
+  }
+}
 
-      if (contentRef.value) {
-        offsetX = contentRef.value.offsetLeft
-        offsetY = contentRef.value.offsetTop
-      }
-    })
+function handleResize() {
+  triggerRef(wrapperRef)
+  triggerRef(contentRef)
+
+  if (contentRef.value) {
+    offsetX = contentRef.value.offsetLeft
+    offsetY = contentRef.value.offsetTop
   }
 }
 
@@ -328,6 +329,8 @@ onUnmounted(() => {
     observer.disconnect()
     observer.takeRecords()
   }
+
+  window.removeEventListener('resize', handleResize)
 })
 
 function showLoading() {

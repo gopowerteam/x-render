@@ -3,7 +3,7 @@ import type { Ref } from 'vue'
 import type { TableRenderContext, TableRenderOptions, TableRenderProps } from '.'
 import { nextTick, ref } from 'vue'
 
-export function tableSecletionRender(
+export function tableSelectionRender(
   props: TableRenderProps,
   ctx: TableRenderContext,
   {
