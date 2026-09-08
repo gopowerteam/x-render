@@ -25,6 +25,7 @@ Vue 3 模态框/抽屉渲染组件库，基于 Promise 风格 API，提供灵活
 - Promise 风格 API，支持 async/await
 - 预设对话框：confirm、info、warning、error、success
 - 可拖拽、全屏、自定义尺寸
+- 移动端自适应：视口 ≤768px 时弹窗自动切换为 bottom sheet、抽屉自动全屏
 - 支持嵌套模态框
 - 完整的 TypeScript 类型支持
 
@@ -203,6 +204,7 @@ onSubmit((actions) => {
 | maxWidth | `string \| number` | `'90%'` | 最大宽度 |
 | maxHeight | `string \| number` | `'90%'` | 最大高度 |
 | offset | `{ x?: number, y?: number }` | `{ x: 0, y: 0 }` | 偏移量 |
+| mobile | `boolean \| 'auto'` | `'auto'` | 移动端形态开关，`'auto'` 按视口宽度（768px）自动判断 |
 
 ```vue
 <ModalProvider
@@ -376,6 +378,7 @@ function showGlobalLoading() {
 | 属性 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
 | mode | `'dialog' \| 'drawer'` | `'dialog'` | 显示模式 |
+| mobile | `boolean \| 'auto'` | 继承 Provider | 移动端形态开关，单次覆盖全局配置 |
 | position | `'top' \| 'right' \| 'bottom' \| 'left'` | `'right'` | 抽屉方向（drawer 模式） |
 | size | `'small' \| 'middle' \| 'large'` | `'middle'` | 预设尺寸 |
 | width | `string \| number` | - | 自定义宽度 |
@@ -632,6 +635,25 @@ function openNested() {
 ---
 
 ## 高级用法
+
+### 移动端适配
+
+视口宽度 ≤768px 时自动启用移动端形态：弹窗（dialog）切换为底部弹出（bottom sheet），
+抽屉（drawer）切换为全屏，预设消息弹窗保持居中小卡，按钮触控高度提升至 44px。
+
+```ts
+// 全局禁用
+// <ModalProvider :mobile="false">...</ModalProvider>
+
+// 单次强制移动端形态
+modal.open(Component, {}, { mobile: true })
+
+// 单次禁用，保持桌面形态
+modal.open(Component, {}, { mobile: false })
+```
+
+> 安全区适配说明：底部安全区（`env(safe-area-inset-bottom)`）依赖宿主页面
+> `<meta name="viewport" content="..., viewport-fit=cover">`。
 
 ### 全屏模式
 
@@ -943,6 +965,7 @@ interface OpenModalOptions {
   draggable?: boolean
   form?: string
   mode?: 'dialog' | 'drawer'
+  mobile?: boolean | 'auto'
   position?: 'top' | 'right' | 'bottom' | 'left'
   backgroundColor?: string
   bodyStyle?: CSSProperties

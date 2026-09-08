@@ -38,6 +38,32 @@ function onShowLoading() {
     a()
   }, 3000)
 }
+
+function onOpenDrawer() {
+  modal.open(Test1, {}, {
+    title: '抽屉',
+    mode: 'drawer',
+    position: 'right',
+    footer: true,
+  })
+}
+
+function onOpenConfirm() {
+  modal.confirm({
+    content: '确认执行该操作吗？',
+    onOk() {
+      console.log('ok')
+    },
+  })
+}
+
+function onOpenDesktopDialog() {
+  modal.open(Test1, {}, {
+    title: '保持桌面形态',
+    mobile: false,
+    footer: true,
+  })
+}
 </script>
 
 <template>
@@ -48,6 +74,15 @@ function onShowLoading() {
 
   <button @click="onShowLoading">
     showLoading
+  </button>
+  <button @click="onOpenDrawer">
+    抽屉
+  </button>
+  <button @click="onOpenConfirm">
+    confirm
+  </button>
+  <button @click="onOpenDesktopDialog">
+    禁用移动端形态
   </button>
 </template>
 

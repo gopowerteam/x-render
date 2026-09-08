@@ -56,7 +56,7 @@ export function useMobile() {
 ### 2. `modal-container.vue`
 
 - 新增 prop `mobile`，setup 中调用一次 `const isMobileQuery = useMobile()`，计算 `isMobileMode = computed(() => props.mobile === 'auto' ? isMobileQuery.value : props.mobile)`
-- 为 true 时：wrapper 加 `modal-wrapper--mobile`，content 加 `modal--mobile`
+- 进一步区分 `isBottomSheetMode`（= mobile + dialog + 组件弹窗）：wrapper 加 `modal-wrapper--bottom-sheet`（贴底），content 加 `modal--bottom-sheet`（宽度/圆角/安全区）；`modal--mobile` 类作用于所有移动端弹窗（触控按钮 44px、抽屉 body 安全区）——保证 confirm 等消息弹窗不受贴底样式影响
 - `contentStyle` 新增分支（内联样式优先级高于类，无法纯 CSS 解决）：
   1. dialog + mobile：跳过 `sizes` 百分比 width/maxWidth（由 CSS 类设 100%）；显式 `props.width` 仍以内联生效
   2. 消息弹窗（`type !== 'component'`）+ mobile + dialog：`width: min(calc(100vw - 32px), 400px)`
@@ -67,18 +67,18 @@ export function useMobile() {
 ### 3. CSS 形态切换（`modal-container.vue` scoped 样式）
 
 ```less
-.modal-wrapper--mobile { align-items: flex-end; } // bottom sheet 贴底
+.modal-wrapper--bottom-sheet { align-items: flex-end; } // bottom sheet 贴底（仅组件弹窗）
 
 .modal-content.modal--mobile {
-  &.dialog-mode {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 16px 16px 0 0;
-    padding-bottom: env(safe-area-inset-bottom, 0);
-  }
-  .modal-footer button { height: 44px; line-height: 44px; }
-  :deep(.modal-dialog button) { height: 44px; line-height: 44px; }
-  &.drawer-mode .modal-body { padding-bottom: env(safe-area-inset-bottom, 0); }
+  // 触控目标优化：按钮 44px（含 :deep(.modal-dialog button)）
+  &.drawer-mode .modal-body { padding-bottom: env(safe-area-inset-bottom, 0px); }
+}
+
+.modal-content.modal--bottom-sheet {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 16px 16px 0 0;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 ```
 
