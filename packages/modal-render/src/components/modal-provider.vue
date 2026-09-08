@@ -299,7 +299,7 @@ export default {
   &:deep(.modal-content.drawer-mode) {
     transition: transform 0.5s ease;
   }
-  &:deep(.modal-content.dialog-mode.modal--mobile) {
+  &:deep(.modal-content.dialog-mode.modal--bottom-sheet) {
     transition: transform 0.3s ease;
   }
 }
@@ -320,7 +320,7 @@ export default {
   &:deep(.modal-content.drawer-mode.bottom-position) {
     transform: translate3d(0, 100%, 0);
   }
-  &:deep(.modal-content.dialog-mode.modal--mobile) {
+  &:deep(.modal-content.dialog-mode.modal--bottom-sheet) {
     transform: translate3d(0, 100%, 0);
   }
 }

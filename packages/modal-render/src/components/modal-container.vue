@@ -80,6 +80,11 @@ const isMobileMode = computed(() =>
   props.mobile === 'auto' ? isMobileQuery.value : props.mobile,
 )
 
+// 移动端 bottom sheet（仅组件弹窗，消息弹窗保持居中）
+const isBottomSheetMode = computed(() =>
+  isMobileMode.value && props.mode === 'dialog' && props.type === 'component',
+)
+
 let offsetX = 0
 let offsetY = 0
 let observer!: MutationObserver
@@ -384,14 +389,14 @@ export default {
   <div
     ref="wrapperRef"
     class="modal-wrapper"
-    :class="{ 'modal-wrapper--mobile': isMobileMode }"
+    :class="{ 'modal-wrapper--bottom-sheet': isBottomSheetMode }"
     :style="wrapperStyle"
     @click.self="maskClosable && onClose()"
   >
     <div
       ref="contentRef"
       class="modal-content"
-      :class="{ [`${mode}-mode`]: true, [`${position}-position`]: true, 'modal--mobile': isMobileMode }"
+      :class="{ [`${mode}-mode`]: true, [`${position}-position`]: true, 'modal--mobile': isMobileMode, 'modal--bottom-sheet': isBottomSheetMode }"
       :style="contentStyle"
     >
       <div
@@ -570,23 +575,12 @@ export default {
 }
 
 // 移动端适配
-.modal-wrapper--mobile {
+.modal-wrapper--bottom-sheet {
   align-items: flex-end;
 }
 
+// 触控目标优化：按钮高度 44px
 .modal-content.modal--mobile {
-  &.dialog-mode {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 16px 16px 0 0;
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-  }
-
-  &.drawer-mode .modal-body {
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-  }
-
-  // 触控目标优化：按钮高度 44px
   .modal-footer button {
     height: 44px;
     line-height: 44px;
@@ -596,5 +590,17 @@ export default {
     height: 44px;
     line-height: 44px;
   }
+
+  &.drawer-mode .modal-body {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+// bottom sheet 形态
+.modal-content.modal--bottom-sheet {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 16px 16px 0 0;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 </style>
