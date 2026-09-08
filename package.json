@@ -2,7 +2,7 @@
   "name": "@gopowerteam/x-render",
   "version": "0.0.0",
   "private": true,
-  "packageManager": "pnpm@10.24.0",
+  "packageManager": "pnpm@11.15.1",
   "engines": {
     "node": ">=24.0.0"
   },
@@ -17,6 +17,7 @@
     "commit": "git-cz",
     "preinstall": "npx only-allow pnpm",
     "cs": "changeset && changeset version",
+    "cs:publish": "changeset publish --provenance",
     "publish-packages": "turbo run build && changeset version && changeset publish"
   },
   "devDependencies": {
