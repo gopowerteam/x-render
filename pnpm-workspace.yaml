@@ -9,3 +9,7 @@ onlyBuiltDependencies:
 
 autoInstallPeers: true
 nodeLinker: hoisted
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+  less: true
