@@ -27,6 +27,8 @@ export interface OpenModalOptions {
   draggable?: boolean
   form?: string
   mode?: 'dialog' | 'drawer'
+  /** 移动端形态开关：'auto' 跟随视口宽度（默认，继承 Provider），boolean 强制指定 */
+  mobile?: boolean | 'auto'
   position?: 'top' | 'right' | 'bottom' | 'left'
   backgroundColor?: string
   bodyStyle?: CSSProperties

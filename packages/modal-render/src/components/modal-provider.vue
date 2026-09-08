@@ -29,6 +29,7 @@ withDefaults(
     maxWidth?: string | number
     maxHeight?: string | number
     offset?: { x?: number, y?: number }
+    mobile?: boolean | 'auto'
   }>(),
   {
     appendToBody: false,
@@ -40,6 +41,7 @@ withDefaults(
       large: '90%',
     }),
     offset: () => ({ x: 0, y: 0 }),
+    mobile: 'auto',
   },
 )
 
@@ -280,6 +282,7 @@ export default {
           :max-width="maxWidth"
           :offset="offset"
           :sizes="sizes"
+          :mobile="mobile"
           v-bind="modal.options"
           @submit="() => onEvent(modal.id, 'submit')"
         />
@@ -295,6 +298,9 @@ export default {
 
   &:deep(.modal-content.drawer-mode) {
     transition: transform 0.5s ease;
+  }
+  &:deep(.modal-content.dialog-mode.modal--mobile) {
+    transition: transform 0.3s ease;
   }
 }
 
@@ -312,6 +318,9 @@ export default {
     transform: translate3d(0, -100%, 0);
   }
   &:deep(.modal-content.drawer-mode.bottom-position) {
+    transform: translate3d(0, 100%, 0);
+  }
+  &:deep(.modal-content.dialog-mode.modal--mobile) {
     transform: translate3d(0, 100%, 0);
   }
 }

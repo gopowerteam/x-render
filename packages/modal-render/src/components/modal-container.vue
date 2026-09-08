@@ -19,6 +19,7 @@ import {
   triggerRef,
 } from 'vue'
 import { ModalKey } from '../constants'
+import { useMobile } from '../hooks/use-mobile'
 
 const props = withDefaults(
   defineProps<{
@@ -48,6 +49,7 @@ const props = withDefaults(
     bodyStyle?: CSSProperties
     submitText?: string
     cancelText?: string
+    mobile?: boolean | 'auto'
     zIndex?: number
     onOk?: (options: { close: () => void }) => void
     onCancel?: () => void
@@ -64,13 +66,19 @@ const props = withDefaults(
     position: 'right',
     submitText: '确定',
     cancelText: '取消',
+    mobile: 'auto',
     maxHeight: 90,
     zIndex: 1000,
   },
 )
 const emits = defineEmits(['submit'])
 const modal = inject(ModalKey)
+const isMobileQuery = useMobile()
 const loading = ref(false)
+
+const isMobileMode = computed(() =>
+  props.mobile === 'auto' ? isMobileQuery.value : props.mobile,
+)
 
 let offsetX = 0
 let offsetY = 0
@@ -155,7 +163,8 @@ const contentStyle = computed(() => {
     // styles.height = formatSizeValue(props.sizes![props.size!])
     styles.maxHeight = formatSizeValue(props.maxHeight!)
   }
-  else {
+  else if (!(isMobileMode.value && props.mode === 'dialog')) {
+    // 移动端 dialog 宽度由 CSS 类控制（bottom sheet）
     styles.width = formatSizeValue(props.sizes![props.size!])
     styles.maxWidth = formatSizeValue(props.maxWidth!)
   }
@@ -179,13 +188,20 @@ const contentStyle = computed(() => {
     styles.borderRadius = 0
   }
 
-  if (props.draggable && !props.fullscreen && props.mode === 'dialog') {
+  if (props.draggable && !props.fullscreen && props.mode === 'dialog' && !isMobileMode.value) {
     styles.transform = `translate3d(${x.value - offsetX}px, ${y.value - offsetY}px, 0px)`
   }
 
   if (props.mode === 'drawer') {
     styles.borderRadius = 0
-    if (['left', 'right'].includes(props.position)) {
+
+    if (isMobileMode.value) {
+      // 移动端抽屉全屏
+      styles.width = '100%'
+      styles.height = '100%'
+      styles.maxHeight = 'unset'
+    }
+    else if (['left', 'right'].includes(props.position)) {
       styles.height = '100%'
     }
     else {
@@ -193,7 +209,12 @@ const contentStyle = computed(() => {
     }
   }
 
-  if (props.offset && props.mode === 'dialog') {
+  // 移动端消息弹窗保持居中小卡，宽度自适应
+  if (isMobileMode.value && props.mode === 'dialog' && props.type !== 'component') {
+    styles.width = 'min(calc(100vw - 32px), 400px)'
+  }
+
+  if (props.offset && props.mode === 'dialog' && !isMobileMode.value) {
     styles.marginLeft = `${props.offset.x || 0}px`
     styles.marginTop = `${props.offset.y || 0}px`
   }
@@ -234,7 +255,11 @@ const bodyStyle = computed<CSSProperties>(() => {
   if (props.mode === 'drawer') {
     styles.maxHeight = 'unset'
 
-    if (['left', 'right'].includes(props.position)) {
+    if (isMobileMode.value) {
+      // 移动端抽屉全屏，与 fullscreen 相同策略
+      styles.height = `calc(100% - ${extraHeight}px)`
+    }
+    else if (['left', 'right'].includes(props.position)) {
       styles.height = `${wrapperHeight.value - extraHeight}px`
     }
   }
@@ -359,13 +384,14 @@ export default {
   <div
     ref="wrapperRef"
     class="modal-wrapper"
+    :class="{ 'modal-wrapper--mobile': isMobileMode }"
     :style="wrapperStyle"
     @click.self="maskClosable && onClose()"
   >
     <div
       ref="contentRef"
       class="modal-content"
-      :class="{ [`${mode}-mode`]: true, [`${position}-position`]: true }"
+      :class="{ [`${mode}-mode`]: true, [`${position}-position`]: true, 'modal--mobile': isMobileMode }"
       :style="contentStyle"
     >
       <div
@@ -540,6 +566,35 @@ export default {
     100% {
       transform: rotate(360deg);
     }
+  }
+}
+
+// 移动端适配
+.modal-wrapper--mobile {
+  align-items: flex-end;
+}
+
+.modal-content.modal--mobile {
+  &.dialog-mode {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 16px 16px 0 0;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  &.drawer-mode .modal-body {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  // 触控目标优化：按钮高度 44px
+  .modal-footer button {
+    height: 44px;
+    line-height: 44px;
+  }
+
+  :deep(.modal-dialog button) {
+    height: 44px;
+    line-height: 44px;
   }
 }
 </style>
