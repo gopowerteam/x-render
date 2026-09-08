@@ -200,17 +200,16 @@ const contentStyle = computed(() => {
   if (props.mode === 'drawer') {
     styles.borderRadius = 0
 
-    if (isMobileMode.value) {
-      // 移动端抽屉全屏
-      styles.width = '100%'
-      styles.height = '100%'
-      styles.maxHeight = 'unset'
-    }
-    else if (['left', 'right'].includes(props.position)) {
+    if (['left', 'right'].includes(props.position)) {
       styles.height = '100%'
     }
     else {
       styles.width = '100%'
+    }
+
+    // 移动端不强制全屏，仅钳制宽度，避免显式像素宽度溢出小屏视口
+    if (isMobileMode.value) {
+      styles.maxWidth = '100%'
     }
   }
 
@@ -260,11 +259,7 @@ const bodyStyle = computed<CSSProperties>(() => {
   if (props.mode === 'drawer') {
     styles.maxHeight = 'unset'
 
-    if (isMobileMode.value) {
-      // 移动端抽屉全屏，与 fullscreen 相同策略
-      styles.height = `calc(100% - ${extraHeight}px)`
-    }
-    else if (['left', 'right'].includes(props.position)) {
+    if (['left', 'right'].includes(props.position)) {
       styles.height = `${wrapperHeight.value - extraHeight}px`
     }
   }

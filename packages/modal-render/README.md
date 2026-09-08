@@ -25,7 +25,7 @@ Vue 3 模态框/抽屉渲染组件库，基于 Promise 风格 API，提供灵活
 - Promise 风格 API，支持 async/await
 - 预设对话框：confirm、info、warning、error、success
 - 可拖拽、全屏、自定义尺寸
-- 移动端自适应：视口 ≤768px 时弹窗自动切换为 bottom sheet、抽屉自动全屏
+- 移动端自适应：视口 ≤768px 时弹窗自动切换为 bottom sheet，抽屉保持原有尺寸与方向
 - 支持嵌套模态框
 - 完整的 TypeScript 类型支持
 
@@ -639,7 +639,9 @@ function openNested() {
 ### 移动端适配
 
 视口宽度 ≤768px 时自动启用移动端形态：弹窗（dialog）切换为底部弹出（bottom sheet），
-抽屉（drawer）切换为全屏，预设消息弹窗保持居中小卡，按钮触控高度提升至 44px。
+抽屉（drawer）保持原有尺寸与方向（宽度不超过视口），预设消息弹窗保持居中小卡，按钮触控高度提升至 44px。
+
+如需移动端全屏抽屉，可显式传入 `fullscreen: true`：
 
 ```ts
 // 全局禁用
