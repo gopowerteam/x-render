@@ -1,5 +1,12 @@
 # @gopowerteam/modal-render
 
+## 1.0.5
+
+### Patch Changes
+
+- 修复叠加弹窗时弹窗 z-index 覆盖 arco 弹层（如 ASelect 下拉列表）导致无法选择的问题：zIndex 恢复固定 1000，叠加弹窗的层叠关系改由 DOM 顺序保证，显式传入 zIndex 仍可覆盖
+- 修复弹窗 z-index 问题
+
 ## 1.0.4
 
 ### Patch Changes

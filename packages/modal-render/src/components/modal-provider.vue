@@ -68,10 +68,11 @@ function openModal(
     elementProps.type = component
   }
 
-  // zIndex 按打开顺序递增，后打开的弹窗层级在上（用户显式传入 zIndex 时可覆盖）
+  // zIndex 固定 1000：叠加弹窗的层叠关系由 DOM 顺序保证（transition-group 按 elements 数组顺序渲染，后开者靠后、自然覆盖先开者）。
+  // arco 弹层（如 ASelect 下拉）z-index 从 1001 起自增，恒高于弹窗本体，避免弹窗覆盖弹窗内弹层；显式传入 zIndex 时可覆盖。
   const elementOptions = Object.assign(
     {
-      zIndex: 1000 + elements.value.length,
+      zIndex: 1000,
     },
     options,
   )

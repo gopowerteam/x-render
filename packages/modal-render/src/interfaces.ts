@@ -33,6 +33,8 @@ export interface OpenModalOptions {
   bodyStyle?: CSSProperties
   submitText?: string
   cancelText?: string
+  /** 弹窗层级，默认 1000；arco 弹层（下拉、弹窗等）从 1001 起自增，通常无需调整 */
+  zIndex?: number
   onOk?: (options: { close: () => void }) => void
   onCancel?: () => void
 }

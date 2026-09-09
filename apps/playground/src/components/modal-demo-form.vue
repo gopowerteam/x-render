@@ -8,7 +8,15 @@ const modal = useModal()
 const formModel = reactive({
   name: '',
   email: '',
+  role: '',
 })
+
+// 回归演示：弹窗内 ASelect 下拉列表的 z-index 必须高于弹窗本体，保证可正常选择
+const roleOptions = [
+  '管理员',
+  '成员',
+  '访客',
+]
 
 const formRules: Record<string, FieldRule<any> | FieldRule<any>[]> = {
   name: {
@@ -49,6 +57,9 @@ function onSubmitSuccess() {
     </AFormItem>
     <AFormItem field="email" label="邮箱">
       <AInput v-model="formModel.email" placeholder="请输入邮箱" />
+    </AFormItem>
+    <AFormItem field="role" label="角色">
+      <ASelect v-model="formModel.role" :options="roleOptions" placeholder="请选择角色（验证下拉层级）" />
     </AFormItem>
   </AForm>
 </template>
