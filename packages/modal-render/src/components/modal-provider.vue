@@ -8,8 +8,6 @@ import type {
   SizeOptions,
 } from '../interfaces'
 import {
-  defineAsyncComponent,
-  defineProps,
   getCurrentInstance,
   onMounted,
   provide,
@@ -47,46 +45,52 @@ withDefaults(
 
 // modal列表
 const elements = shallowRef<ModalElement[]>([])
+// 全局 Loading 关闭函数表（键：容器 id 或 '__global__'），供 hideLoading 兜底关闭
+const globalLoadingClosers = new Map<string, () => void>()
 // 处理SSR错误
 const clientMounted = ref<boolean>(false)
 const instance = getCurrentInstance()
-// const zIndex = 1100
+
 /**
  * 打开Modal
  */
-
 function openModal(
   component: Component | 'confirm' | 'info' | 'warning' | 'error' | 'success',
   props: Record<string, any> = {},
   options: OpenModalOptions = {},
 ) {
-  const instance = defineAsyncComponent(() =>
-    Promise.resolve(typeof component === 'string' ? ModalDialog : component),
-  )
+  const modalComponent = typeof component === 'string' ? ModalDialog : component
+
+  // 拷贝入参，避免污染调用方对象
+  const elementProps = { ...props }
 
   if (typeof component === 'string') {
-    props.type = component
-    options.size = 'small'
-    options.fullscreen = false
-    options.mode = 'dialog'
-    options.footer = false
-    options.header = false
+    elementProps.type = component
   }
 
-  const id = Math.random().toString(32).slice(2)
-
+  // zIndex 按打开顺序递增，后打开的弹窗层级在上（用户显式传入 zIndex 时可覆盖）
   const elementOptions = Object.assign(
     {
-      zIndex: typeof component === 'string' ? 1100 : 1000,
+      zIndex: 1000 + elements.value.length,
     },
     options,
   )
 
+  if (typeof component === 'string') {
+    elementOptions.size = 'small'
+    elementOptions.fullscreen = false
+    elementOptions.mode = 'dialog'
+    elementOptions.footer = false
+    elementOptions.header = false
+  }
+
+  const id = `modal_${++modalIdCounter}`
+
   const promise = new Promise((resolve, reject) => {
     elements.value.push({
       id,
-      component: instance,
-      props: props || {},
+      component: modalComponent,
+      props: elementProps,
       options: {
         ...elementOptions,
         type: typeof component === 'string' ? component : 'component',
@@ -155,22 +159,23 @@ function onEvent(id: string, event: string) {
     return
   }
 
-  const listener = element.listeners.find(x => x.event === event)
-
-  if (listener) {
-    listener.callback({
-      open: openModal,
-      close: (data?: any) => closeModal(element.id, data),
-      closeAll: closeAllModal,
-      showLoading: () => showModalLoading(element.id),
-      hideLoading: () => hideModalLoading(element.id),
-      confirm: options => openModal('confirm', options),
-      success: options => openModal('success', options),
-      error: options => openModal('error', options),
-      warning: options => openModal('warning', options),
-      info: options => openModal('info', options),
-    })
-  }
+  // 同一事件可能注册多个监听器，全部触发
+  element.listeners
+    .filter(x => x.event === event)
+    .forEach(listener =>
+      listener.callback({
+        open: openModal,
+        close: (data?: any) => closeModal(element.id, data),
+        closeAll: closeAllModal,
+        showLoading: () => showModalLoading(element.id),
+        hideLoading: () => hideModalLoading(element.id),
+        confirm: options => openModal('confirm', options),
+        success: options => openModal('success', options),
+        error: options => openModal('error', options),
+        warning: options => openModal('warning', options),
+        info: options => openModal('info', options),
+      }),
+    )
 }
 
 function showModalLoading(id?: string, options?: ShowLoadingOptions) {
@@ -184,6 +189,7 @@ function showModalLoading(id?: string, options?: ShowLoadingOptions) {
     return container.showLoading()
   }
   else {
+    const key = id ?? '__global__'
     const { close } = openModal(
       ModalLoading,
       {
@@ -197,9 +203,16 @@ function showModalLoading(id?: string, options?: ShowLoadingOptions) {
       },
     )
 
+    // 记录关闭函数，供 hideLoading 在无容器场景下兜底关闭
+    globalLoadingClosers.set(key, close)
+
     if (options?.duration) {
       setTimeout(() => {
         close()
+
+        if (globalLoadingClosers.get(key) === close) {
+          globalLoadingClosers.delete(key)
+        }
       }, options?.duration)
     }
 
@@ -212,10 +225,20 @@ function hideModalLoading(id?: string) {
     return
   }
 
-  const [container] = instance.refs[`modal-container_${id}`] as any[]
+  const [container] = (instance.refs[`modal-container_${id}`] || []) as any[]
 
   if (container) {
     return container.hideLoading()
+  }
+  else {
+    // 容器不存在时兜底关闭全局 Loading 弹窗
+    const key = id ?? '__global__'
+    const close = globalLoadingClosers.get(key)
+
+    if (close) {
+      globalLoadingClosers.delete(key)
+      close()
+    }
   }
 }
 
@@ -226,7 +249,11 @@ function addEventListener(
 ) {
   const element = elements.value.find(element => element.id === id)
 
-  if (element) {
+  // 同一事件 + 同一回调去重，避免重复注册
+  if (
+    element
+    && !element.listeners.some(x => x.event === event && x.callback === callback)
+  ) {
     element.listeners.push({
       event,
       callback,
@@ -256,6 +283,9 @@ onMounted(() => {
 </script>
 
 <script lang="ts">
+// 弹窗自增 ID 计数器（模块级，跨 Provider 实例保证唯一）
+let modalIdCounter = 0
+
 export default {
   name: 'ModalProvider',
   inheritAttrs: false,

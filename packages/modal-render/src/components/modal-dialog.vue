@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useModal } from '..'
+// 直接从 hooks 导入，避免经由包入口形成循环依赖（index → container → dialog → index）
+import { useModal } from '../hooks/use-modal'
 
 const props = withDefaults(
   defineProps<{
@@ -87,7 +88,9 @@ async function onClickCancel() {
   </section>
 </template>
 
-<style scoped lang="less">
+<style scoped lang="scss">
+@use './styles/modal-buttons' as *;
+
 .dialog-body {
   padding: 20px 10px 10px 10px;
 }
@@ -108,36 +111,6 @@ async function onClickCancel() {
   align-items: center;
   padding: 0 10px;
 
-  button {
-    height: 32px;
-    line-height: 28px;
-    min-width: 80px;
-    outline: none;
-    border-color: transparent;
-    font-size: 14px;
-    border-radius: 4px;
-    padding: 0;
-    box-sizing: border-box;
-
-    &.submit-button {
-      color: #fff;
-      background-color: rgb(var(--primary-6, 45, 106, 251));
-
-      &:hover {
-        background-color: rgb(var(--primary-5, 28, 76, 207));
-      }
-      &:active {
-        background-color: rgb(var(--primary-7, 14, 66, 210));
-      }
-    }
-    &.cancel-button {
-      color: rgb(var(--color-text-2, 78, 89, 105));
-      background-color: var(--color-fill-1, #f5f5f5);
-
-      &:hover {
-        background-color: var(--color-fill-4, #c9cdd4);
-      }
-    }
-  }
+  @include modal-buttons;
 }
 </style>

@@ -8,6 +8,27 @@ export function useModal() {
   const modal = inject(ModalKey)
   const ctx = getCurrentInstance()
 
+  /** 统一守卫：未在 ModalProvider 内使用时抛出中文错误 */
+  function requireModal() {
+    if (!modal) {
+      throw new Error('未找到 ModalProvider 组件，请将组件包裹在 <ModalProvider> 内使用')
+    }
+
+    return modal
+  }
+
+  /** 定位当前所在弹窗容器的 id */
+  function currentContainerId() {
+    const modalContainer = findContainer(ctx, 'ModalContainer')
+    const id = modalContainer?.props?.id as string | undefined
+
+    if (!id) {
+      throw new Error('未找到当前弹窗容器，请在弹窗内容组件中使用')
+    }
+
+    return id
+  }
+
   function open(
     component: 'confirm',
     props: {
@@ -35,56 +56,33 @@ export function useModal() {
     props?: Record<string, any>,
     options?: OpenModalOptions,
   ): Promise<any> & { close: () => void } {
-    if (!modal) {
-      throw new Error('Not Found Modal Provider Component')
-    }
-
-    return modal.open(component, props, options)
+    return requireModal().open(component, props, options)
   }
 
   return {
     open,
     close(data?: any): void {
-      if (!modal) {
-        throw new Error('Not Found Modal Provider Component')
-      }
-
-      const modalContainer = findContainer(ctx, 'ModalContainer')
-      const id = modalContainer?.props?.id as string | undefined
-
-      if (!id) {
-        throw new Error('Not Found Current Modal Container')
-      }
-
-      modal.close(id, data)
+      const actions = requireModal()
+      actions.close(currentContainerId(), data)
     },
     closeAll() {
-      if (!modal) {
-        throw new Error('Not Found Modal Provider Component')
-      }
-
-      modal.closeAll()
+      requireModal().closeAll()
     },
     showLoading(options?: ShowLoadingOptions) {
-      if (!modal) {
-        throw new Error('Not Found Modal Provider Component')
-      }
-
+      const actions = requireModal()
       const container = findContainer(ctx, 'ModalContainer')
       const id = container?.props?.id as string | undefined
 
-      return modal.showLoading(id, options)
+      return actions.showLoading(id, options)
     },
     hideLoading() {
-      if (!modal) {
-        throw new Error('Not Found Modal Provider Component')
-      }
-
+      const actions = requireModal()
       const container = findContainer(ctx, 'ModalContainer')
       const id = container?.props?.id as string | undefined
 
-      return modal.hideLoading(id)
+      return actions.hideLoading(id)
     },
+    // 快捷方法直接调用 open 函数（不依赖 this），支持 const { confirm } = useModal() 解构调用
     confirm(props: {
       title?: string
       content: string
@@ -92,31 +90,31 @@ export function useModal() {
       onCancel?: () => Promise<void> | void
       footer?: () => JSX.Element
     }) {
-      return this.open('confirm', props)
+      return open('confirm', props)
     },
     info(props: {
       title?: string
       content: string
     }) {
-      return this.open('info', props)
+      return open('info', props)
     },
     error(props: {
       title?: string
       content: string
     }) {
-      return this.open('error', props)
+      return open('error', props)
     },
     warning(props: {
       title?: string
       content: string
     }) {
-      return this.open('warning', props)
+      return open('warning', props)
     },
     success(props: {
       title?: string
       content: string
     }) {
-      return this.open('success', props)
+      return open('success', props)
     },
   }
 }

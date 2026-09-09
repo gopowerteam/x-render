@@ -390,7 +390,6 @@ function showGlobalLoading() {
 | footer | `boolean` | `false` | 是否显示底部按钮 |
 | closeable | `boolean` | `true` | 是否显示关闭按钮 |
 | esc | `boolean` | `false` | 按 ESC 键关闭 |
-| mask | `boolean` | `true` | 是否显示遮罩 |
 | maskClosable | `boolean` | `false` | 点击遮罩关闭 |
 | bodyStyle | `CSSProperties` | - | 内容区样式 |
 | backgroundColor | `string` | - | 背景色 |
@@ -955,7 +954,6 @@ interface ShowLoadingOptions {
 interface OpenModalOptions {
   closeable?: boolean
   esc?: boolean
-  mask?: boolean
   maskClosable?: boolean
   title?: string
   header?: boolean
@@ -995,7 +993,7 @@ interface ModalActions {
 
 ## FAQ
 
-### 1. 为什么 useModal 报错 "Not Found Modal Provider Component"？
+### 1. 为什么 useModal 报错 "未找到 ModalProvider 组件，请将组件包裹在 <ModalProvider> 内使用"？
 
 `useModal` 必须在 `ModalProvider` 组件内部调用，确保组件树中存在 Provider：
 

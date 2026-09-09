@@ -15,7 +15,6 @@ export interface ShowLoadingOptions {
 export interface OpenModalOptions {
   closeable?: boolean
   esc?: boolean
-  mask?: boolean
   maskClosable?: boolean
   title?: string
   header?: boolean

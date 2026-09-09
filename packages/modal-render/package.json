@@ -1,12 +1,15 @@
 {
   "name": "@gopowerteam/modal-render",
   "type": "module",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": {
     "name": "zhuchentong",
     "email": "2037630@gmail.com"
   },
   "license": "MIT",
+  "sideEffects": [
+    "**/*.css"
+  ],
   "homepage": "https://github.com/gopowerteam/x-render",
   "repository": {
     "type": "git",
@@ -46,7 +49,7 @@
     "dev": "vite build --watch",
     "build": "vite build",
     "lint": "eslint src",
-    "npm:publish": "npm run build && npm publish --access publish"
+    "npm:publish": "npm run build && npm publish --access public"
   },
   "peerDependencies": {
     "vue": "^3.0.0"

@@ -12,6 +12,9 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    ModalDemoContent: typeof import('./components/modal-demo-content.vue')['default']
+    ModalDemoFooter: typeof import('./components/modal-demo-footer.vue')['default']
+    ModalDemoForm: typeof import('./components/modal-demo-form.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TableRender: typeof import('@gopowerteam/table-render')['TableRender']
@@ -22,6 +25,9 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
+  const ModalDemoContent: typeof import('./components/modal-demo-content.vue')['default']
+  const ModalDemoFooter: typeof import('./components/modal-demo-footer.vue')['default']
+  const ModalDemoForm: typeof import('./components/modal-demo-form.vue')['default']
   const RouterLink: typeof import('vue-router')['RouterLink']
   const RouterView: typeof import('vue-router')['RouterView']
   const TableRender: typeof import('@gopowerteam/table-render')['TableRender']

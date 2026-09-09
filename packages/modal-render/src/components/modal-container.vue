@@ -14,11 +14,12 @@ import {
   inject,
   onMounted,
   onUnmounted,
+  provide,
   ref,
   shallowRef,
   triggerRef,
 } from 'vue'
-import { ModalKey } from '../constants'
+import { ModalContainerIdKey, ModalKey } from '../constants'
 import { useMobile } from '../hooks/use-mobile'
 
 const props = withDefaults(
@@ -67,12 +68,20 @@ const props = withDefaults(
     submitText: '确定',
     cancelText: '取消',
     mobile: 'auto',
-    maxHeight: 90,
+    sizes: () => ({
+      small: '50%',
+      middle: '70%',
+      large: '90%',
+    }),
+    maxHeight: '90%',
     zIndex: 1000,
   },
 )
 const emits = defineEmits(['submit'])
 const modal = inject(ModalKey)
+
+// 向内容组件（ModalHeader / ModalFooter）注入自身 id，用于 Teleport 锚点唯一化（支持嵌套弹窗）
+provide(ModalContainerIdKey, props.id)
 const isMobileQuery = useMobile()
 const loading = ref(false)
 
@@ -87,7 +96,6 @@ const isBottomSheetMode = computed(() =>
 
 let offsetX = 0
 let offsetY = 0
-let observer!: MutationObserver
 const wrapperRef = shallowRef<HTMLDivElement>()
 const contentRef = shallowRef<HTMLDivElement>()
 const headerRef = shallowRef<HTMLDivElement>()
@@ -97,7 +105,6 @@ const footerSlotRef = shallowRef<HTMLDivElement>()
 const { height: wrapperHeight } = useElementSize(
   wrapperRef as unknown as MaybeComputedElementRef,
 )
-// const { height: contentHeight } = useElementSize(contentRef)
 const { height: headerHeight } = useElementSize(
   headerRef as unknown as MaybeComputedElementRef,
   undefined,
@@ -165,7 +172,6 @@ const contentStyle = computed(() => {
   const styles: HTMLAttributes['style'] = {}
 
   if (props.mode === 'drawer' && ['top', 'bottom'].includes(props.position)) {
-    // styles.height = formatSizeValue(props.sizes![props.size!])
     styles.maxHeight = formatSizeValue(props.maxHeight!)
   }
   else if (!(isMobileMode.value && props.mode === 'dialog')) {
@@ -247,13 +253,14 @@ const bodyStyle = computed<CSSProperties>(() => {
       + footerSlotHeight.value
       + headerHeight.value
       + footerHeight.value
-  const containerMaxHeight = Math.floor(
-    wrapperHeight.value
-    * (Number(formatSizeValue(props.maxHeight).replace('%', '')) / 100),
-  )
+  // maxHeight 语义：百分比字符串按容器高度折算；数字 / px 字符串直接作为像素上限
+  const maxHeightPx
+    = typeof props.maxHeight === 'string' && props.maxHeight.endsWith('%')
+      ? Math.floor(wrapperHeight.value * (Number.parseFloat(props.maxHeight) / 100))
+      : Number.parseFloat(formatSizeValue(props.maxHeight!))
 
-  if (props.maxHeight) {
-    styles.maxHeight = `${containerMaxHeight - extraHeight}px`
+  if (Number.isFinite(maxHeightPx)) {
+    styles.maxHeight = `${maxHeightPx - extraHeight}px`
   }
 
   if (props.mode === 'drawer') {
@@ -310,9 +317,9 @@ function onCancelClick() {
   }
 }
 
-function onResize() {
-  if (window) {
-    window.addEventListener('resize', handleResize)
+function handleEsc({ key }: { key: string }) {
+  if (key === 'Escape') {
+    modal?.close(props.id)
   }
 }
 
@@ -326,35 +333,22 @@ function handleResize() {
   }
 }
 
-function onKeyboard() {
-  if (props.closeable && props.esc) {
-    const handleEsc = ({ key }: { key: string }) => {
-      if (key === 'Escape') {
-        modal?.close(props.id)
-        window.removeEventListener('keydown', handleEsc)
-      }
-    }
-
-    window.addEventListener('keydown', handleEsc)
-  }
-}
-
 function onMouseDown() {
   offsetX = contentRef.value!.offsetLeft
   offsetY = contentRef.value!.offsetTop
 }
 
 onMounted(() => {
-  onKeyboard()
-  onResize()
+  if (props.closeable && props.esc) {
+    window.addEventListener('keydown', handleEsc)
+  }
+
+  window.addEventListener('resize', handleResize)
 })
 
 onUnmounted(() => {
-  if (observer) {
-    observer.disconnect()
-    observer.takeRecords()
-  }
-
+  // 成对移除监听，避免弹窗经其他途径关闭后 ESC 监听器泄漏
+  window.removeEventListener('keydown', handleEsc)
   window.removeEventListener('resize', handleResize)
 })
 
@@ -391,6 +385,9 @@ export default {
     <div
       ref="contentRef"
       class="modal-content"
+      role="dialog"
+      aria-modal="true"
+      :aria-label="title || undefined"
       :class="{ [`${mode}-mode`]: true, [`${position}-position`]: true, 'modal--mobile': isMobileMode, 'modal--bottom-sheet': isBottomSheetMode }"
       :style="contentStyle"
     >
@@ -408,15 +405,17 @@ export default {
           <div
             v-if="closeable"
             class="i-icon-park-outline:close block cursor-pointer"
+            role="button"
+            aria-label="关闭"
             @click="onClose"
           />
         </div>
       </div>
-      <div id="modal-header-slot" ref="headerSlotRef" />
+      <div :id="`modal-header-slot_${id}`" ref="headerSlotRef" />
       <div class="modal-body" :style="bodyStyle">
         <Component :is="component" v-bind="componentProps" />
       </div>
-      <div id="modal-footer-slot" ref="footerSlotRef" />
+      <div :id="`modal-footer-slot_${id}`" ref="footerSlotRef" />
       <div v-if="footer" ref="footerRef" class="modal-footer space-x-2">
         <button class="cancel-button" type="button" @click="onCancelClick">
           {{ cancelText }}
@@ -442,7 +441,10 @@ export default {
   </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
+@use './styles/modal-buttons' as *;
+@use './styles/loading-spinner' as *;
+
 .modal-wrapper {
   z-index: v-bind(zIndex);
   position: fixed;
@@ -488,41 +490,7 @@ export default {
   justify-content: flex-end;
   padding: 10px;
 
-  button {
-    height: 32px;
-    line-height: 28px;
-    min-width: 80px;
-    outline: none;
-    border-color: transparent;
-    font-size: 14px;
-    border-radius: 4px;
-    padding: 0 10px;
-    box-sizing: border-box;
-
-    &.submit-button {
-      color: #fff;
-      background-color: rgb(var(--primary-6, 45, 106, 251));
-
-      &:hover {
-        background-color: rgb(var(--primary-5, 28, 76, 207));
-      }
-      &:active {
-        background-color: rgb(var(--primary-7, 14, 66, 210));
-      }
-    }
-    &.cancel-button {
-      color: rgb(var(--color-text-2, 78, 89, 105));
-      background-color: var(--color-fill-1, #f5f5f5);
-
-      &:hover {
-        background-color: var(--color-fill-3, #e5e6eb);
-      }
-
-      &:active {
-        background-color: var(--color-fill-4, #c9cdd4);
-      }
-    }
-  }
+  @include modal-buttons;
 }
 
 .modal-loading {
@@ -532,41 +500,8 @@ export default {
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.1);
-  .lds-ring {
-    display: inline-block;
-    position: relative;
-    width: 80px;
-    height: 80px;
-  }
-  .lds-ring div {
-    box-sizing: border-box;
-    display: block;
-    position: absolute;
-    width: 48px;
-    height: 48px;
-    margin: 8px;
-    border: 5px solid #fff;
-    border-radius: 50%;
-    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border-color: #fff transparent transparent transparent;
-  }
-  .lds-ring div:nth-child(1) {
-    animation-delay: -0.45s;
-  }
-  .lds-ring div:nth-child(2) {
-    animation-delay: -0.3s;
-  }
-  .lds-ring div:nth-child(3) {
-    animation-delay: -0.15s;
-  }
-  @keyframes lds-ring {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
+
+  @include loading-spinner;
 }
 
 // 移动端适配
